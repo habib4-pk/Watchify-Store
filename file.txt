@@ -1,0 +1,6 @@
+Summary of relationships:
+Model	Relation Method	Relationship Type	Related Model
+User	cartItems	hasMany (one-to-many)	Cart
+Watch	cartItems	hasMany (one-to-many)	Cart
+Cart	user	belongsTo	User
+Cart	watch	belongsTo	Watch
