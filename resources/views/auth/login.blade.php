@@ -28,7 +28,7 @@
         background: #fff;
         padding: 50px;
         border: 1px solid var(--border-light);
-        box-shadow: 0 10px 40px rgba(0,0,0,0.02);
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.02);
         text-align: center;
     }
 
@@ -141,6 +141,22 @@
         <h1>Welcome Back</h1>
         <p>Please enter your details to access your collection.</p>
 
+        @if(session('error'))
+        <div id="error-msg" style="color: red; margin-bottom: 15px;">
+            {{ session('error') }}
+        </div>
+
+        <script>
+            setTimeout(function() {
+                var errorDiv = document.getElementById('error-msg');
+                if (errorDiv) {
+                    errorDiv.style.display = 'none';
+                }
+            }, 5000); // 5000 milliseconds = 5 seconds
+        </script>
+        @endif
+
+
         <form action="{{ route('login') }}" method="POST">
             @csrf
 
@@ -148,7 +164,7 @@
                 <label for="email">Email Address</label>
                 <input type="email" name="email" id="email" value="{{ old('email') }}" required placeholder="yourname@email.com">
                 @error('email')
-                    <span class="error-msg">{{ $message }}</span>
+                <span class="error-msg">{{ $message }}</span>
                 @enderror
             </div>
 
@@ -156,7 +172,7 @@
                 <label for="password">Password</label>
                 <input type="password" name="password" id="password" required placeholder="••••••••">
                 @error('password')
-                    <span class="error-msg">{{ $message }}</span>
+                <span class="error-msg">{{ $message }}</span>
                 @enderror
             </div>
 

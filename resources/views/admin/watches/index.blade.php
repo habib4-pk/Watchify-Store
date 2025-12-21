@@ -29,57 +29,68 @@
 @endsection
 
 @section('content')
+
+@if(session('success'))
+    <div style="max-width: 500px; margin: 0 auto 25px; padding: 0 15px;">
+        <div id="success-alert" class="alert-success" style="display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; background: #dcfce7; color: #15803d; border-radius: 8px; border: 1px solid #bbf7d0; font-size: 14px; font-weight: 500; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+            <span>{{ session('success') }}</span>
+            <button type="button" class="close-btn" onclick="document.getElementById('success-alert').remove()" style="background: none; border: none; color: #15803d; font-size: 24px; font-weight: bold; cursor: pointer; line-height: 1; padding: 0; margin-left: 20px; transition: transform 0.2s ease;">&times;</button>
+        </div>
+    </div>
+@endif
+
 <div class="page-header">
     <h1 class="page-title">Manage Watches</h1>
     <a href="{{ route('addWatch') }}" class="btn-add">Add New Watch</a>
 </div>
 
-@if(session('success'))
-    <div class="alert-success">{{ session('success') }}</div>
-@endif
+
 
 <div class="table-container">
     <table class="custom-table">
         <thead>
-            <tr>
-                <th>#</th>
-                <th>Image</th>
-                <th>Name</th>
-                <th>Price (Rs.)</th>
-                <th>Stock</th>
-                <th>Description</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($allWatches as $watch)
-            <tr>
-                <td>{{ $loop->iteration }}</td>
-                <td>
-                    @if($watch->image)
-                        <img src="{{ asset('storage/' . $watch->image) }}" class="watch-img" alt="Watch">
-                    @endif
-                </td>
-                <td><strong>{{ $watch->name }}</strong></td>
-                <td>{{ number_format($watch->price, 2) }}</td>
-                <td>{{ $watch->stock }}</td>
-                <td class="desc-text">{{ $watch->description }}</td>
-                <td class="actions">
-                    <form action="{{ route('editWatch') }}" method="POST">
-                        @csrf
-                        <input type="hidden" name="id" value="{{ $watch->id }}">
-                        <button type="submit" class="btn-edit">Edit</button>
-                    </form>
+    <tr>
+        <th>#</th>
+        <th>Image</th>
+        <th>Name</th>
+        <th>Price (Rs.)</th>
+        <th>Stock</th>
+        <th>Featured</th> {{-- New column header --}}
+        <th>Description</th>
+        <th>Actions</th>
+    </tr>
+</thead>
+<tbody>
+    @foreach($allWatches as $watch)
+    <tr>
+        <td>{{ $loop->iteration }}</td>
+        <td>
+            @if($watch->image)
+                <img src="{{ asset('storage/' . $watch->image) }}" class="watch-img" alt="Watch">
+            @endif
+        </td>
+        <td><strong>{{ $watch->name }}</strong></td>
+        <td>{{ number_format($watch->price, 2) }}</td>
+        <td>{{ $watch->stock }}</td>
+        <td>{{ $watch->featured === 'yes' ? 'Yes' : 'No' }}</td> {{-- Display Yes or No --}}
+        <td class="desc-text">{{ $watch->description }}</td>
+        <td class="actions">
+            <form action="{{ route('editWatch') }}" method="POST">
+                @csrf
+                <input type="hidden" name="id" value="{{ $watch->id }}">
+                <button type="submit" class="btn-edit">Edit</button>
+            </form>
 
-                    <form action="{{ route('deleteWatch') }}" method="POST" onsubmit="return confirm('Delete this watch?');">
-                        @csrf
-                        <input type="hidden" value="{{$watch->id}}" name="id">
-                        <button type="submit" class="btn-delete">Delete</button>
-                    </form>
-                </td>
-            </tr>
-            @endforeach
-        </tbody>
+            <form action="{{ route('deleteWatch') }}" method="POST" onsubmit="return confirm('Delete this watch?');">
+                @csrf
+                <input type="hidden" value="{{$watch->id}}" name="id">
+                <button type="submit" class="btn-delete">Delete</button>
+            </form>
+        </td>
+    </tr>
+    @endforeach
+</tbody>
+
     </table>
 </div>
 @endsection

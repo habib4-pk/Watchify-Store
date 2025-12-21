@@ -1,6 +1,6 @@
 @extends('buyer.layout')
 
-@section('title', 'Collections')
+@section('title', 'Search Results')
 
 @section('styles')
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -85,7 +85,7 @@
         margin: 0 auto;
     }
 
-    /* --- Section Header Layout --- */
+    /* --- Section Header Layout (The Fix) --- */
     .featured-products {
         max-width: 1400px;
         margin: 0 auto 100px;
@@ -95,7 +95,7 @@
     .section-header {
         display: flex;
         justify-content: space-between;
-        align-items: flex-end; /* Aligns title and sort dropdown baseline */
+        align-items: flex-end; /* Aligns title and actions to the same baseline */
         margin-bottom: 50px;
         border-bottom: 1px solid #eee;
         padding-bottom: 20px;
@@ -108,11 +108,24 @@
         margin: 0;
     }
 
-    .header-utilities {
+    .header-actions {
         display: flex;
         align-items: center;
-        gap: 20px;
+        gap: 30px; /* Precise gap between Sort and "View All" link */
     }
+
+    .view-all-link {
+        font-size: 11px;
+        text-transform: uppercase;
+        color: var(--luxury-black);
+        font-weight: 700;
+        letter-spacing: 1.5px;
+        text-decoration: none;
+        border-bottom: 1px solid #000;
+        padding-bottom: 5px;
+        transition: opacity 0.3s;
+    }
+    .view-all-link:hover { opacity: 0.6; }
 
     /* --- Product Grid --- */
     .product-grid {
@@ -186,21 +199,22 @@
     .btn-add { color: var(--accent-blue); text-align: right; }
     .btn-add:hover { letter-spacing: 2px; }
 
-    /* Empty State Styling */
-    .no-results {
+    /* No Results Styling */
+    .no-results-message {
         text-align: center;
-        padding: 80px 0;
+        color: #555;
         font-family: var(--font-sans);
-        color: var(--text-muted);
+        font-size: 18px;
+        margin: 80px 0;
+        font-weight: 500;
         text-transform: uppercase;
         letter-spacing: 2px;
-        font-size: 13px;
     }
 
     @media (max-width: 768px) {
         .hero h1 { font-size: 38px; }
         .section-header { flex-direction: column; align-items: flex-start; gap: 20px; }
-        .featured-products { padding: 0 20px; }
+        .header-actions { width: 100%; justify-content: space-between; }
     }
 </style>
 @endsection
@@ -224,27 +238,27 @@
 
 <section class="featured-products">
     <div class="section-header">
-        <h2 class="section-title">New Arrivals</h2>
+        <h2 class="section-title">Searched Selection</h2>
         
-        <div class="header-utilities">
+        <div class="header-actions">
             @include('buyer.partials.sort')
+            
+            <a href="{{ route('home') }}" class="view-all-link">View All Collections</a>
         </div>
     </div>
 
     
 
     @if(count($allWatches) == 0)
-        <div class="no-results">
-            No matching timepieces found.
-        </div>
+        <p class="no-results-message">
+            No matching results found for "<strong>{{ $query ?? '' }}</strong>"
+        </p>
     @else
         <div class="product-grid">
             @foreach($allWatches as $watch)
             <article class="product-card">
                 <div class="image-container">
-                    <img src="{{ asset('storage/' . $watch->image) }}"
-                        class="product-image"
-                        alt="{{ $watch->name }}">
+                    <img src="{{ asset('storage/' . $watch->image) }}" class="product-image" alt="{{ $watch->name }}">
                 </div>
 
                 <div class="product-info">

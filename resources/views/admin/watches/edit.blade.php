@@ -12,7 +12,7 @@
 <div class="form-container">
     <form action="{{ route('updateWatch') }}" method="POST" enctype="multipart/form-data">
         @csrf
-        <input type="hidden" value="{{$watch->id}}" name="id">
+        <input type="hidden" value="{{ $watch->id }}" name="id">
 
         <div class="form-group">
             <label class="form-label">Watch Name</label>
@@ -33,6 +33,14 @@
         <div class="form-group">
             <label class="form-label">Description</label>
             <textarea name="description" rows="4" class="form-input">{{ old('description', $watch->description) }}</textarea>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Featured</label>
+            <select name="featured" class="form-input" required>
+                <option value="no" {{ old('featured', $watch->featured) == 'no' ? 'selected' : '' }}>No</option>
+                <option value="yes" {{ old('featured', $watch->featured) == 'yes' ? 'selected' : '' }}>Yes</option>
+            </select>
         </div>
 
         <div class="form-group">

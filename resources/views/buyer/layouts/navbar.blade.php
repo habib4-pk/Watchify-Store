@@ -52,7 +52,6 @@
         transition: color 0.3s ease;
     }
 
-    /* Elegant Underline Hover Interaction */
     .nav-menu li a::after {
         content: '';
         position: absolute;
@@ -68,6 +67,55 @@
         width: 100%;
     }
 
+    /* --- Refined Search Bar --- */
+    .search-container {
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid #e0e0e0; /* Minimalist bottom line instead of box */
+        margin-right: 20px;
+        transition: border-color 0.3s ease;
+    }
+
+    .search-container:focus-within {
+        border-color: #000;
+    }
+
+    .search-input {
+        border: none;
+        padding: 8px 0;
+        font-size: 11px;
+        font-family: 'Inter', sans-serif;
+        font-weight: 400;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        width: 130px;
+        outline: none;
+        background: transparent;
+    }
+
+    .search-input::placeholder {
+        color: #b0b0b0;
+        text-transform: uppercase;
+        font-size: 10px;
+    }
+
+    .search-submit {
+        background: none;
+        border: none;
+        padding: 0 0 0 10px;
+        font-size: 10px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        color: #000;
+        cursor: pointer;
+        transition: color 0.3s ease;
+    }
+
+    .search-submit:hover {
+        color: #888;
+    }
+
     /* User Actions & Auth Area */
     .nav-actions {
         display: flex;
@@ -75,7 +123,6 @@
         align-items: center;
     }
 
-    /* Consistent styling for "Welcome [Name]" */
     .user-greeting {
         font-size: 11px;
         font-weight: 600;
@@ -95,11 +142,6 @@
         transition: color 0.3s ease;
     }
 
-    .login-btn:hover {
-        color: #000;
-    }
-
-    /* Call to Action Button */
     .signup-btn {
         padding: 12px 28px;
         font-size: 11px;
@@ -118,11 +160,10 @@
         color: #000;
     }
 
-    /* Responsive adjustments */
     @media (max-width: 1100px) {
         .watchify-nav { padding: 0 4%; }
-        .nav-menu { gap: 20px; }
-        .user-greeting { display: none; } /* Simplify on smaller screens */
+        .nav-menu { display: none; } /* Hide menu on smaller screens */
+        .search-input { width: 100px; }
     }
 </style>
 
@@ -133,7 +174,7 @@
     
     <ul class="nav-menu">
         <li><a href="{{ route('home') }}">Home</a></li>
-        <li><a href="{{ route('home') }}">Collections</a></li>
+        <li><a href="{{ route('featured') }}">Featured</a></li>
         <li><a href="{{ route('cartItems') }}">Cart</a></li> 
 
         @if(Auth::user())
@@ -144,8 +185,21 @@
     </ul>
 
     <div class="nav-actions">
+        <form action="{{route('search')}}" method="GET" class="search-container">
+            <input 
+                type="text" 
+                name="query" 
+                placeholder="Search Timepieces" 
+
+                value=""
+               
+                class="search-input"
+            >
+            <button type="submit" class="search-submit">Search</button>
+        </form>
+
         @if(Auth::user())
-            <span class="user-greeting">Welcome, {{ Auth::user()->name }}</span>
+            <span class="user-greeting">Member: {{ Auth::user()->name }}</span>
             <a href="{{ route('logout') }}" class="login-btn">Logout</a>
         @else
             <a href="{{ url('/login') }}" class="login-btn">Login</a>

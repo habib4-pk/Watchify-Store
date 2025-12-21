@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Watch extends Model
 {
-     protected $fillable = ['name', 'price', 'description', 'image', 'stock'];
+    protected $fillable = ['name', 'price', 'description', 'image', 'stock', 'featured'];
 
     public function orderItems()
     {

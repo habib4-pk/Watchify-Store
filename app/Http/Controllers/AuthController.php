@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -11,17 +10,13 @@ class AuthController extends Controller
 {
     public function loginForm()
     {
-
         return view('auth.login');
     }
 
     public function registerForm()
     {
-
         return view('auth.register');
     }
-
-  
 
     public function login(Request $request)
     {
@@ -37,56 +32,19 @@ class AuthController extends Controller
             $user = Auth::user();
 
             if ($user->role === 'admin') {
-                return redirect()->intended(route('adminDashboard'));
+                return redirect()->intended(route('adminDashboard'))
+                    ->with('success', 'Welcome Admin! You have logged in successfully.');
             }
 
-            return redirect()->intended(route('home'));
+            return redirect()->intended(route('home'))
+                ->with('success', 'Login successful. Welcome back!');
         }
 
-        return redirect()->back();
+        return redirect()->back()->with('error', 'Invalid email or password.');
     }
-
-
-    // public function login(Request $request){
-
-    //     $email = $request->email;
-
-    //     $password = $request->password;
-
-    //     $user = User::where('email',$email)->first();
-
-    //     if($user){
-
-    //         $dbPass = $user->password;
-
-    //         if(password_verify($password,$dbPass)){
-
-
-    //             if($user->role == 'admin'){
-    //                 return redirect()->route('adminDashboard');
-    //             }else{
-
-    //                 return redirect()->route('home');
-    //             }
-
-    //         }else{
-    //             return redirect()->back();
-    //         }
-
-
-    //     }else{
-
-    //         return redirect()->back();
-
-    //     }
-
-
-    // }
 
     public function register(Request $request)
     {
-
-
         $user = new User;
 
         $user->name = $request->name;
@@ -95,13 +53,13 @@ class AuthController extends Controller
 
         $user->save();
 
-        return redirect()->route('loginForm');
+        return redirect()->route('loginForm')
+            ->with('success', 'Registration successful! Please login.');
     }
 
-    public function logout(Request $request){
-
+    public function logout(Request $request)
+    {
         $role = Auth::user()->role;
-
 
         Auth::logout();
 
@@ -109,12 +67,12 @@ class AuthController extends Controller
 
         $request->session()->regenerateToken();
 
-        if($role === 'admin'){
-            return redirect()->route('login');
+        if ($role === 'admin') {
+            return redirect()->route('login')
+                ->with('success', 'Admin logged out successfully.');
         }
-        
 
-        return redirect()->route('home');
+        return redirect()->route('home')
+            ->with('success', 'Logged out successfully.');
     }
-    
 }

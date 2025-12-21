@@ -13,12 +13,44 @@
         --bg-off-white: #fafafa;
     }
 
+    /* --- Manual Dismiss Success Alert --- */
+    .alert-success { 
+        display: flex; 
+        justify-content: space-between; 
+        align-items: center; 
+        padding: 15px 25px; 
+        background: #dcfce7; 
+        color: #15803d; 
+        border-radius: 4px; 
+        margin: 20px auto 0;
+        max-width: 1200px;
+        border: 1px solid #bbf7d0; 
+        font-size: 14px;
+        font-weight: 500;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        font-family: 'Inter', sans-serif;
+    }
+
+    .close-btn { 
+        background: none; 
+        border: none; 
+        color: #15803d; 
+        font-size: 24px; 
+        font-weight: bold; 
+        cursor: pointer; 
+        line-height: 1; 
+        padding: 0;
+        margin-left: 20px;
+        transition: transform 0.2s ease;
+    }
+    .close-btn:hover { transform: scale(1.2); opacity: 0.7; }
+
     .checkout-wrapper {
         display: grid;
         grid-template-columns: 1fr 400px;
         gap: 60px;
         max-width: 1200px;
-        margin: 60px auto 100px;
+        margin: 40px auto 100px;
         font-family: 'Inter', sans-serif;
     }
 
@@ -30,13 +62,14 @@
         padding-bottom: 15px;
     }
 
-    /* --- Left Side: Shipping Form --- */
+    /* --- Form Section --- */
     .form-section h3 {
-        font-size: 14px;
+        font-size: 13px;
         text-transform: uppercase;
         letter-spacing: 2px;
         margin-bottom: 25px;
         font-weight: 700;
+        color: var(--luxury-black);
     }
 
     .input-grid {
@@ -55,9 +88,10 @@
     }
 
     .field-group label {
-        font-size: 12px;
+        font-size: 11px;
         font-weight: 700;
         text-transform: uppercase;
+        letter-spacing: 1px;
         color: var(--luxury-black);
     }
 
@@ -67,6 +101,7 @@
         font-size: 14px;
         border-radius: 2px;
         transition: border-color 0.3s;
+        font-family: 'Inter', sans-serif;
     }
 
     .field-group input:focus {
@@ -74,7 +109,7 @@
         border-color: var(--luxury-black);
     }
 
-    /* --- Right Side: Order Summary --- */
+    /* --- Sidebar Summary --- */
     .summary-sidebar {
         background: var(--bg-off-white);
         padding: 35px;
@@ -85,18 +120,12 @@
     }
 
     .summary-sidebar h3 {
-        font-size: 14px;
+        font-size: 13px;
         text-transform: uppercase;
         letter-spacing: 1.5px;
         margin-bottom: 25px;
         border-bottom: 1px solid #ddd;
         padding-bottom: 15px;
-    }
-
-    .order-items-list {
-        list-style: none;
-        padding: 0;
-        margin-bottom: 25px;
     }
 
     .summary-item {
@@ -114,22 +143,17 @@
         border: 1px solid #eee;
     }
 
-    .summary-item-info { flex: 1; }
-    
     .summary-item-info p {
         font-size: 13px;
         font-weight: 600;
         margin: 0;
-    }
-
-    .summary-item-info span {
-        font-size: 12px;
-        color: var(--text-muted);
+        text-transform: uppercase;
     }
 
     .summary-total-box {
         border-top: 1px solid #ddd;
         padding-top: 20px;
+        margin-top: 10px;
     }
 
     .total-row {
@@ -138,6 +162,7 @@
         font-size: 18px;
         font-weight: 700;
         margin-top: 10px;
+        color: var(--luxury-black);
     }
 
     .btn-place-order {
@@ -149,7 +174,7 @@
         text-transform: uppercase;
         letter-spacing: 2px;
         font-weight: 700;
-        font-size: 13px;
+        font-size: 12px;
         margin-top: 30px;
         cursor: pointer;
         transition: all 0.3s ease;
@@ -161,18 +186,24 @@
     }
 
     @media (max-width: 992px) {
-        .checkout-wrapper {
-            grid-template-columns: 1fr;
-        }
-        .summary-sidebar {
-            position: static;
-            order: -1; /* Summary appears first on mobile */
-        }
+        .checkout-wrapper { grid-template-columns: 1fr; }
+        .summary-sidebar { position: static; order: -1; margin-bottom: 40px; }
     }
 </style>
 @endsection
 
 @section('content')
+
+@if(session('success'))
+    <div style="max-width: 500px; margin: 0 auto 25px; padding: 0 15px;">
+        <div id="success-alert" class="alert-success" style="display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; background: #dcfce7; color: #15803d; border-radius: 8px; border: 1px solid #bbf7d0; font-size: 14px; font-weight: 500; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+            <span>{{ session('success') }}</span>
+            <button type="button" class="close-btn" onclick="document.getElementById('success-alert').remove()" style="background: none; border: none; color: #15803d; font-size: 24px; font-weight: bold; cursor: pointer; line-height: 1; padding: 0; margin-left: 20px; transition: transform 0.2s ease;">&times;</button>
+        </div>
+    </div>
+@endif
+
+
 <div class="checkout-wrapper">
     <div class="form-section">
         <h1 class="checkout-title">Checkout</h1>
@@ -215,13 +246,13 @@
     <div class="summary-sidebar">
         <h3>Order Summary</h3>
         
-        <ul class="order-items-list">
+        <ul class="order-items-list" style="list-style: none; padding: 0;">
             @foreach ($cart as $item)
             <li class="summary-item">
                 <img src="{{ asset('storage/' . $item->watch->image) }}" alt="{{ $item->watch->name }}">
                 <div class="summary-item-info">
                     <p>{{ $item->watch->name }}</p>
-                    <span>Qty: {{ $item->quantity }}</span>
+                    <span style="font-size: 12px; color: var(--text-muted);">Qty: {{ $item->quantity }}</span>
                 </div>
                 <div style="font-size: 13px; font-weight: 600;">
                     Rs. {{ number_format($item->watch->price * $item->quantity, 2) }}
@@ -231,11 +262,11 @@
         </ul>
 
         <div class="summary-total-box">
-            <div style="display: flex; justify-content: space-between; color: var(--text-muted); font-size: 14px; margin-bottom: 10px;">
+            <div style="display: flex; justify-content: space-between; color: var(--text-muted); font-size: 13px; margin-bottom: 12px;">
                 <span>Subtotal</span>
                 <span>Rs. {{ number_format($total, 2) }}</span>
             </div>
-            <div style="display: flex; justify-content: space-between; color: var(--text-muted); font-size: 14px; margin-bottom: 10px;">
+            <div style="display: flex; justify-content: space-between; color: var(--text-muted); font-size: 13px; margin-bottom: 12px;">
                 <span>Shipping</span>
                 <span style="color: #15803d; font-weight: 600;">Complimentary</span>
             </div>
@@ -245,8 +276,8 @@
             </div>
         </div>
         
-        <p style="font-size: 11px; color: #999; margin-top: 20px; text-align: center;">
-            <i class="bi bi-shield-lock"></i> Secure SSL Encrypted Checkout
+        <p style="font-size: 10px; color: #999; margin-top: 30px; text-align: center; text-transform: uppercase; letter-spacing: 1px;">
+            Secure SSL Encrypted Checkout
         </p>
     </div>
 </div>

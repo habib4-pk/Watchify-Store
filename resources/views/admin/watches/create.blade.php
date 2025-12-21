@@ -46,6 +46,14 @@
         </div>
 
         <div class="form-group">
+            <label class="form-label">Featured</label>
+            <select name="featured" class="form-input" required>
+                <option value="no" {{ old('featured') == 'no' ? 'selected' : '' }}>No</option>
+                <option value="yes" {{ old('featured') == 'yes' ? 'selected' : '' }}>Yes</option>
+            </select>
+        </div>
+
+        <div class="form-group">
             <label class="form-label">Watch Image</label>
             <input type="file" name="image" class="form-input" accept="image/*" required>
             <p style="font-size: 12px; color: #64748b; margin-top: 5px;">Allowed: jpeg, png, jpg. Max: 2MB.</p>

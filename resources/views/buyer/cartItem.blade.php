@@ -13,6 +13,37 @@
         --accent-green: #15803d;
     }
 
+    /* --- Manual Dismiss Success Alert --- */
+    .alert-success { 
+        display: flex; 
+        justify-content: space-between; 
+        align-items: center; 
+        padding: 15px 20px; 
+        background: #dcfce7; 
+        color: #15803d; 
+        border-radius: 8px; 
+        margin-bottom: 25px; 
+        border: 1px solid #bbf7d0; 
+        font-size: 14px;
+        font-weight: 500;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        font-family: 'Inter', sans-serif;
+    }
+
+    .close-btn { 
+        background: none; 
+        border: none; 
+        color: #15803d; 
+        font-size: 24px; 
+        font-weight: bold; 
+        cursor: pointer; 
+        line-height: 1; 
+        padding: 0;
+        margin-left: 20px;
+        transition: transform 0.2s ease;
+    }
+    .close-btn:hover { transform: scale(1.2); opacity: 0.7; }
+
     .cart-wrapper {
         max-width: 1000px;
         margin: 60px auto 100px;
@@ -58,6 +89,7 @@
         aspect-ratio: 1/1;
         object-fit: cover;
         background: #f9f9f9;
+        border-radius: 2px;
     }
 
     .item-details h3 {
@@ -189,6 +221,26 @@
 @endsection
 
 @section('content')
+
+@if(session('success'))
+    <div style="max-width: 500px; margin: 0 auto 25px; padding: 0 15px;">
+        <div id="success-alert" class="alert-success" style="display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; background: #dcfce7; color: #15803d; border-radius: 8px; border: 1px solid #bbf7d0; font-size: 14px; font-weight: 500; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+            <span>{{ session('success') }}</span>
+            <button type="button" class="close-btn" onclick="document.getElementById('success-alert').remove()" style="background: none; border: none; color: #15803d; font-size: 24px; font-weight: bold; cursor: pointer; line-height: 1; padding: 0; margin-left: 20px; transition: transform 0.2s ease;">&times;</button>
+        </div>
+    </div>
+@endif
+
+@if(session('error'))
+    <div style="max-width: 500px; margin: 0 auto 25px; padding: 0 15px;">
+        <div id="error-alert" class="alert-error" style="display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; background: #fee2e2; color: #b91c1c; border-radius: 8px; border: 1px solid #fca5a5; font-size: 14px; font-weight: 500; box-shadow: 0 2px 8px rgba(0,0,0,0.05); font-family: 'Inter', sans-serif;">
+            <span>{{ session('error') }}</span>
+            <button type="button" class="close-btn" onclick="document.getElementById('error-alert').remove()" style="background: none; border: none; color: #b91c1c; font-size: 24px; font-weight: bold; cursor: pointer; line-height: 1; padding: 0; margin-left: 20px; transition: transform 0.2s ease;">&times;</button>
+        </div>
+    </div>
+@endif
+
+
 <div class="cart-wrapper">
     @if(count($cart) > 0)
     <div class="cart-header">

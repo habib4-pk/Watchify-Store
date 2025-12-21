@@ -41,7 +41,9 @@ Route::post('/admin/users/delete',[AdminController::class, 'destroy'])->name('de
 //For Buyer
 
 Route::get("/home", [BuyerController::class, 'home'])->name('home');
+Route::get("/home/featured", [BuyerController::class, 'featured'])->name('featured');
 Route::get("/home/watches",[BuyerController::class,'details'])->name('watchDetails');
+Route::get("/home/search",[BuyerController::class,'search'])->name('search');
 Route::get("/home/cart",[BuyerController::class,'addToCart'])->name('cartDetails');
 
 Route::post("/home/cart",[BuyerController::class,'addToCart'])->name('addToCart');

@@ -12,14 +12,17 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('watches', function (Blueprint $table) {
+
             
-            $table->id();
-            $table->string('name');
-            $table->float('price');
-            $table->text('description')->nullable();
-            $table->string('image'); 
-            $table->integer('stock')->default(0);
-            $table->timestamps();
+                $table->id();
+                $table->string('name');
+                $table->float('price');
+                $table->text('description')->nullable();
+                $table->string('image');
+                $table->integer('stock')->default(0);
+                $table->enum('featured', ['yes', 'no'])->default('no');  
+                $table->timestamps();
+         
         });
     }
 
