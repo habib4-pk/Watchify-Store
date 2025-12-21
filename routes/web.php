@@ -25,7 +25,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
     // Orders Routes
     Route::get('admin/orders', [OrderController::class, 'index'])->name('allOrders');
-    Route::get('admin/orders/order-details', [OrderController::class, 'show'])->name('orderDetails');
+    Route::post('admin/orders/order-details', [OrderController::class, 'show'])->name('orderDetails');
     Route::post('admin/orders/update-order-status', [OrderController::class, 'update'])->name('updateOrderStatus');
 
     // Users Routes
