@@ -175,9 +175,11 @@
     <ul class="nav-menu">
         <li><a href="{{ route('home') }}">Home</a></li>
         <li><a href="{{ route('featured') }}">Featured</a></li>
+
+          @if(Auth::user())
         <li><a href="{{ route('cartItems') }}">Cart</a></li> 
 
-        @if(Auth::user())
+      
             <li><a href="{{ route('myOrders') }}">My Orders</a></li> 
         @endif 
         

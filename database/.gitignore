@@ -1,1 +1,43 @@
-*.sqlite*
+# Laravel common ignores
+
+/vendor
+/node_modules
+/public/storage
+/storage/*.key
+/storage/app/public
+/storage/framework/cache/data
+/storage/framework/sessions
+/storage/framework/views
+/.env
+/.env.*
+Homestead.yaml
+Homestead.json
+/.vagrant
+
+# Ignore SQLite database files
+*.sqlite
+*.sqlite3
+
+# Ignore IDE/editor files
+.idea
+.vscode
+*.sublime-project
+*.sublime-workspace
+
+# Ignore system files
+.DS_Store
+Thumbs.db
+
+# Ignore logs and debug files
+/storage/logs/*.log
+/storage/debugbar
+
+# Ignore compiled files and caches
+/bootstrap/cache/*.php
+
+# Ignore Composer files
+composer.lock
+
+# Ignore NPM/Yarn lock files (optional, depends on your workflow)
+package-lock.json
+yarn.lock

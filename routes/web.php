@@ -10,32 +10,29 @@ use Symfony\Component\Routing\Router;
 
 //For Admin
 
-Route::get('/admin/dashboard',[AdminController::class,'dashboard']);
+Route::middleware(['auth', 'admin'])->group(function () {
 
+    // Admin Dashboard
+    Route::get('/admin/dashboard', [AdminController::class, 'dashboard']);
 
-//For Watches
+    // Watches Routes
+    Route::get('admin/watches', [WatchController::class, 'index'])->name('adminDashboard');
+    Route::get('admin/watches/add', [WatchController::class, 'add'])->name('addWatch');
+    Route::post('admin/watches/store', [WatchController::class, 'store'])->name('storeWatch');
+    Route::post('admin/watches/delete', [WatchController::class, 'destroy'])->name('deleteWatch');
+    Route::post('admin/watches/update', [WatchController::class, 'update'])->name('updateWatch');
+    Route::post('admin/watches/edit', [WatchController::class, 'edit'])->name('editWatch');
 
-Route::get('admin/watches',[WatchController::class ,'index'])->name('adminDashboard');
-Route::get('admin/watches/add',[WatchController::class, 'add'])->name('addWatch');
-Route::post("/admin/watches/store",[WatchController::class ,'store'])->name('storeWatch');
-Route::post("/admin/watches/delete",[WatchController::class ,'destroy'])->name('deleteWatch');
-Route::post("/admin/watches/update",[WatchController::class ,'update'])->name('updateWatch');
-Route::post("/admin/watches/edit",[WatchController::class ,'edit'])->name('editWatch');
+    // Orders Routes
+    Route::get('admin/orders', [OrderController::class, 'index'])->name('allOrders');
+    Route::get('admin/orders/order-details', [OrderController::class, 'show'])->name('orderDetails');
+    Route::post('admin/orders/update-order-status', [OrderController::class, 'update'])->name('updateOrderStatus');
 
+    // Users Routes
+    Route::get('/admin/users', [AdminController::class, 'showAllUsers'])->name('allUsers');
+    Route::post('/admin/users/delete', [AdminController::class, 'destroy'])->name('deleteUser');
 
-//For Orders
-
-Route::get('admin/orders',[OrderController::class ,'index'])->name('allOrders');
-Route::get('admin/orders/order-details',[OrderController::class ,'show'])->name('orderDetails');
-Route::post('admin/orders/update-order-status',[OrderController::class ,'update'])->name('updateOrderStatus');
-
-
-//For Users
-
-
-Route::get('/admin/users',[AdminController::class, 'showAllUsers'])->name('allUsers');
-Route::post('/admin/users/delete',[AdminController::class, 'destroy'])->name('deleteUser');
-
+});
 
 
 //For Buyer

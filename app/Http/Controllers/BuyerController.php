@@ -230,7 +230,7 @@ class BuyerController extends Controller
                 return redirect()->back()->with('error', 'Not in stock any more');
             }
         } else {
-            return redirect()->route('login');
+            return redirect()->route('login')->with('error', 'Please log in to add items to your cart.');
         }
     }
 
