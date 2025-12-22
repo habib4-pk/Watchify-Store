@@ -1,0 +1,412 @@
+/* ===============================
+   NAVBAR MAIN CONTAINER
+================================ */
+#nav-toggle {
+    display: none;
+}
+
+.watchify-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 8%;
+    height: 90px;
+    background: #ffffff;
+    border-bottom: 1px solid #f2f2f2;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    font-family: 'Inter', sans-serif;
+}
+
+/* ===============================
+   LOGO STYLING
+================================ */
+.nav-brand {
+    font-size: 32px;
+    font-weight: 900;
+    color: #000;
+    text-decoration: none;
+    letter-spacing: -1px;
+    z-index: 1001;
+}
+
+.nav-brand span {
+    color: #666;
+    font-weight: 700;
+    font-size: 32px;
+}
+
+/* ===============================
+   HAMBURGER MENU
+================================ */
+.nav-hamburger {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+    z-index: 1001;
+}
+
+.nav-hamburger span {
+    width: 25px;
+    height: 2px;
+    background: #000;
+    margin: 4px 0;
+    transition: 0.3s;
+    border-radius: 2px;
+}
+
+#nav-toggle:checked ~ .watchify-nav .nav-hamburger span:nth-child(1) {
+    transform: rotate(-45deg) translate(-5px, 6px);
+}
+
+#nav-toggle:checked ~ .watchify-nav .nav-hamburger span:nth-child(2) {
+    opacity: 0;
+}
+
+#nav-toggle:checked ~ .watchify-nav .nav-hamburger span:nth-child(3) {
+    transform: rotate(45deg) translate(-5px, -6px);
+}
+
+/* ===============================
+   NAVIGATION MENU
+================================ */
+.nav-menu {
+    display: flex;
+    gap: 40px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    align-items: center;
+}
+
+.nav-menu li a {
+    text-decoration: none;
+    color: #1a1a1a;
+    font-size: 14px;
+    font-weight: 500;
+    position: relative;
+    padding: 8px 0;
+    transition: color 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.nav-menu li a i {
+    font-size: 18px;
+}
+
+.nav-menu li a.cart-link {
+    position: relative;
+}
+
+.cart-badge {
+    position: absolute;
+    top: -8px;
+    right: -10px;
+    background: #ff4444;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 10px;
+    min-width: 18px;
+    text-align: center;
+}
+
+.nav-menu li a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: #000;
+    transition: width 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.nav-menu li a:hover {
+    color: #000;
+}
+
+.nav-menu li a:hover::after {
+    width: 100%;
+}
+
+/* Hide mobile-only items on desktop */
+.mobile-only {
+    display: none;
+}
+
+/* ===============================
+   SEARCH BAR
+================================ */
+.search-container {
+    display: flex;
+    align-items: center;
+    background: #f8f8f8;
+    border-radius: 24px;
+    padding: 8px 16px;
+    margin-right: 20px;
+    transition: all 0.3s ease;
+}
+
+.search-container:focus-within {
+    background: #f0f0f0;
+    box-shadow: 0 0 0 2px #e0e0e0;
+}
+
+.search-input {
+    border: none;
+    padding: 4px 8px;
+    font-size: 13px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    width: 160px;
+    outline: none;
+    background: transparent;
+}
+
+.search-input::placeholder {
+    color: #999;
+    font-size: 13px;
+}
+
+.search-submit {
+    background: none;
+    border: none;
+    padding: 0 0 0 8px;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+    display: flex;
+    align-items: center;
+}
+
+.search-submit i {
+    font-size: 14px;
+    color: #666;
+}
+
+.search-submit:hover {
+    opacity: 0.7;
+}
+
+/* ===============================
+   USER ACTIONS & AUTH AREA
+================================ */
+.nav-actions {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.user-greeting {
+    font-size: 13px;
+    font-weight: 500;
+    color: #666;
+    margin: 0;
+}
+
+.login-btn {
+    text-decoration: none;
+    color: #1a1a1a;
+    font-size: 14px;
+    font-weight: 500;
+    transition: color 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.login-btn i {
+    font-size: 18px;
+}
+
+.login-btn:hover {
+    color: #000;
+}
+
+.signup-btn {
+    padding: 8px 18px;
+    font-size: 13px;
+    font-weight: 600;
+    background: #000;
+    color: #fff;
+    border: 2px solid #000;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.signup-btn:hover {
+    background: #fff;
+    color: #000;
+}
+
+/* Overlay (hidden by default) */
+.nav-overlay {
+    display: none;
+}
+
+/* ===============================
+   TABLET VIEW
+================================ */
+@media (max-width: 992px) {
+    .watchify-nav {
+        padding: 0 4%;
+    }
+
+    .search-input {
+        width: 120px;
+    }
+
+    .nav-menu {
+        gap: 30px;
+    }
+}
+
+/* ===============================
+   MOBILE VIEW
+================================ */
+@media (max-width: 768px) {
+    /* Show hamburger menu */
+    .nav-hamburger {
+        display: flex;
+    }
+
+    /* Hide desktop nav actions */
+    .nav-actions {
+        display: none;
+    }
+
+    /* Mobile menu styling */
+    .nav-menu {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 280px;
+        height: 100vh;
+        background: #ffffff;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 100px 30px 30px;
+        gap: 20px;
+        transition: right 0.4s ease;
+        box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+        overflow-y: auto;
+    }
+
+    /* Show menu when checkbox is checked */
+    #nav-toggle:checked ~ .watchify-nav .nav-menu {
+        right: 0;
+    }
+
+    /* Show overlay when menu is open */
+    #nav-toggle:checked ~ .nav-overlay {
+        display: block;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+    }
+
+    .nav-menu li {
+        width: 100%;
+    }
+
+    .nav-menu li a {
+        display: flex;
+        font-size: 15px;
+        padding: 12px 0;
+        width: 100%;
+    }
+
+    /* Show mobile-only items */
+    .mobile-only {
+        display: block;
+        width: 100%;
+        padding: 12px 0;
+        border-top: 1px solid #f2f2f2;
+    }
+
+    /* Mobile search styling */
+    .mobile-only .search-container {
+        width: 100%;
+        margin: 10px 0;
+        border-radius: 8px;
+    }
+
+    .mobile-only .search-input {
+        width: 100%;
+        padding: 8px;
+        font-size: 14px;
+    }
+
+    .mobile-only .search-submit {
+        padding: 0 0 0 10px;
+    }
+
+    /* Mobile auth links */
+    .mobile-auth-link {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        text-decoration: none;
+        color: #1a1a1a;
+        font-size: 15px;
+        font-weight: 500;
+        padding: 12px 0;
+    }
+
+    .mobile-auth-link i {
+        font-size: 18px;
+    }
+
+    .mobile-auth-link.signup {
+        background: #000;
+        color: #fff;
+        text-align: center;
+        padding: 15px;
+        margin-top: 10px;
+        border-radius: 6px;
+        justify-content: center;
+        transition: all 0.3s ease;
+    }
+
+    .mobile-auth-link.signup:hover {
+        background: #333;
+    }
+
+    .mobile-only .user-greeting {
+        display: block;
+        font-size: 14px;
+        color: #666;
+        padding: 12px 0;
+    }
+}
+
+/* ===============================
+   SMALL MOBILE
+================================ */
+@media (max-width: 480px) {
+    .watchify-nav {
+        padding: 0 5%;
+        height: 70px;
+    }
+
+    .nav-brand {
+        font-size: 28px;
+    }
+
+    .nav-brand span {
+        font-size: 28px;
+    }
+
+    .nav-menu {
+        width: 100%;
+    }
+}

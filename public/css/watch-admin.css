@@ -1,0 +1,245 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    gap: 15px;
+}
+
+.page-title {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: #111;
+}
+
+.mb-20 {
+    margin-bottom: 20px;
+}
+
+.btn-add {
+    background-color: #d4af37;
+    color: #111;
+    text-decoration: none;
+    padding: 12px 25px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    transition: 0.3s ease;
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2);
+}
+
+.btn-add:hover {
+    background-color: #111;
+    color: #d4af37;
+}
+
+.table-container, .form-container {
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.04);
+}
+
+.table-container {
+    overflow-x: auto;
+}
+
+.custom-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 900px;
+}
+
+.custom-table th {
+    background: #fdfdfd;
+    padding: 18px 15px;
+    text-align: left;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #888;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+.custom-table td {
+    padding: 15px;
+    border-bottom: 1px solid #f7f7f7;
+    vertical-align: middle;
+    font-size: 0.95rem;
+    color: #444;
+}
+
+.watch-img {
+    width: 65px;
+    height: 65px;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 1px solid #eee;
+    background: #fafafa;
+}
+
+.desc-text {
+    max-width: 250px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 0.85rem;
+    color: #777;
+}
+
+.actions {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-edit, .btn-delete, .btn-submit, .btn-view {
+    padding: 9px 18px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    border: none;
+    transition: 0.3s ease;
+}
+
+.btn-edit { background: #f0f4ff; color: #4e73df; }
+.btn-edit:hover { background: #4e73df; color: #fff; }
+
+.btn-delete { background: #fff5f5; color: #e74a3b; }
+.btn-delete:hover { background: #e74a3b; color: #fff; }
+
+.form-group {
+    margin-bottom: 25px;
+}
+
+.form-label {
+    display: block;
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: #111;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.form-input {
+    width: 100%;
+    padding: 14px 18px;
+    border: 1.5px solid #ececec;
+    border-radius: 10px;
+    font-size: 1rem;
+    color: #333;
+    background: #fafafa;
+    transition: all 0.3s ease;
+}
+
+.form-input:focus {
+    border-color: #d4af37;
+    background: #fff;
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.1);
+}
+
+.grid-2-gap {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+}
+
+.form-actions {
+    margin-top: 40px;
+    padding-top: 25px;
+    border-top: 1px solid #f0f0f0;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.btn-submit {
+    background: #111;
+    color: #d4af37;
+    padding: 14px 35px;
+    font-size: 1rem;
+    border: 1px solid #111;
+}
+
+.btn-submit:hover {
+    background: #d4af37;
+    color: #111;
+    border-color: #d4af37;
+}
+
+.btn-cancel {
+    text-decoration: none;
+    color: #888;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.error-box {
+    background: #fff5f5;
+    color: #c53030;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 30px;
+    border-left: 6px solid #fc8181;
+    font-size: 0.9rem;
+}
+
+.alert-wrapper {
+    margin-bottom: 25px;
+}
+
+.alert-success {
+    background: #111;
+    color: #fff;
+    padding: 16px 24px;
+    border-radius: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-left: 6px solid #d4af37;
+}
+
+.close-btn {
+    background: transparent;
+    border: none;
+    color: #d4af37;
+    font-size: 1.8rem;
+    cursor: pointer;
+    line-height: 1;
+}
+
+@media (max-width: 992px) {
+    .grid-2-gap {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .btn-add {
+        width: 100%;
+        text-align: center;
+    }
+    .form-container, .table-container {
+        padding: 20px;
+    }
+    .form-actions {
+        flex-direction: column;
+    }
+    .btn-submit {
+        width: 100%;
+    }
+}

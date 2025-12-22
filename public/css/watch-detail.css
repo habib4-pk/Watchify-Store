@@ -1,0 +1,261 @@
+/* ===============================
+   WATCH DETAILS PAGE
+================================ */
+.detail-wrapper {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 80px;
+    max-width: 1300px;
+    margin: 80px auto;
+    padding: 0 40px;
+    font-family: 'Inter', sans-serif;
+    align-items: start;
+}
+
+/* ===============================
+   IMAGE GALLERY
+================================ */
+.image-gallery {
+    background: #fafafa;
+    padding: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+}
+
+.image-gallery img {
+    width: 100%;
+    height: auto;
+    max-height: 600px;
+    object-fit: contain;
+    transition: transform 0.5s;
+}
+
+.image-gallery img:hover {
+    transform: scale(1.05);
+}
+
+/* ===============================
+   PRODUCT DETAILS
+================================ */
+.product-details {
+    padding-top: 20px;
+}
+
+.brand-label {
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #999;
+    margin-bottom: 15px;
+    display: block;
+}
+
+.product-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 42px;
+    font-weight: 400;
+    color: #1a1a1a;
+    margin-bottom: 20px;
+    line-height: 1.2;
+}
+
+.price-tag {
+    font-size: 24px;
+    font-weight: 400;
+    color: #333;
+    margin-bottom: 35px;
+    display: block;
+}
+
+/* ===============================
+   DESCRIPTION BOX
+================================ */
+.description-box {
+    border-top: 1px solid #f0f0f0;
+    padding-top: 30px;
+    margin-bottom: 40px;
+}
+
+.description-box h4 {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 15px;
+    color: #1a1a1a;
+}
+
+.description-box p {
+    font-size: 15px;
+    line-height: 1.8;
+    color: #666;
+    font-weight: 300;
+}
+
+/* ===============================
+   STOCK STATUS
+================================ */
+.stock-status {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.in-stock {
+    color: #15803d;
+}
+
+.in-stock .status-dot {
+    background: #15803d;
+}
+
+.out-stock {
+    color: #b91c1c;
+}
+
+.out-stock .status-dot {
+    background: #b91c1c;
+}
+
+/* ===============================
+   BUY BUTTON
+================================ */
+.btn-buy {
+    width: 100%;
+    background: #1a1a1a;
+    color: #fff;
+    border: 1px solid #1a1a1a;
+    padding: 20px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-buy:hover {
+    background: transparent;
+    color: #1a1a1a;
+}
+
+.disabled-btn {
+    background: #eee;
+    color: #999;
+    border-color: #eee;
+    cursor: not-allowed;
+}
+
+.disabled-btn:hover {
+    background: #eee;
+    color: #999;
+}
+
+/* ===============================
+   WARRANTY TEXT
+================================ */
+.warranty-text {
+    margin-top: 25px;
+    font-size: 12px;
+    color: #999;
+    text-align: center;
+    letter-spacing: 0.5px;
+}
+
+/* ===============================
+   TABLET (992px and below)
+================================ */
+@media (max-width: 992px) {
+    .detail-wrapper {
+        grid-template-columns: 1fr;
+        gap: 50px;
+        margin: 60px auto;
+        padding: 0 30px;
+    }
+
+    .product-title {
+        font-size: 36px;
+    }
+
+    .price-tag {
+        font-size: 22px;
+    }
+}
+
+/* ===============================
+   MOBILE (576px and below)
+================================ */
+@media (max-width: 576px) {
+    .detail-wrapper {
+        gap: 40px;
+        margin: 40px auto;
+        padding: 0 20px;
+    }
+
+    .image-gallery {
+        padding: 20px;
+    }
+
+    .image-gallery img {
+        max-height: 400px;
+    }
+
+    .product-details {
+        padding-top: 0;
+    }
+
+    .brand-label {
+        font-size: 10px;
+        letter-spacing: 3px;
+    }
+
+    .product-title {
+        font-size: 28px;
+    }
+
+    .price-tag {
+        font-size: 20px;
+        margin-bottom: 25px;
+    }
+
+    .description-box {
+        padding-top: 20px;
+        margin-bottom: 30px;
+    }
+
+    .description-box h4 {
+        font-size: 11px;
+    }
+
+    .description-box p {
+        font-size: 14px;
+    }
+
+    .stock-status {
+        font-size: 11px;
+        margin-bottom: 20px;
+    }
+
+    .btn-buy {
+        padding: 16px;
+        font-size: 12px;
+    }
+
+    .warranty-text {
+        font-size: 11px;
+        margin-top: 20px;
+    }
+}

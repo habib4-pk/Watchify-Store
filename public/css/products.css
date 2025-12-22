@@ -1,0 +1,399 @@
+/* ===============================
+   ALERT SUCCESS
+================================ */
+.alert-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 40px;
+}
+
+.alert-success {
+    background: #f0fdf4;
+    border: 1px solid #86efac;
+    color: #166534;
+    padding: 15px 20px;
+    border-radius: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.alert-close {
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: #166534;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+}
+
+.alert-close:hover {
+    opacity: 0.7;
+}
+
+/* ===============================
+   HERO SECTION
+================================ */
+.hero {
+    padding: 100px 40px 80px;
+    text-align: center;
+    background: #fcfcfc;
+    border-bottom: 1px solid #f0f0f0;
+    margin-bottom: 80px;
+}
+
+.hero-label {
+    text-transform: uppercase;
+    letter-spacing: 5px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #666;
+    display: block;
+    margin-bottom: 15px;
+}
+
+.hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 48px;
+    font-weight: 400;
+    color: #1a1a1a;
+    letter-spacing: -1px;
+    margin-bottom: 20px;
+}
+
+.hero p {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    color: #666;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+/* ===============================
+   FEATURED PRODUCTS SECTION
+================================ */
+.featured-products {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 40px 100px;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 50px;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+    font-weight: 400;
+    color: #1a1a1a;
+}
+
+.header-actions {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.view-all-link {
+    text-decoration: none;
+    color: #1a1a1a;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    transition: color 0.3s;
+}
+
+.view-all-link:hover {
+    color: #666;
+}
+
+/* ===============================
+   PRODUCT GRID
+================================ */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+}
+
+.product-card {
+    background: #fff;
+    border: 1px solid #f0f0f0;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.image-container {
+    width: 100%;
+    aspect-ratio: 1/1;
+    overflow: hidden;
+    background: #fafafa;
+}
+
+.product-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s;
+}
+
+.product-card:hover .product-image {
+    transform: scale(1.05);
+}
+
+/* ===============================
+   PRODUCT INFO
+================================ */
+.product-info {
+    padding: 25px;
+}
+
+.product-name {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.product-price {
+    font-family: 'Inter', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 20px;
+}
+
+/* ===============================
+   BUTTON GROUP
+================================ */
+.button-group {
+    display: flex;
+    gap: 10px;
+}
+
+.form-inline {
+    flex: 1;
+}
+
+.btn-view,
+.btn-add {
+    width: 100%;
+    padding: 12px 20px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    border: 1px solid #1a1a1a;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-view {
+    background: #fff;
+    color: #1a1a1a;
+}
+
+.btn-view:hover {
+    background: #1a1a1a;
+    color: #fff;
+}
+
+.btn-add {
+    background: #1a1a1a;
+    color: #fff;
+}
+
+.btn-add:hover {
+    background: #fff;
+    color: #1a1a1a;
+}
+
+.btn-disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.btn-disabled:hover {
+    background: #1a1a1a;
+    color: #fff;
+}
+
+/* ===============================
+   NO RESULTS
+================================ */
+.no-results {
+    text-align: center;
+    padding: 60px 20px;
+    background: #fafafa;
+    border: 1px solid #f0f0f0;
+}
+
+.no-results p {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    color: #666;
+}
+
+.no-results strong {
+    color: #1a1a1a;
+}
+
+/* ===============================
+   TABLET (992px and below)
+================================ */
+@media (max-width: 992px) {
+    .hero {
+        padding: 80px 30px 60px;
+        margin-bottom: 60px;
+    }
+
+    .hero h1 {
+        font-size: 38px;
+    }
+
+    .hero p {
+        font-size: 15px;
+    }
+
+    .featured-products {
+        padding: 0 30px 80px;
+    }
+
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        margin-bottom: 40px;
+    }
+
+    .section-title {
+        font-size: 28px;
+    }
+
+    .product-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 30px;
+    }
+
+    .alert-container {
+        padding: 0 30px;
+    }
+}
+
+/* ===============================
+   MOBILE (576px and below)
+================================ */
+@media (max-width: 576px) {
+    .hero {
+        padding: 60px 20px 50px;
+        margin-bottom: 40px;
+    }
+
+    .hero-label {
+        font-size: 10px;
+        letter-spacing: 3px;
+    }
+
+    .hero h1 {
+        font-size: 32px;
+    }
+
+    .hero p {
+        font-size: 14px;
+    }
+
+    .featured-products {
+        padding: 0 20px 60px;
+    }
+
+    .section-header {
+        margin-bottom: 30px;
+    }
+
+    .section-title {
+        font-size: 24px;
+    }
+
+    .header-actions {
+        flex-direction: column;
+        align-items: flex-start;
+        width: 100%;
+        gap: 15px;
+    }
+
+    .view-all-link {
+        font-size: 11px;
+    }
+
+    .product-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+
+    .product-info {
+        padding: 15px;
+    }
+
+    .product-name {
+        font-size: 13px;
+    }
+
+    .product-price {
+        font-size: 16px;
+    }
+
+    .button-group {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .btn-view,
+    .btn-add {
+        padding: 10px 15px;
+        font-size: 10px;
+    }
+
+    .alert-container {
+        padding: 0 20px;
+    }
+
+    .alert-success {
+        font-size: 13px;
+        padding: 12px 15px;
+    }
+}
+
+/* ===============================
+   SMALL MOBILE (400px and below)
+================================ */
+@media (max-width: 400px) {
+    .product-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .hero h1 {
+        font-size: 28px;
+    }
+
+    .section-title {
+        font-size: 22px;
+    }
+}

@@ -1,0 +1,235 @@
+/* ===============================
+   AUTH WRAPPER
+================================ */
+.auth-wrapper {
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    background: #fafafa;
+}
+
+.auth-card {
+    background: #fff;
+    padding: 50px;
+    max-width: 480px;
+    width: 100%;
+    border: 1px solid #f0f0f0;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+}
+
+.auth-card h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+    font-weight: 400;
+    color: #1a1a1a;
+    margin-bottom: 10px;
+}
+
+.auth-card > p {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 35px;
+}
+
+/* ===============================
+   ERROR BANNER
+================================ */
+.error-banner {
+    color: #b91c1c;
+    background: #fee2e2;
+    border: 1px solid #fca5a5;
+    padding: 12px 15px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+/* ===============================
+   FORM ELEMENTS
+================================ */
+.form-group {
+    margin-bottom: 25px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #1a1a1a;
+    margin-bottom: 8px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    transition: border-color 0.3s;
+    border-radius: 2px;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #1a1a1a;
+}
+
+.error-msg {
+    color: #b91c1c;
+    font-size: 12px;
+    margin-top: 5px;
+    display: block;
+}
+
+/* ===============================
+   AUTH BUTTON
+================================ */
+.btn-auth {
+    width: 100%;
+    background: #1a1a1a;
+    color: #fff;
+    border: 1px solid #1a1a1a;
+    padding: 16px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-top: 10px;
+}
+
+.btn-auth:hover {
+    background: transparent;
+    color: #1a1a1a;
+}
+
+/* ===============================
+   AUTH FOOTER
+================================ */
+.auth-footer {
+    text-align: center;
+    margin-top: 30px;
+    padding-top: 25px;
+    border-top: 1px solid #f0f0f0;
+}
+
+.auth-footer p {
+    font-size: 13px;
+    color: #666;
+}
+
+.auth-link {
+    color: #1a1a1a;
+    text-decoration: none;
+    font-weight: 700;
+    border-bottom: 1px solid #1a1a1a;
+    transition: opacity 0.3s;
+}
+
+.auth-link:hover {
+    opacity: 0.7;
+}
+
+/* ===============================
+   PASSWORD REQUIREMENTS
+================================ */
+.password-requirements {
+    display: none;
+    margin-top: 10px;
+    padding: 15px;
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.password-requirements p {
+    font-size: 13px;
+    margin: 8px 0;
+    color: #666;
+}
+
+.password-requirements b {
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+/* Validation Icons */
+.valid:before {
+    position: relative;
+    right: 35px;
+    content: "✔";
+    color: #13c247;
+}
+
+.invalid:before {
+    position: relative;
+    right: 35px;
+    content: "✖";
+    color: #c21613;
+}
+
+/* ===============================
+   TABLET (768px and below)
+================================ */
+@media (max-width: 768px) {
+    .auth-wrapper {
+        padding: 40px 20px;
+    }
+
+    .auth-card {
+        padding: 40px 30px;
+    }
+
+    .auth-card h1 {
+        font-size: 28px;
+    }
+}
+
+/* ===============================
+   MOBILE (576px and below)
+================================ */
+@media (max-width: 576px) {
+    .auth-wrapper {
+        padding: 30px 15px;
+    }
+
+    .auth-card {
+        padding: 30px 20px;
+    }
+
+    .auth-card h1 {
+        font-size: 24px;
+    }
+
+    .auth-card > p {
+        font-size: 13px;
+        margin-bottom: 25px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group input {
+        padding: 12px;
+        font-size: 13px;
+    }
+
+    .btn-auth {
+        padding: 14px;
+        font-size: 12px;
+    }
+
+    .password-requirements {
+        padding: 12px;
+    }
+
+    .password-requirements p {
+        font-size: 12px;
+    }
+}

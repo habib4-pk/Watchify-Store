@@ -4,25 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin - @yield('title')</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-        body { background-color: #f4f7fe; display: flex; min-height: 100vh; }
-        
-        .admin-layout { display: flex; width: 100%; }
-        
-        /* Sidebar Styling */
-        .sidebar-container { width: 260px; background: #1e293b; color: white; min-height: 100vh; position: fixed; }
-        
-        /* Main Body Styling */
-        .main-wrapper { flex: 1; margin-left: 260px; display: flex; flex-direction: column; min-width: 0; }
-        .content-area { padding: 30px; flex: 1; }
-
-        @media (max-width: 768px) {
-            .sidebar-container { width: 70px; }
-            .main-wrapper { margin-left: 70px; }
-            .sidebar-text { display: none; }
-        }
-    </style>
+    
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    
+  
+    <link rel="stylesheet" href="{{ asset('css/admin-layout.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin-style.css') }}">
+    
     @yield('styles')
 </head>
 <body>
@@ -41,5 +30,8 @@
             @include('admin.layouts.footer')
         </div>
     </div>
+
+    <script src="{{ asset('js/admin-main.js') }}"></script>
+    @yield('scripts')
 </body>
 </html>

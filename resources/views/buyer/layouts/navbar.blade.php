@@ -1,211 +1,94 @@
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="{{ asset('css/navbar.css') }}">
 
-<style>
-    /* Navbar Main Container */
-    .watchify-nav {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 0 8%;
-        height: 90px;
-        background: #ffffff;
-        border-bottom: 1px solid #f2f2f2;
-        position: sticky;
-        top: 0;
-        z-index: 1000;
-        font-family: 'Inter', sans-serif;
-    }
-
-    /* Logo Styling */
-    .nav-brand {
-        font-size: 22px;
-        font-weight: 900;
-        color: #000;
-        text-decoration: none;
-        letter-spacing: 4px;
-        text-transform: uppercase;
-    }
-
-    .nav-brand span {
-        color: #a1a1a1;
-        font-weight: 300;
-    }
-
-    /* Navigation Menu */
-    .nav-menu {
-        display: flex;
-        gap: 35px;
-        list-style: none;
-        margin: 0;
-        padding: 0;
-    }
-
-    .nav-menu li a {
-        text-decoration: none;
-        color: #1a1a1a;
-        font-size: 11px;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 1.5px;
-        position: relative;
-        padding: 8px 0;
-        transition: color 0.3s ease;
-    }
-
-    .nav-menu li a::after {
-        content: '';
-        position: absolute;
-        width: 0;
-        height: 1px;
-        bottom: 0;
-        left: 0;
-        background-color: #000;
-        transition: width 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-    }
-
-    .nav-menu li a:hover::after {
-        width: 100%;
-    }
-
-    /* --- Refined Search Bar --- */
-    .search-container {
-        display: flex;
-        align-items: center;
-        border-bottom: 1px solid #e0e0e0; /* Minimalist bottom line instead of box */
-        margin-right: 20px;
-        transition: border-color 0.3s ease;
-    }
-
-    .search-container:focus-within {
-        border-color: #000;
-    }
-
-    .search-input {
-        border: none;
-        padding: 8px 0;
-        font-size: 11px;
-        font-family: 'Inter', sans-serif;
-        font-weight: 400;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        width: 130px;
-        outline: none;
-        background: transparent;
-    }
-
-    .search-input::placeholder {
-        color: #b0b0b0;
-        text-transform: uppercase;
-        font-size: 10px;
-    }
-
-    .search-submit {
-        background: none;
-        border: none;
-        padding: 0 0 0 10px;
-        font-size: 10px;
-        font-weight: 800;
-        text-transform: uppercase;
-        letter-spacing: 1.5px;
-        color: #000;
-        cursor: pointer;
-        transition: color 0.3s ease;
-    }
-
-    .search-submit:hover {
-        color: #888;
-    }
-
-    /* User Actions & Auth Area */
-    .nav-actions {
-        display: flex;
-        gap: 25px;
-        align-items: center;
-    }
-
-    .user-greeting {
-        font-size: 11px;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        color: #888;
-        margin: 0;
-    }
-
-    .login-btn {
-        text-decoration: none;
-        color: #1a1a1a;
-        font-size: 11px;
-        font-weight: 800;
-        text-transform: uppercase;
-        letter-spacing: 1.5px;
-        transition: color 0.3s ease;
-    }
-
-    .signup-btn {
-        padding: 12px 28px;
-        font-size: 11px;
-        font-weight: 800;
-        background: #000;
-        color: #fff;
-        border: 1px solid #000;
-        text-decoration: none;
-        text-transform: uppercase;
-        letter-spacing: 2px;
-        transition: all 0.3s ease;
-    }
-
-    .signup-btn:hover {
-        background: #fff;
-        color: #000;
-    }
-
-    @media (max-width: 1100px) {
-        .watchify-nav { padding: 0 4%; }
-        .nav-menu { display: none; } /* Hide menu on smaller screens */
-        .search-input { width: 100px; }
-    }
-</style>
+<!-- Mobile Menu Toggle -->
+<input type="checkbox" id="nav-toggle">
 
 <nav class="watchify-nav">
     <a href="{{ url('/') }}" class="nav-brand">
-        Watchify<span>Store</span>
+        W<span>.</span>
     </a>
+
+    <!-- Hamburger Menu Button -->
+    <label for="nav-toggle" class="nav-hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+    </label>
     
     <ul class="nav-menu">
         <li><a href="{{ route('home') }}">Home</a></li>
         <li><a href="{{ route('featured') }}">Featured</a></li>
 
         @if(Auth::user())
-        <li><a href="{{ route('cartItems') }}">Cart</a></li> 
-
-      
-            <li><a href="{{ route('myOrders') }}">My Orders</a></li> 
+        
+        <li><a href="{{ route('myOrders') }}">My Orders</a></li> 
         @endif 
         
-        <li><a href="{{ route('aboutUs') }}">About Us</a></li>
+        <li><a href="{{ route('aboutUs') }}">About</a></li>
+
+        <li class="mobile-only">
+            <form action="{{route('search')}}" method="GET" class="search-container">
+                <input 
+                    type="text" 
+                    name="query" 
+                    placeholder="Search watches..." 
+                    class="search-input"
+                >
+                <button type="submit" class="search-submit">
+                    <i class="fas fa-search"></i>
+                </button>
+            </form>
+        </li>
+
+        @if(Auth::user())
+            <li class="mobile-only"><span class="user-greeting">{{ Auth::user()->name }}</span></li>
+            <li class="mobile-only">
+                <a href="{{ route('logout') }}" class="mobile-auth-link">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Logout
+                </a>
+            </li>
+        @else
+            <li class="mobile-only"><a href="{{ url('/login') }}" class="mobile-auth-link">Login</a></li>
+            <li class="mobile-only"><a href="{{ url('/register') }}" class="mobile-auth-link signup">Join Now</a></li>
+        @endif
     </ul>
 
     <div class="nav-actions">
+        @if(Auth::user())
+            <a href="{{ route('cartItems') }}" class="cart-link">
+                <i class="fas fa-shopping-cart"></i>
+             
+                    <span class="cart-badge">1</span>
+          
+            </a>
+        @endif
+
         <form action="{{route('search')}}" method="GET" class="search-container">
             <input 
                 type="text" 
                 name="query" 
-                placeholder="Search Timepieces" 
-
-                value=""
-               
+                placeholder="Search watches..." 
                 class="search-input"
             >
-            <button type="submit" class="search-submit">Search</button>
+            <button type="submit" class="search-submit">
+                <i class="fas fa-search"></i>
+            </button>
         </form>
 
         @if(Auth::user())
-            <span class="user-greeting">Member: {{ Auth::user()->name }}</span>
-            <a href="{{ route('logout') }}" class="login-btn">Logout</a>
+            <span class="user-greeting">{{ Auth::user()->name }}</span>
+            <a href="{{ route('logout') }}" class="login-btn">
+                <i class="fas fa-sign-out-alt"></i>
+            </a>
         @else
             <a href="{{ url('/login') }}" class="login-btn">Login</a>
             <a href="{{ url('/register') }}" class="signup-btn">Join Now</a>
         @endif
     </div>
 </nav>
+
+<!-- Overlay for mobile menu -->
+<label for="nav-toggle" class="nav-overlay"></label>

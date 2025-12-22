@@ -1,0 +1,259 @@
+/* ===============================
+   HERO SECTION
+================================ */
+.about-hero {
+    padding: 120px 20px;
+    text-align: center;
+    background: #fcfcfc;
+    border-bottom: 1px solid #f0f0f0;
+    margin-bottom: 80px;
+}
+
+.about-hero span {
+    text-transform: uppercase;
+    letter-spacing: 5px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #666;
+    display: block;
+    margin-bottom: 15px;
+}
+
+.about-hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 56px;
+    font-weight: 400;
+    color: #1a1a1a;
+    letter-spacing: -1px;
+}
+
+/* ===============================
+   STORY SECTION
+================================ */
+.story-section {
+    max-width: 1000px;
+    margin: 0 auto 100px;
+    padding: 0 40px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+}
+
+.story-text h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+    margin-bottom: 25px;
+    font-weight: 400;
+    line-height: 1.2;
+    color: #1a1a1a;
+}
+
+.story-text p {
+    font-family: 'Inter', sans-serif;
+    color: #666;
+    font-size: 16px;
+    line-height: 1.9;
+    margin-bottom: 20px;
+    font-weight: 300;
+}
+
+.story-image {
+    position: relative;
+    background: #fafafa;
+    aspect-ratio: 4/5;
+    overflow: hidden;
+}
+
+.story-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.story-placeholder {
+    width: 100%;
+    height: 100%;
+    background: #eee;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #aaa;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+}
+
+/* ===============================
+   VALUES SECTION
+================================ */
+.values-grid {
+    background: #fafafa;
+    padding: 100px 40px;
+    margin-bottom: 100px;
+}
+
+.values-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 60px;
+    text-align: center;
+}
+
+.value-item h4 {
+    font-family: 'Inter', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    font-size: 12px;
+    margin-bottom: 20px;
+    font-weight: 700;
+    color: #1a1a1a;
+}
+
+.value-item p {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: #666;
+    line-height: 1.7;
+    font-weight: 300;
+}
+
+/* ===============================
+   CALL TO ACTION
+================================ */
+.about-cta {
+    text-align: center;
+    padding-bottom: 120px;
+}
+
+.about-cta h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 34px;
+    margin-bottom: 35px;
+    font-weight: 400;
+    color: #1a1a1a;
+}
+
+.btn-explore {
+    display: inline-block;
+    padding: 15px 40px;
+    background: #000;
+    color: #fff;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    transition: background 0.3s;
+}
+
+.btn-explore:hover {
+    background: #333;
+}
+
+/* ===============================
+   TABLET (992px and below)
+================================ */
+@media (max-width: 992px) {
+    .about-hero {
+        padding: 80px 20px;
+        margin-bottom: 60px;
+    }
+
+    .about-hero h1 {
+        font-size: 42px;
+    }
+
+    .story-section {
+        grid-template-columns: 1fr;
+        gap: 50px;
+        padding: 0 30px;
+        margin-bottom: 80px;
+    }
+
+    .values-container {
+        grid-template-columns: 1fr;
+        gap: 50px;
+    }
+
+    .values-grid {
+        padding: 80px 30px;
+        margin-bottom: 80px;
+    }
+
+    .about-cta {
+        padding-bottom: 80px;
+    }
+
+    .about-cta h2 {
+        font-size: 28px;
+    }
+}
+
+/* ===============================
+   MOBILE (576px and below)
+================================ */
+@media (max-width: 576px) {
+    .about-hero {
+        padding: 60px 20px;
+        margin-bottom: 40px;
+    }
+
+    .about-hero span {
+        font-size: 10px;
+        letter-spacing: 3px;
+    }
+
+    .about-hero h1 {
+        font-size: 32px;
+    }
+
+    .story-section {
+        padding: 0 20px;
+        margin-bottom: 60px;
+        gap: 40px;
+    }
+
+    .story-text h2 {
+        font-size: 26px;
+    }
+
+    .story-text p {
+        font-size: 14px;
+        line-height: 1.7;
+    }
+
+    .values-grid {
+        padding: 60px 20px;
+        margin-bottom: 60px;
+    }
+
+    .values-container {
+        gap: 40px;
+    }
+
+    .value-item h4 {
+        font-size: 11px;
+        letter-spacing: 2px;
+    }
+
+    .value-item p {
+        font-size: 13px;
+    }
+
+    .about-cta {
+        padding-bottom: 60px;
+    }
+
+    .about-cta h2 {
+        font-size: 24px;
+        margin-bottom: 25px;
+    }
+
+    .btn-explore {
+        padding: 12px 30px;
+        font-size: 10px;
+    }
+}

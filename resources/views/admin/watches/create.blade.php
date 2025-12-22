@@ -3,11 +3,11 @@
 @section('title', 'Add New Watch')
 
 @section('styles')
-    @include('admin.watches.form_styles') {{-- Optional: move common styles to a partial or paste here --}}
+    <link rel="stylesheet" href="{{ asset('css/watch-admin.css') }}">
 @endsection
 
 @section('content')
-<h1 class="page-title" style="margin-bottom: 20px;">Add New Watch</h1>
+<h1 class="page-title mb-20">Add New Watch</h1>
 
 @if ($errors->any())
     <div class="error-box">
@@ -29,7 +29,7 @@
             <input type="text" name="name" value="{{ old('name') }}" class="form-input" required>
         </div>
 
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+        <div class="grid-2-gap">
             <div class="form-group">
                 <label class="form-label">Price (Rs.)</label>
                 <input type="number" step="0.01" name="price" value="{{ old('price') }}" class="form-input" required>
@@ -56,10 +56,10 @@
         <div class="form-group">
             <label class="form-label">Watch Image</label>
             <input type="file" name="image" class="form-input" accept="image/*" required>
-            <p style="font-size: 12px; color: #64748b; margin-top: 5px;">Allowed: jpeg, png, jpg. Max: 2MB.</p>
+            <p class="input-help-text">Allowed: jpeg, png, jpg. Max: 2MB.</p>
         </div>
 
-        <div style="margin-top: 30px;">
+        <div class="form-actions">
             <button type="submit" class="btn-submit">Save Watch</button>
             <a href="{{ route('adminDashboard') }}" class="btn-cancel">Cancel</a>
         </div>

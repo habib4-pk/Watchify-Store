@@ -4,136 +4,7 @@
 
 @section('styles')
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-
-<style>
-    :root {
-        --luxury-black: #0a0a0a;
-        --text-muted: #666;
-        --border-light: #eee;
-        --bg-soft: #fcfcfc;
-    }
-
-    .auth-wrapper {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: 80vh; /* Slightly taller for more fields */
-        padding: 60px 20px;
-        font-family: 'Inter', sans-serif;
-    }
-
-    .auth-card {
-        width: 100%;
-        max-width: 450px;
-        background: #fff;
-        padding: 50px;
-        border: 1px solid var(--border-light);
-        box-shadow: 0 10px 40px rgba(0,0,0,0.02);
-        text-align: center;
-    }
-
-    .auth-card h1 {
-        font-family: 'Playfair Display', serif;
-        font-size: 32px;
-        font-weight: 400;
-        margin-bottom: 10px;
-        color: var(--luxury-black);
-    }
-
-    .auth-card p {
-        font-size: 14px;
-        color: var(--text-muted);
-        margin-bottom: 35px;
-    }
-
-    /* --- Form Styling --- */
-    .form-group {
-        text-align: left;
-        margin-bottom: 25px;
-    }
-
-    .form-group label {
-        display: block;
-        font-size: 11px;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 1.5px;
-        margin-bottom: 10px;
-        color: var(--luxury-black);
-    }
-
-    .form-group input {
-        width: 100%;
-        padding: 15px;
-        border: 1px solid #ddd;
-        font-size: 14px;
-        border-radius: 2px;
-        transition: all 0.3s ease;
-        background: var(--bg-soft);
-        box-sizing: border-box;
-    }
-
-    .form-group input:focus {
-        outline: none;
-        border-color: var(--luxury-black);
-        background: #fff;
-    }
-
-    /* --- Primary Action Button --- */
-    .btn-auth {
-        width: 100%;
-        padding: 18px;
-        background: var(--luxury-black);
-        color: #fff;
-        border: 1px solid var(--luxury-black);
-        font-size: 12px;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 2.5px;
-        cursor: pointer;
-        transition: all 0.4s ease;
-        margin-top: 10px;
-    }
-
-    .btn-auth:hover {
-        background: transparent;
-        color: var(--luxury-black);
-    }
-
-    /* --- Footer Links --- */
-    .auth-footer {
-        margin-top: 30px;
-        padding-top: 25px;
-        border-top: 1px solid var(--border-light);
-    }
-
-    .auth-footer p {
-        margin-bottom: 0;
-        font-size: 13px;
-    }
-
-    .auth-link {
-        color: var(--luxury-black);
-        text-decoration: none;
-        font-weight: 700;
-        border-bottom: 1px solid var(--luxury-black);
-        padding-bottom: 2px;
-        transition: opacity 0.3s;
-    }
-
-    .auth-link:hover {
-        opacity: 0.6;
-    }
-
-    /* Validation Errors */
-    .error-msg {
-        color: #b91c1c;
-        font-size: 12px;
-        margin-top: 5px;
-        display: block;
-        text-align: left;
-    }
-</style>
+<link rel="stylesheet" href="{{ asset('css/auth.css') }}">
 @endsection
 
 @section('content')
@@ -148,25 +19,25 @@
             <div class="form-group">
                 <label for="name">Full Name</label>
                 <input type="text" name="name" id="name" value="{{ old('name') }}" required placeholder="e.g. Umer Nisar">
-                @error('name')
-                    <span class="error-msg">{{ $message }}</span>
-                @enderror
+             
             </div>
 
             <div class="form-group">
                 <label for="email">Email Address</label>
                 <input type="email" name="email" id="email" value="{{ old('email') }}" required placeholder="yourname@email.com">
-                @error('email')
-                    <span class="error-msg">{{ $message }}</span>
-                @enderror
+               
             </div>
 
             <div class="form-group">
                 <label for="password">Create Password</label>
-                <input type="password" name="password" id="password" required placeholder="••••••••">
-                @error('password')
-                    <span class="error-msg">{{ $message }}</span>
-                @enderror
+                <input type="password" name="password" id="password" required placeholder="••••••••" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters">
+              
+            </div>
+
+            <div id="message" class="password-requirements">
+              
+                <p id="length" class="invalid">Minimum <b>8 characters</b></p>
+                <p id="char" class="invalid">A <b>special character</b></p>
             </div>
 
             <button type="submit" class="btn-auth">Create Account</button>
@@ -177,4 +48,6 @@
         </div>
     </div>
 </div>
+
+<script src="{{ asset('js/auth.js') }}"></script>
 @endsection
