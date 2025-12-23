@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Mail\RegistrationMail;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
@@ -52,6 +54,13 @@ class AuthController extends Controller
         $user->password = $request->password;
 
         $user->save();
+        $mailData = [
+            'title' => 'Welcome to WatchifyStore',
+            'name'  => $request->name,
+        ];
+
+        Mail::to($request->email)->send(new RegistrationMail($mailData));
+
 
         return redirect()->route('loginForm')
             ->with('success', 'Registration successful! Please login.');

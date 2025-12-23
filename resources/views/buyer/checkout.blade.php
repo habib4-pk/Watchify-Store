@@ -18,6 +18,15 @@
 </div>
 @endif
 
+@if(session('error'))
+<div class="alert-container">
+    <div id="error-alert" class="alert-error">
+        <span>{{ session('error') }}</span>
+        <button type="button" class="alert-close" onclick="document.getElementById('error-alert').remove()">&times;</button>
+    </div>
+</div>
+@endif
+
 <div class="checkout-wrapper">
     <div class="form-section">
         <h1 class="checkout-title">Checkout</h1>

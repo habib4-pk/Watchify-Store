@@ -2,13 +2,26 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <link rel="stylesheet" href="{{ asset('css/navbar.css') }}">
 
+
+
+@php
+    use App\Models\Cart;
+
+    if (Auth::check()) {
+        $userId = Auth::id();
+        $cartCount = Cart::where('user_id', $userId)->count();
+    } else {
+        $cartCount = 0;
+    }
+@endphp
+
 <!-- Mobile Menu Toggle -->
 <input type="checkbox" id="nav-toggle">
 
 <nav class="watchify-nav">
     <a href="{{ url('/') }}" class="nav-brand">
         W<span>.</span>
-    </a>
+    </a> 
 
     <!-- Hamburger Menu Button -->
     <label for="nav-toggle" class="nav-hamburger">
@@ -60,9 +73,10 @@
         @if(Auth::user())
             <a href="{{ route('cartItems') }}" class="cart-link">
                 <i class="fas fa-shopping-cart"></i>
-             
-                    <span class="cart-badge">1</span>
-          
+                @if( $cartCount > 0)
+
+                    <span class="cart-badge">{{ $cartCount }}</span>
+                @endif
             </a>
         @endif
 

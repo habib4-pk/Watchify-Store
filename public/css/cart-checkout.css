@@ -1,9 +1,10 @@
 /* ===============================
    ALERT MESSAGES
 ================================ */
+/* Alert Styles */
 .alert-container {
     max-width: 500px;
-    margin: 0 auto 25px;
+    margin: 20px auto 25px;
     padding: 0 15px;
 }
 
@@ -16,7 +17,8 @@
     border-radius: 8px;
     font-size: 14px;
     font-weight: 500;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px;
 }
 
 .alert-success {
@@ -34,7 +36,7 @@
 .alert-close {
     background: none;
     border: none;
-    font-size: 24px;
+    font-size: 20px;
     font-weight: bold;
     cursor: pointer;
     line-height: 1;
@@ -54,6 +56,7 @@
 .alert-close:hover {
     transform: scale(1.1);
 }
+
 
 /* ===============================
    CART PAGE

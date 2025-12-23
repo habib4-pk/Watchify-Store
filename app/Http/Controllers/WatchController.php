@@ -29,6 +29,8 @@ class WatchController extends Controller
         $watch->price= $req->price;
         $watch->description = $req->description;
         $watch->image= $imagePath;
+        $watch->featured= $req->featured;
+
         $watch->stock= $req->stock;
 
         $watch->save();
@@ -50,6 +52,7 @@ class WatchController extends Controller
         $watch->price= $req->price;
         $watch->description = $req->description;
         $watch->image= $imagePath;
+        $watch->featured= $req->featured;
         $watch->stock= $req->stock;
 
         $watch->save();

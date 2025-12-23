@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Models\Watch;
 use App\Models\OrderItem;
 use Illuminate\Http\Request;
+use App\Mail\OrderStatusMail;
+use Illuminate\Support\Facades\Mail;
 
 class OrderController extends Controller
 {
@@ -36,10 +39,40 @@ class OrderController extends Controller
 
         $order = Order::where('id', $id)->first();
 
-        $order->status = $req->status;
+        $newStatus = $req->status;
+        $oldStatus = $order->status;
 
+        if ($oldStatus === $newStatus) {
+            return redirect()->route('allOrders')
+                ->with('success', 'Same Status. No Change!');
+        }
+
+
+        if ($newStatus === 'cancelled') {
+
+            $orderItems = OrderItem::where('order_id', $order->id)->get();
+
+            foreach ($orderItems as $item) {
+                $watch = Watch::where('id', $item->watch_id)->first();
+                $watch->stock = $watch->stock + $item->quantity;
+                $watch->save();
+            }
+        }
+
+        $order->status = $newStatus;
         $order->save();
 
-        return redirect()->route('allOrders')->with('success', 'Order status updated successfully!');
+        $mailData = [
+            'title' => 'Order Status Updated',
+            'name' => $order->user->name,
+            'order_id' => $order->id,
+            'status' => $order->status,
+        ];
+
+        Mail::to($order->user->email)
+            ->send(new OrderStatusMail($mailData));
+
+        return redirect()->route('allOrders')
+            ->with('success', 'Order status updated successfully!');
     }
 }

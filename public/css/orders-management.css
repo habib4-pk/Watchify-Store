@@ -189,6 +189,8 @@
     background-color: #dc2626; /* Darker red on hover */
 }
 
+
+
 @media (max-width: 1024px) {
     .info-grid { grid-template-columns: repeat(2, 1fr); }
 }
