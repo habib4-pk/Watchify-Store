@@ -5,9 +5,13 @@
 @section('styles')
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{{ asset('css/auth.css') }}">
+<link rel="stylesheet" href="{{ asset('css/a.css') }}">
 @endsection
 
 @section('content')
+
+<link rel="stylesheet" href="{{ asset('css/about-us.css') }}">
+
 <div class="auth-wrapper">
     <div class="auth-card">
         <h1>Join the Gallery</h1>
