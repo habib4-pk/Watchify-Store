@@ -1,4 +1,3 @@
-
 .detail-wrapper {
     display: grid;
     grid-template-columns: 1.2fr 1fr;
@@ -9,7 +8,6 @@
     font-family: 'Inter', sans-serif;
     align-items: start;
 }
-
 
 .image-gallery {
     background: #fafafa;
@@ -31,7 +29,6 @@
 .image-gallery img:hover {
     transform: scale(1.05);
 }
-
 
 .product-details {
     padding-top: 20px;
@@ -64,9 +61,6 @@
     display: block;
 }
 
-/* ===============================
-   DESCRIPTION BOX
-================================ */
 .description-box {
     border-top: 1px solid #f0f0f0;
     padding-top: 30px;
@@ -88,9 +82,6 @@
     font-weight: 300;
 }
 
-/* ===============================
-   STOCK STATUS
-================================ */
 .stock-status {
     font-size: 12px;
     font-weight: 700;
@@ -124,9 +115,6 @@
     background: #b91c1c;
 }
 
-/* ===============================
-   BUY BUTTON
-================================ */
 .btn-buy {
     width: 100%;
     background: #1a1a1a;
@@ -158,9 +146,6 @@
     color: #999;
 }
 
-/* ===============================
-   WARRANTY TEXT
-================================ */
 .warranty-text {
     margin-top: 25px;
     font-size: 12px;
@@ -169,7 +154,6 @@
     letter-spacing: 0.5px;
 }
 
-/* Stock badge for product cards */
 .stock-badge {
     position: absolute;
     top: 10px;
@@ -186,9 +170,7 @@
 .image-container {
     position: relative;
 }
-/* ===============================
-   TABLET (992px and below)
-================================ */
+
 @media (max-width: 992px) {
     .detail-wrapper {
         grid-template-columns: 1fr;
@@ -206,9 +188,6 @@
     }
 }
 
-/* ===============================
-   MOBILE (576px and below)
-================================ */
 @media (max-width: 576px) {
     .detail-wrapper {
         gap: 40px;

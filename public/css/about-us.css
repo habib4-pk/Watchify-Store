@@ -1,6 +1,3 @@
-/* ===============================
-   HERO SECTION
-================================ */
 .about-hero {
     padding: 120px 20px;
     text-align: center;
@@ -27,9 +24,6 @@
     letter-spacing: -1px;
 }
 
-/* ===============================
-   STORY SECTION
-================================ */
 .story-section {
     max-width: 1000px;
     margin: 0 auto 100px;
@@ -84,9 +78,6 @@
     letter-spacing: 3px;
 }
 
-/* ===============================
-   VALUES SECTION
-================================ */
 .values-grid {
     background: #fafafa;
     padding: 100px 40px;
@@ -120,9 +111,6 @@
     font-weight: 300;
 }
 
-/* ===============================
-   CALL TO ACTION
-================================ */
 .about-cta {
     text-align: center;
     padding-bottom: 120px;
@@ -153,9 +141,6 @@
     background: #333;
 }
 
-/* ===============================
-   TABLET (992px and below)
-================================ */
 @media (max-width: 992px) {
     .about-hero {
         padding: 80px 20px;
@@ -192,9 +177,6 @@
     }
 }
 
-/* ===============================
-   MOBILE (576px and below)
-================================ */
 @media (max-width: 576px) {
     .about-hero {
         padding: 60px 20px;
