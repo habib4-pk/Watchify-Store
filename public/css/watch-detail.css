@@ -1,6 +1,4 @@
-/* ===============================
-   WATCH DETAILS PAGE
-================================ */
+
 .detail-wrapper {
     display: grid;
     grid-template-columns: 1.2fr 1fr;
@@ -12,9 +10,7 @@
     align-items: start;
 }
 
-/* ===============================
-   IMAGE GALLERY
-================================ */
+
 .image-gallery {
     background: #fafafa;
     padding: 40px;
@@ -36,9 +32,7 @@
     transform: scale(1.05);
 }
 
-/* ===============================
-   PRODUCT DETAILS
-================================ */
+
 .product-details {
     padding-top: 20px;
 }

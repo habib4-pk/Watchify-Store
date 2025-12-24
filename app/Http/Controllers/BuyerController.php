@@ -256,7 +256,8 @@ class BuyerController extends Controller
         $order->save();
 
         foreach ($cartItems as $item) {
-            $watch = Watch::find($item->watch_id);
+            $watch = Watch::where('id', $item->watch_id)->first();
+
             $watch->stock = $watch->stock - $item->quantity;
             $watch->save();
 
