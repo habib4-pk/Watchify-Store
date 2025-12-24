@@ -13,69 +13,7 @@ use Illuminate\Support\Facades\Mail;
 
 class BuyerController extends Controller
 {
-    public function home(Request $req)
-    {
-        $sort = $req->input('sort');
-        $allWatches = Watch::query();
 
-        if ($sort == 'price_asc') {
-            $allWatches->orderBy('price', 'asc');
-        } elseif ($sort == 'price_desc') {
-            $allWatches->orderBy('price', 'desc');
-        } elseif ($sort == 'name_az') {
-            $allWatches->orderBy('name', 'asc');
-        } elseif ($sort == 'newest') {
-            $allWatches->orderBy('created_at', 'desc');
-        } else {
-            $allWatches->orderBy('created_at', 'desc');
-        }
-
-        $allWatches = $allWatches->get();
-        return view('buyer.home', compact('allWatches', 'sort'));
-    }
-
-    public function featured(Request $req)
-    {
-        $sort = $req->input('sort');
-        $allWatches = Watch::where('featured', 'yes');
-
-        if ($sort == 'price_asc') {
-            $allWatches->orderBy('price', 'asc');
-        } elseif ($sort == 'price_desc') {
-            $allWatches->orderBy('price', 'desc');
-        } elseif ($sort == 'name_az') {
-            $allWatches->orderBy('name', 'asc');
-        } elseif ($sort == 'newest') {
-            $allWatches->orderBy('created_at', 'desc');
-        } else {
-            $allWatches->orderBy('created_at', 'desc');
-        }
-
-        $allWatches = $allWatches->get();
-        return view('buyer.featured', compact('allWatches', 'sort'));
-    }
-
-    public function search(Request $req)
-    {
-        $query = $req->input('query');
-        $sort = $req->input('sort');
-        $allWatches = Watch::where('name', 'LIKE', "%{$query}%");
-
-        if ($sort == 'price_asc') {
-            $allWatches->orderBy('price', 'asc');
-        } elseif ($sort == 'price_desc') {
-            $allWatches->orderBy('price', 'desc');
-        } elseif ($sort == 'name_az') {
-            $allWatches->orderBy('name', 'asc');
-        } elseif ($sort == 'newest') {
-            $allWatches->orderBy('created_at', 'desc');
-        } else {
-            $allWatches->orderBy('created_at', 'desc');
-        }
-
-        $allWatches = $allWatches->get();
-        return view('buyer.searchedResult', compact('allWatches', 'query', 'sort'));
-    }
 
     public function details(Request $req)
     {
@@ -137,7 +75,6 @@ class BuyerController extends Controller
         if ($cart->quantity > 1) {
             $cart->quantity = $cart->quantity - 1;
             $cart->save();
-            
         } else {
             Cart::destroy($id);
         }
@@ -202,7 +139,7 @@ class BuyerController extends Controller
         }
 
         if ($cart) {
-         
+
             if ($cart->quantity + 1 > $watch->stock) {
                 return redirect()->back()->with('error', "Only {$watch->stock} units available. You already have {$cart->quantity} in your cart.");
             }
@@ -231,7 +168,7 @@ class BuyerController extends Controller
             return redirect()->back()->with('error', 'Your cart is empty.');
         }
 
-       
+
         foreach ($cartItems as $item) {
             $watch = Watch::find($item->watch_id);
             if ($watch->stock < $item->quantity) {
@@ -297,6 +234,66 @@ class BuyerController extends Controller
             return redirect()->route('login');
         }
     }
+
+
+    public function home(Request $req)
+    {
+        $sort = $req->input('sort');
+
+        if ($sort == 'price_asc') {
+            $allWatches = Watch::orderBy('price', 'asc')->get();
+        } elseif ($sort == 'price_desc') {
+            $allWatches = Watch::orderBy('price', 'desc')->get();
+        } elseif ($sort == 'name_az') {
+            $allWatches = Watch::orderBy('name', 'asc')->get();
+        } elseif ($sort == 'newest') {
+            $allWatches = Watch::orderBy('created_at', 'desc')->get();
+        } else {
+            $allWatches = Watch::orderBy('created_at', 'desc')->get();
+        }
+
+        return view('buyer.home', compact('allWatches', 'sort'));
+    }
+
+    public function featured(Request $req)
+    {
+        $sort = $req->input('sort');
+
+        if ($sort == 'price_asc') {
+            $allWatches = Watch::where('featured', 'yes')->orderBy('price', 'asc')->get();
+        } elseif ($sort == 'price_desc') {
+            $allWatches = Watch::where('featured', 'yes')->orderBy('price', 'desc')->get();
+        } elseif ($sort == 'name_az') {
+            $allWatches = Watch::where('featured', 'yes')->orderBy('name', 'asc')->get();
+        } elseif ($sort == 'newest') {
+            $allWatches = Watch::where('featured', 'yes')->orderBy('created_at', 'desc')->get();
+        } else {
+            $allWatches = Watch::where('featured', 'yes')->orderBy('created_at', 'desc')->get();
+        }
+
+        return view('buyer.featured', compact('allWatches', 'sort'));
+    }
+
+    public function search(Request $req)
+    {
+        $query = $req->input('query');
+        $sort = $req->input('sort');
+
+        if ($sort == 'price_asc') {
+            $allWatches = Watch::where('name', 'LIKE', "%{$query}%")->orderBy('price', 'asc')->get();
+        } elseif ($sort == 'price_desc') {
+            $allWatches = Watch::where('name', 'LIKE', "%{$query}%")->orderBy('price', 'desc')->get();
+        } elseif ($sort == 'name_az') {
+            $allWatches = Watch::where('name', 'LIKE', "%{$query}%")->orderBy('name', 'asc')->get();
+        } elseif ($sort == 'newest') {
+            $allWatches = Watch::where('name', 'LIKE', "%{$query}%")->orderBy('created_at', 'desc')->get();
+        } else {
+            $allWatches = Watch::where('name', 'LIKE', "%{$query}%")->orderBy('created_at', 'desc')->get();
+        }
+
+        return view('buyer.searchedResult', compact('allWatches', 'query', 'sort'));
+    }
+
 
     public function aboutUs()
     {
