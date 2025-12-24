@@ -6,9 +6,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{{ asset('css/watch-detail.css') }}">
 <link rel="stylesheet" href="{{ asset('css/alert.css') }}">
-
-
-
+<link rel="stylesheet" href="{{ asset('css/reviews.css') }}">
 @endsection
 
 @section('content')
@@ -32,7 +30,7 @@
 @endif
 
 <div class="detail-wrapper">
-    
+
     <div class="image-gallery">
         <img src="{{ asset('storage/' . $watch->image) }}" alt="{{ $watch->name }}">
     </div>
@@ -75,4 +73,80 @@
         </p>
     </div>
 </div>
+
+<div class="reviews-wrapper">
+
+    <h2 class="reviews-title">Customer Reviews</h2>
+
+    <div class="avg-rating">
+        @php
+            $avg = $avgRating ?? 0;
+            $fullStars = floor($avg);
+        @endphp
+        <div class="stars">
+            @for($i = 1; $i <= 5; $i++)
+                @if($i <= $fullStars)
+                    <span class="star filled">★</span>
+                @else
+                    <span class="star">☆</span>
+                @endif
+            @endfor
+        </div>
+        <span class="avg-text">{{ number_format($avg, 1) }} out of 5</span>
+    </div>
+
+    <div class="reviews-list">
+        @forelse($reviews as $review)
+            <div class="single-review">
+                <div class="review-header">
+                    <strong>{{ $review->user->name }}</strong>
+                    <span class="review-stars">
+                        @for($i = 1; $i <= 5; $i++)
+                            @if($i <= $review->rating)
+                                ★
+                            @else
+                                ☆
+                            @endif
+                        @endfor
+                    </span>
+                </div>
+                <p class="review-comment">{{ $review->comment }}</p>
+                @auth
+                    @if(Auth::id() == $review->user_id)
+                        <form action="{{ route('review.delete') }}" method="POST" style="display:inline-block;">
+                            @csrf
+                            <input type="hidden" name="review_id" value="{{ $review->id }}">
+                            <button type="submit" class="btn-delete" onclick="return confirm('Are you sure you want to delete this review?')">Delete</button>
+                        </form>
+                    @endif
+                @endauth
+            </div>
+        @empty
+            <p class="no-reviews">No reviews yet. Be the first to review!</p>
+        @endforelse
+    </div>
+
+    @auth
+    <div class="review-form">
+        <h3>Write a Review</h3>
+        <form action="{{ route('review.store') }}" method="POST">
+            @csrf
+            <input type="hidden" name="watch_id" value="{{ $watch->id }}">
+            <label>Rating</label>
+            <select name="rating" required>
+                <option value="">Select</option>
+                <option value="5">5 - Excellent</option>
+                <option value="4">4 - Good</option>
+                <option value="3">3 - Average</option>
+                <option value="2">2 - Poor</option>
+                <option value="1">1 - Bad</option>
+            </select>
+            <label>Comment</label>
+            <textarea name="comment" rows="4" placeholder="Share your experience..." required></textarea>
+            <button type="submit">Submit Review</button>
+        </form>
+    </div>
+    @endauth
+</div>
+
 @endsection

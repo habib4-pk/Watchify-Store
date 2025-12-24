@@ -22,11 +22,11 @@
         <div class="grid-2-gap">
             <div class="form-group">
                 <label class="form-label">Price (Rs.)</label>
-                <input type="number" step="0.01" name="price" class="form-input" value="{{ old('price', $watch->price) }}" required>
+                <input type="number" step="0.01" name="price" class="form-input" min="100" value="{{ old('price', $watch->price) }}" required>
             </div>
             <div class="form-group">
                 <label class="form-label">Stock</label>
-                <input type="number" name="stock" class="form-input" value="{{ old('stock', $watch->stock) }}" required>
+                <input type="number" name="stock" class="form-input" min="1" value="{{ old('stock', $watch->stock) }}" required>
             </div>
         </div>
 

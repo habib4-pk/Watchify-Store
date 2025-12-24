@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Watch;
 use App\Models\Cart;
+use App\Models\User;
+use App\Models\Review;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Mail\OrderPlacedMail;
@@ -16,11 +18,38 @@ class BuyerController extends Controller
 
 
     public function details(Request $req)
-    {
-        $id = $req->id;
-        $watch = Watch::where('id', $id)->first();
-        return view('buyer.watchDetail', compact('watch'));
+{
+    $id = $req->id;
+
+    $watch = Watch::where('id', $id)->first();
+
+    if (!$watch) {
+        return redirect()->back()->with('error', 'Watch not found.');
     }
+
+  
+    $reviews = Review::where('watch_id', $id)->orderBy('created_at', 'desc')->get();
+
+    foreach ($reviews as $review) {
+        $review->user = User::where('id', $review->user_id)->first();
+    }
+
+     $totalRating = 0;
+    $count = count($reviews);
+
+    foreach ($reviews as $review) {
+        $totalRating += $review->rating;
+    }
+
+    if ($count > 0) {
+        $avgRating = $totalRating / $count;
+    } else {
+        $avgRating = 0;
+    }
+
+    return view('buyer.watchDetail', compact('watch', 'reviews', 'avgRating'));
+}
+
 
     public function cart()
     {

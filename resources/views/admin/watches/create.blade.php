@@ -9,7 +9,7 @@
 @section('content')
 <h1 class="page-title mb-20">Add New Watch</h1>
 
-@endif
+
 
 <div class="form-container">
     <form action="{{ route('storeWatch') }}" method="POST" enctype="multipart/form-data">
@@ -23,11 +23,11 @@
         <div class="grid-2-gap">
             <div class="form-group">
                 <label class="form-label">Price (Rs.)</label>
-                <input type="number" step="0.01" name="price" value="{{ old('price') }}" class="form-input" required>
+                <input type="number" step="0.01" name="price" value="{{ old('price') }}" min="100" class="form-input" required>
             </div>
             <div class="form-group">
                 <label class="form-label">Stock Quantity</label>
-                <input type="number" name="stock" value="{{ old('stock') }}" class="form-input" required>
+                <input type="number" name="stock" value="{{ old('stock') }}" min="1" class="form-input" required>
             </div>
         </div>
 

@@ -44,8 +44,7 @@
 
             <div class="form-group">
                 <label for="password">Create Password</label>
-                <input type="password" name="password" id="password" required placeholder="••••••••" pattern="^(?=.*[!@#$%^&*()_+\-=\[\]{};':\ \\|,.<>\/?]).{8}$ "
-                title="Must be exactly 8 characters and include at least one special character">
+                <input type="password" name="password" id="password" required placeholder="••••••••" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one special character and at least 8">
 
             </div>
 
