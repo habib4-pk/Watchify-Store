@@ -36,7 +36,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
 Route::get("/home", [BuyerController::class, 'home'])->name('home');
 Route::get("/home/featured", [BuyerController::class, 'featured'])->name('featured');
-Route::post("/home/watches", [BuyerController::class, 'details'])->name('watchDetails');
+Route::get("/home/watches", [BuyerController::class, 'details'])->name('watchDetails');
 Route::get("/home/search", [BuyerController::class, 'search'])->name('search');
 Route::get("/home/cart", [BuyerController::class, 'addToCart'])->name('cartDetails');
 
@@ -50,6 +50,10 @@ Route::post('/home/checkout/placeOrder', [BuyerController::class, 'placeOrder'])
 
 Route::get("/home/about-us", [BuyerController::class, 'aboutUs'])->name('aboutUs');
 Route::get("/home/my-orders", [BuyerController::class, 'myOrders'])->name('myOrders');
+
+Route::post('/review/store', [App\Http\Controllers\ReviewController::class, 'store'])->name('reviewStore');
+
+Route::post('/review/delete', [App\Http\Controllers\ReviewController::class, 'delete'])->name('reviewDelete');
 
 Route::get('/login', [AuthController::class, 'loginForm'])->name('loginForm');
 Route::get('/register', [AuthController::class, 'registerForm'])->name('registerForm');

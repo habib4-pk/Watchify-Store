@@ -1,144 +1,120 @@
 @extends('admin.layout')
 
-@section('title', 'Order Management - Details')
-
-@section('styles')
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('css/orders-management.css') }}">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
-@endsection
+@section('title', 'Order Details')
 
 @section('content')
 
-
 @if(session('success'))
-    <div class="alert-wrapper">
-        <div id="success-alert" class="alert-success-box">
-            <span class="alert-text">{{ session('success') }}</span>
-            <button type="button"
-                    class="alert-close-btn"
-                    onclick="document.getElementById('success-alert').remove()">
-                &times;
-            </button>
-        </div>
-    </div>
+<div class="alert alert-success alert-dismissible fade show border-0 mb-4" role="alert" style="background-color: #238636;">
+    <i class="bi bi-check-circle me-2"></i>{{ session('success') }}
+    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert"></button>
+</div>
 @endif
 
-
 @if(count($orderItems) == 0)
-    <div class="order-info-card">
-        <p class="empty-message">No order items found for this reference.</p>
+<div class="card border-0 rounded-4" style="background-color: #161b22;">
+    <div class="card-body text-center py-5">
+        <i class="bi bi-inbox display-1 text-secondary mb-3"></i>
+        <h5 class="text-white">No Items Found</h5>
+        <p class="text-secondary mb-4">No order items found for this reference.</p>
+        <a href="{{ route('allOrders') }}" class="btn btn-primary"><i class="bi bi-arrow-left me-2"></i>Back to Orders</a>
     </div>
-
+</div>
 @else
 
-{{-- Order Info --}}
-<div class="order-info-card">
-    <h1 class="card-title">
-        Order #{{ str_pad($orderItems[0]->order->id, 6, '0', STR_PAD_LEFT) }} Details
-    </h1>
+<div class="mb-4">
+    <a href="{{ route('allOrders') }}" class="btn btn-outline-secondary rounded-pill"><i class="bi bi-arrow-left me-2"></i>Back to Orders</a>
+</div>
 
-    <div class="info-grid">
-
-        <div class="info-item">
-            <label class="info-label">Customer Identity</label>
-            <p class="info-value">
-                {{ $orderItems[0]->order->customer_name }}
-            </p>
-        </div>
-
-        <div class="info-item">
-            <label class="info-label">Total Revenue</label>
-            <p class="info-value info-value-amount">
-                Rs. {{ number_format($totalPrice, 2) }}
-            </p>
-        </div>
-
-        <div class="info-item">
-            <label class="info-label">Transaction Date</label>
-            <p class="info-value">
-                {{ $orderItems[0]->order->created_at->format('d M Y, h:i A') }}
-            </p>
-        </div>
-
+<div class="card border-0 rounded-4 mb-4" style="background-color: #161b22;">
+    <div class="card-header border-bottom py-3 d-flex align-items-center justify-content-between" style="background-color: transparent; border-color: #30363d !important;">
+        <h5 class="text-white mb-0 fw-semibold"><i class="bi bi-receipt me-2 text-primary"></i>Order #{{ str_pad($orderItems[0]->order->id, 6, '0', STR_PAD_LEFT) }}</h5>
+        @php $currentStatus = $orderItems[0]->order->status; @endphp
+        @if($currentStatus === 'completed')
+            <span class="badge rounded-pill px-3 py-2" style="background-color: #238636;"><i class="bi bi-check-circle me-1"></i>Completed</span>
+        @elseif($currentStatus === 'pending')
+            <span class="badge rounded-pill px-3 py-2" style="background-color: #f0883e;"><i class="bi bi-clock me-1"></i>Pending</span>
+        @elseif($currentStatus === 'shipped')
+            <span class="badge rounded-pill px-3 py-2" style="background-color: #1f6feb;"><i class="bi bi-truck me-1"></i>Shipped</span>
+        @else
+            <span class="badge rounded-pill px-3 py-2" style="background-color: #da3633;"><i class="bi bi-x-circle me-1"></i>Cancelled</span>
+        @endif
     </div>
-
-
-    <form action="{{ route('updateOrderStatus') }}" method="POST" class="status-form">
-        @csrf
-        <input type="hidden" name="order_id" value="{{ $orderItems[0]->order->id }}">
-
-        <div class="form-group">
-            <label for="status" class="form-label">Modify Order Status</label>
-            <select name="status" id="status" class="status-select">
-                @php $currentStatus = $orderItems[0]->order->status; @endphp
-                <option value="pending" {{ $currentStatus == 'pending' ? 'selected' : '' }}>Pending</option>
-                <option value="shipped" {{ $currentStatus == 'shipped' ? 'selected' : '' }}>Shipped</option>
-                <option value="completed" {{ $currentStatus == 'completed' ? 'selected' : '' }}>Completed</option>
-                <option value="cancelled" {{ $currentStatus == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
-            </select>
+    <div class="card-body p-4">
+        <div class="row g-4 mb-4">
+            <div class="col-md-4">
+                <div class="rounded-3 p-3" style="background-color: #21262d;">
+                    <div class="d-flex align-items-center gap-2 mb-2"><i class="bi bi-person text-primary"></i><span class="text-secondary small">Customer</span></div>
+                    <h5 class="text-white fw-semibold mb-0">{{ $orderItems[0]->order->customer_name }}</h5>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="rounded-3 p-3" style="background-color: #21262d;">
+                    <div class="d-flex align-items-center gap-2 mb-2"><i class="bi bi-currency-dollar text-success"></i><span class="text-secondary small">Total</span></div>
+                    <h5 class="text-white fw-bold mb-0">Rs. {{ number_format($totalPrice, 2) }}</h5>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="rounded-3 p-3" style="background-color: #21262d;">
+                    <div class="d-flex align-items-center gap-2 mb-2"><i class="bi bi-calendar text-info"></i><span class="text-secondary small">Date</span></div>
+                    <h5 class="text-white fw-semibold mb-0">{{ $orderItems[0]->order->created_at->format('d M Y') }}</h5>
+                </div>
+            </div>
         </div>
-
-        <button type="submit" class="btn-update">
-            Update Status
-        </button>
-    </form>
+        <div class="rounded-3 p-4" style="background-color: #21262d;">
+            <h6 class="text-white fw-semibold mb-3"><i class="bi bi-arrow-repeat me-2 text-primary"></i>Update Status</h6>
+            <form action="{{ route('updateOrderStatus') }}" method="POST" class="row g-3 align-items-end">
+                @csrf
+                <input type="hidden" name="order_id" value="{{ $orderItems[0]->order->id }}">
+                <div class="col-md-6">
+                    <select name="status" class="form-select border-0 rounded-3" style="background-color: #0d1117; color: #fff;">
+                        <option value="pending" {{ $currentStatus == 'pending' ? 'selected' : '' }}>Pending</option>
+                        <option value="shipped" {{ $currentStatus == 'shipped' ? 'selected' : '' }}>Shipped</option>
+                        <option value="completed" {{ $currentStatus == 'completed' ? 'selected' : '' }}>Completed</option>
+                        <option value="cancelled" {{ $currentStatus == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <button type="submit" class="btn btn-primary px-4"><i class="bi bi-check2 me-2"></i>Update</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 
-{{-- Items Table --}}
-<div class="order-info-card">
-    <h3 class="card-title card-title-small">
-        Itemized Manifest
-    </h3>
-
-    <table class="items-table" id="items-table" border="1px solid">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Watch Model</th>
-                <th>Quantity</th>
-                <th>Unit Price</th>
-                <th>Subtotal</th>
-            </tr>
-        </thead>
-
-        <tbody>
-            @foreach($orderItems as $item)
-            <tr>
-                <td>{{ $loop->iteration }}</td>
-
-                <td class="item-name">
-                    {{ $item->watch->name ?? 'Unknown Model' }}
-                </td>
-
-                <td>{{ $item->quantity }}</td>
-
-                <td>
-                    Rs. {{ number_format($item->price, 2) }}
-                </td>
-
-                <td class="item-subtotal">
-                    Rs. {{ number_format($item->quantity * $item->price, 2) }}
-                </td>
-            </tr>
-            @endforeach
-        </tbody>
-    </table>
+<div class="card border-0 rounded-4" style="background-color: #161b22;">
+    <div class="card-header border-bottom py-3" style="background-color: transparent; border-color: #30363d !important;">
+        <h5 class="text-white mb-0 fw-semibold"><i class="bi bi-list-ul me-2 text-primary"></i>Order Items</h5>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-dark table-hover align-middle mb-0" style="background-color: #161b22;">
+                <thead style="background-color: #21262d;"><tr>
+                    <th class="border-0 text-secondary fw-semibold py-3 ps-4">#</th>
+                    <th class="border-0 text-secondary fw-semibold py-3">Watch</th>
+                    <th class="border-0 text-secondary fw-semibold py-3">Qty</th>
+                    <th class="border-0 text-secondary fw-semibold py-3">Price</th>
+                    <th class="border-0 text-secondary fw-semibold py-3 pe-4">Subtotal</th>
+                </tr></thead>
+                <tbody>
+                    @foreach($orderItems as $item)
+                    <tr style="border-bottom: 1px solid #30363d;">
+                        <td class="ps-4 text-white">{{ $loop->iteration }}</td>
+                        <td class="text-white fw-medium">{{ $item->watch->name ?? 'Unknown' }}</td>
+                        <td class="text-secondary">{{ $item->quantity }}</td>
+                        <td class="text-secondary">Rs. {{ number_format($item->price, 2) }}</td>
+                        <td class="text-white fw-semibold pe-4">Rs. {{ number_format($item->quantity * $item->price, 2) }}</td>
+                    </tr>
+                    @endforeach
+                </tbody>
+                <tfoot style="background-color: #21262d;"><tr>
+                    <td colspan="4" class="text-end text-secondary fw-semibold ps-4 py-3">Grand Total:</td>
+                    <td class="text-white fw-bold pe-4 py-3">Rs. {{ number_format($totalPrice, 2) }}</td>
+                </tr></tfoot>
+            </table>
+        </div>
+    </div>
 </div>
-<script>
-    $(document).ready(function () {
-        $('#items-table').DataTable(
-        {
-        "paging": true,
-        "searching": true,
-        "ordering": true,
-        "info": false,
-        "lengthMenu": [ [1, 3, 5, 10], [1, 3, 5, 10] ],
-        })
-    })
-</script>
 
 @endif
 
