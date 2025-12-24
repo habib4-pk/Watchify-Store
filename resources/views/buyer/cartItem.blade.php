@@ -81,7 +81,7 @@
             </div>
             <div class="summary-row">
                 <span>Taxes</span>
-                <span>Included</span>
+                <span>Excluded</span>
             </div>
             <div class="summary-row total-row">
                 <span>Total</span>

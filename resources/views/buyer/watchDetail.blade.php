@@ -5,64 +5,9 @@
 @section('styles')
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{{ asset('css/watch-detail.css') }}">
+<link rel="stylesheet" href="{{ asset('css/alert.css') }}">
 
-<style>
-    .alert-container {
-    max-width: 500px;
-    margin: 20px auto 25px;
-    padding: 0 15px;
-}
 
-.alert-success,
-.alert-error {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 20px;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 500;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    margin-bottom: 10px;
-}
-
-.alert-success {
-    background: #dcfce7;
-    color: #15803d;
-    border: 1px solid #bbf7d0;
-}
-
-.alert-error {
-    background: #fee2e2;
-    color: #b91c1c;
-    border: 1px solid #fca5a5;
-}
-
-.alert-close {
-    background: none;
-    border: none;
-    font-size: 20px;
-    font-weight: bold;
-    cursor: pointer;
-    line-height: 1;
-    padding: 0;
-    margin-left: 20px;
-    transition: transform 0.2s;
-}
-
-.alert-success .alert-close {
-    color: #15803d;
-}
-
-.alert-error .alert-close {
-    color: #b91c1c;
-}
-
-.alert-close:hover {
-    transform: scale(1.1);
-}
-
-</style>
 
 @endsection
 

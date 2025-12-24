@@ -2,11 +2,9 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <link rel="stylesheet" href="{{ asset('css/navbar.css') }}">
 
-@php
-// Removed cart count logic completely
-@endphp
 
-<!-- Mobile Menu Toggle -->
+
+
 <input type="checkbox" id="nav-toggle">
 
 <nav class="watchify-nav">
@@ -14,7 +12,7 @@
         W<span>.</span>
     </a>
 
-    <!-- Hamburger Menu Button -->
+   \
     <label for="nav-toggle" class="nav-hamburger">
         <span></span>
         <span></span>
@@ -93,5 +91,4 @@
     </div>
 </nav>
 
-<!-- Overlay for mobile menu -->
 <label for="nav-toggle" class="nav-overlay"></label>
