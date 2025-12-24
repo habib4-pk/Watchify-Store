@@ -5,6 +5,9 @@
 @section('styles')
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/orders-management.css') }}">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
 @endsection
 
 @section('content')
@@ -90,7 +93,7 @@
         Itemized Manifest
     </h3>
 
-    <table class="items-table">
+    <table class="items-table" id="items-table" border="1px solid">
         <thead>
             <tr>
                 <th>#</th>
@@ -124,6 +127,18 @@
         </tbody>
     </table>
 </div>
+<script>
+    $(document).ready(function () {
+        $('#items-table').DataTable(
+        {
+        "paging": true,
+        "searching": true,
+        "ordering": true,
+        "info": false,
+        "lengthMenu": [ [1, 3, 5, 10], [1, 3, 5, 10] ],
+        })
+    })
+</script>
 
 @endif
 

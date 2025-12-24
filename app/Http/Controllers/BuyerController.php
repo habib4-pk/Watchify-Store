@@ -89,7 +89,6 @@ class BuyerController extends Controller
         if (Auth::user()) {
             $user_id = Auth::id();
             $cart = Cart::where('user_id', $user_id)->get();
-
             $total = 0;
             foreach ($cart as $item) {
                 $item->subtotal = $item->watch->price * $item->quantity;
@@ -138,6 +137,7 @@ class BuyerController extends Controller
         if ($cart->quantity > 1) {
             $cart->quantity = $cart->quantity - 1;
             $cart->save();
+            
         } else {
             Cart::destroy($id);
         }

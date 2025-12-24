@@ -25,21 +25,16 @@ class AuthController extends Controller
         $email = $request->email;
         $password = $request->password;
 
-        if (Auth::attempt([
-            'email' => $email,
-            'password' => $password
-        ])) {
+        if (Auth::attempt(['email' => $email, 'password' => $password])) {
             $request->session()->regenerate();
 
             $user = Auth::user();
 
             if ($user->role === 'admin') {
-                return redirect()->intended(route('adminDashboard'))
-                    ->with('success', 'Welcome Admin! You have logged in successfully.');
+                return redirect()->route('adminDashboard')->with('success', 'Welcome Admin! You have logged in successfully.');
             }
 
-            return redirect()->intended(route('home'))
-                ->with('success', 'Login successful. Welcome back!');
+            return redirect()->route('home')->with('success', 'Login successful. Welcome back!');
         }
 
         return redirect()->back()->with('error', 'Invalid email or password.');
@@ -47,23 +42,25 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
-        $user = new User;
+        $alreadyExist = User::where('email', $request->email)->first();
+        if ($alreadyExist) {
+            return redirect()->back()->with('error', 'Email already registered. Please use another email.');
+        }
 
+        $user = new User;
         $user->name = $request->name;
         $user->email = $request->email;
-        $user->password = $request->password;
-
+        $user->password = bcrypt($request->password);
         $user->save();
+
         $mailData = [
             'title' => 'Welcome to WatchifyStore',
-            'name'  => $request->name,
+            'name' => $request->name,
         ];
 
         Mail::to($request->email)->send(new RegistrationMail($mailData));
 
-
-        return redirect()->route('loginForm')
-            ->with('success', 'Registration successful! Please login.');
+        return redirect()->route('loginForm')->with('success', 'Registration successful! Please login.');
     }
 
     public function logout(Request $request)
@@ -77,11 +74,9 @@ class AuthController extends Controller
         $request->session()->regenerateToken();
 
         if ($role === 'admin') {
-            return redirect()->route('login')
-                ->with('success', 'Admin logged out successfully.');
+            return redirect()->route('login')->with('success', 'Admin logged out successfully.');
         }
 
-        return redirect()->route('home')
-            ->with('success', 'Logged out successfully.');
+        return redirect()->route('home')->with('success', 'Logged out successfully.');
     }
 }

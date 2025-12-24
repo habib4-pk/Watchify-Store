@@ -5,10 +5,20 @@
 @section('styles')
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{{ asset('css/auth.css') }}">
-<link rel="stylesheet" href="{{ asset('css/a.css') }}">
+<link rel="stylesheet" href="{{ asset('css/alert.css') }}">
 @endsection
 
 @section('content')
+
+
+@if(session('error'))
+<div class="alert-container">
+    <div id="error-alert" class="alert-error">
+        <span>{{ session('error') }}</span>
+        <button type="button" class="alert-close" onclick="document.getElementById('error-alert').remove()">&times;</button>
+    </div>
+</div>
+@endif
 
 <link rel="stylesheet" href="{{ asset('css/about-us.css') }}">
 
@@ -23,23 +33,24 @@
             <div class="form-group">
                 <label for="name">Full Name</label>
                 <input type="text" name="name" id="name" value="{{ old('name') }}" required placeholder="e.g. Umer Nisar">
-             
+
             </div>
 
             <div class="form-group">
                 <label for="email">Email Address</label>
                 <input type="email" name="email" id="email" value="{{ old('email') }}" required placeholder="yourname@email.com">
-               
+
             </div>
 
             <div class="form-group">
                 <label for="password">Create Password</label>
-                <input type="password" name="password" id="password" required placeholder="••••••••" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters">
-              
+                <input type="password" name="password" id="password" required placeholder="••••••••" pattern="^(?=.*[!@#$%^&*()_+\-=\[\]{};':\ \\|,.<>\/?]).{8}$ "
+                title="Must be exactly 8 characters and include at least one special character">
+
             </div>
 
             <div id="message" class="password-requirements">
-              
+
                 <p id="length" class="invalid">Minimum <b>8 characters</b></p>
                 <p id="char" class="invalid">A <b>special character</b></p>
             </div>
