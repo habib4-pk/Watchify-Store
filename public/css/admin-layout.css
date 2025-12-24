@@ -164,6 +164,22 @@ body {
     transition: left 0.3s;
 }
 
+.logout-button {
+    background-color: transparent;   /* No background */
+    border: none;                    /* No border */
+    color: #333;                    /* Text/icon color (dark grey) */
+    cursor: pointer;                /* Pointer on hover */
+    font-size: 16px;                /* Size of text */
+    padding: 5px 10px;              /* Some padding for clickable area */
+    transition: color 0.3s ease;   /* Smooth color change on hover */
+}
+
+.logout-button:hover {
+    color: #d33;                   /* Red color on hover */
+    text-decoration: underline;    /* Underline on hover */
+}
+
+
 /* ===============================
    HAMBURGER (Hidden on Desktop)
 ================================ */
