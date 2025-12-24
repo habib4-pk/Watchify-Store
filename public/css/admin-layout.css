@@ -1,6 +1,4 @@
-/* ===============================
-   GLOBAL RESET
-================================ */
+
 * {
     margin: 0;
     padding: 0;
@@ -12,16 +10,12 @@ body {
     background-color: #f8f9fa;
 }
 
-/* ===============================
-   HIDE CHECKBOX
-================================ */
+
 #mobile-menu {
     display: none;
 }
 
-/* ===============================
-   SIDEBAR
-================================ */
+
 .sidebar-nav {
     position: fixed;
     top: 0;
@@ -37,7 +31,7 @@ body {
     transition: transform 0.3s;
 }
 
-/* Brand */
+
 .sidebar-brand {
     padding: 28px 25px;
     font-size: 1.4rem;
@@ -48,7 +42,7 @@ body {
     border-bottom: 1px solid #333;
 }
 
-/* Links */
+
 .nav-item {
     padding: 16px 25px;
     text-decoration: none;
@@ -65,22 +59,20 @@ body {
     white-space: nowrap;
 }
 
-/* Hover */
+
 .nav-item:hover {
     background: #262626;
     color: #ffffff;
 }
 
-/* Active */
+
 .nav-item.active {
     background: #262626;
     color: #ffffff;
     border-left: 4px solid #d4af37;
 }
 
-/* ===============================
-   TOP NAVBAR
-================================ */
+
 .admin-navbar {
     position: fixed;
     top: 0;
@@ -103,7 +95,6 @@ body {
     color: #1a1a1a;
 }
 
-/* User Area */
 .user-section {
     display: flex;
     align-items: center;
@@ -116,7 +107,7 @@ body {
     color: #444;
 }
 
-/* Logout Button */
+
 .logout-link {
     text-decoration: none;
     font-size: 0.85rem;
@@ -133,7 +124,7 @@ body {
     color: #ffffff;
 }
 
-/* Profile Badge */
+
 .profile-img {
     width: 42px;
     height: 42px;
@@ -147,9 +138,7 @@ body {
     border: 1px solid #333;
 }
 
-/* ===============================
-   FOOTER
-================================ */
+
 .admin-footer {
     position: fixed;
     bottom: 0;
@@ -165,24 +154,22 @@ body {
 }
 
 .logout-button {
-    background-color: transparent;   /* No background */
-    border: none;                    /* No border */
-    color: #333;                    /* Text/icon color (dark grey) */
-    cursor: pointer;                /* Pointer on hover */
-    font-size: 16px;                /* Size of text */
-    padding: 5px 10px;              /* Some padding for clickable area */
-    transition: color 0.3s ease;   /* Smooth color change on hover */
+    background-color: transparent;  
+    border: none;                   
+    color: #333;                   
+    cursor: pointer;                
+    font-size: 16px;                
+    padding: 5px 10px;             
+    transition: color 0.3s ease;   
 }
 
 .logout-button:hover {
-    color: #d33;                   /* Red color on hover */
-    text-decoration: underline;    /* Underline on hover */
+    color: #d33;                  
+    text-decoration: underline;    
 }
 
 
-/* ===============================
-   HAMBURGER (Hidden on Desktop)
-================================ */
+
 .menu-btn {
     display: none;
 }
@@ -191,9 +178,7 @@ body {
     display: none;
 }
 
-/* ===============================
-   TABLET (992px and below)
-================================ */
+
 @media (max-width: 992px) {
     .sidebar-nav {
         width: 80px;
@@ -235,11 +220,9 @@ body {
     }
 }
 
-/* ===============================
-   MOBILE (576px and below)
-================================ */
+
 @media (max-width: 576px) {
-    /* Show hamburger button */
+
     .menu-btn {
         display: block;
         position: fixed;
@@ -264,41 +247,7 @@ body {
         border-radius: 2px;
     }
 
-    /* Animate hamburger when menu open */
-    #mobile-menu:checked ~ .menu-btn span:nth-child(1) {
-        transform: rotate(-45deg) translate(-4px, 5px);
-    }
-
-    #mobile-menu:checked ~ .menu-btn span:nth-child(2) {
-        opacity: 0;
-    }
-
-    #mobile-menu:checked ~ .menu-btn span:nth-child(3) {
-        transform: rotate(45deg) translate(-4px, -5px);
-    }
-
-    /* Hide sidebar by default on mobile */
-    .sidebar-nav {
-        width: 260px;
-        transform: translateX(-100%);
-    }
-
-    /* Show sidebar when checkbox checked */
-    #mobile-menu:checked ~ .sidebar-nav {
-        transform: translateX(0);
-    }
-
-    /* Show overlay when menu open */
-    #mobile-menu:checked ~ .menu-overlay {
-        display: block;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.5);
-        z-index: 999;
-    }
+ 
 
     .sidebar-brand {
         display: block;
@@ -322,7 +271,7 @@ body {
         background: #262626;
     }
 
-    /* Adjust navbar and footer */
+ 
     .admin-navbar {
         left: 0;
         padding: 0 15px 0 60px;
@@ -359,9 +308,7 @@ body {
     }
 }
 
-/* ===============================
-   SMALL MOBILE (400px and below)
-================================ */
+
 @media (max-width: 400px) {
     .nav-title {
         font-size: 0.9rem;
