@@ -12,7 +12,7 @@
 
 @section('content')
 
-{{-- Success Alert --}}
+
 @if(session('success'))
     <div class="alert-wrapper">
         <div id="success-alert" class="alert-success-box">
@@ -26,7 +26,7 @@
     </div>
 @endif
 
-{{-- No Items --}}
+
 @if(count($orderItems) == 0)
     <div class="order-info-card">
         <p class="empty-message">No order items found for this reference.</p>
@@ -65,7 +65,7 @@
 
     </div>
 
-    {{-- Status Update --}}
+
     <form action="{{ route('updateOrderStatus') }}" method="POST" class="status-form">
         @csrf
         <input type="hidden" name="order_id" value="{{ $orderItems[0]->order->id }}">

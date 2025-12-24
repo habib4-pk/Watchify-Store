@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Welcome to WatchifyStore</title>
 
-    <!-- Link CSS -->
+  
     <link rel="stylesheet" href="{{ asset('css/email.css') }}">
 </head>
 <body class="email-body">

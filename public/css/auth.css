@@ -173,9 +173,7 @@
     color: #c21613;
 }
 
-/* ===============================
-   TABLET (768px and below)
-================================ */
+
 @media (max-width: 768px) {
     .auth-wrapper {
         padding: 40px 20px;

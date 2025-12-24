@@ -9,15 +9,6 @@
 @section('content')
 <h1 class="page-title mb-20">Add New Watch</h1>
 
-@if ($errors->any())
-    <div class="error-box">
-        <strong>Please fix the following errors:</strong>
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
 @endif
 
 <div class="form-container">
