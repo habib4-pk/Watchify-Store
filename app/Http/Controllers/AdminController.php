@@ -21,7 +21,7 @@ class AdminController extends Controller
 
             return view("admin.dashboard", compact('totalSales', 'totalOrders', 'totalUsers', 'totalWatches'));
    
-            return redirect()->route('login')->with('error', 'You must be an admin to access the dashboard.');
+          
      
     }
 

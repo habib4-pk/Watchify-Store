@@ -58,10 +58,14 @@
         @if(Auth::user())
             <li class="mobile-only"><span class="user-greeting">{{ Auth::user()->name }}</span></li>
             <li class="mobile-only">
-                <a href="{{ route('logout') }}" class="mobile-auth-link">
-                    <i class="fas fa-sign-out-alt"></i>
-                    Logout
-                </a>
+                <form action="{{ route('logout') }}" method="POST" style="display: inline;">
+    @csrf
+    <button type="submit" class="mobile-auth-link" style="background: none; border: none; cursor: pointer; padding: 0; font: inherit; color: inherit;">
+        <i class="fas fa-sign-out-alt"></i>
+        Logout
+    </button>
+</form>
+
             </li>
         @else
             <li class="mobile-only"><a href="{{ url('/login') }}" class="mobile-auth-link">Login</a></li>

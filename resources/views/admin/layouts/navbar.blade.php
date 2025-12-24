@@ -7,8 +7,12 @@
     <div class="user-section">
         <span class="user-name">Hi, {{ Auth::user()->name ?? 'Admin' }}</span>
         
-        <a href="{{ route('logout') }}" class="logout-link">Logout</a>
-        
+       
+        <form action="{{ route('logout') }}" method="POST" style="display: inline;">
+    @csrf
+    <input type="submit" value="Logout" class="logout-button" />
+</form>
+
         <div class="profile-img">
             {{ strtoupper(substr(Auth::user()->name ?? 'A', 0, 1)) }}
         </div>
