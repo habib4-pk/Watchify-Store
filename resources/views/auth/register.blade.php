@@ -5,9 +5,23 @@
 @section('styles')
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{{ asset('css/auth.css') }}">
+<link rel="stylesheet" href="{{ asset('css/alert.css') }}">
 @endsection
 
 @section('content')
+
+
+@if(session('error'))
+<div class="alert-container">
+    <div id="error-alert" class="alert-error">
+        <span>{{ session('error') }}</span>
+        <button type="button" class="alert-close" onclick="document.getElementById('error-alert').remove()">&times;</button>
+    </div>
+</div>
+@endif
+
+<link rel="stylesheet" href="{{ asset('css/about-us.css') }}">
+
 <div class="auth-wrapper">
     <div class="auth-card">
         <h1>Join the Gallery</h1>
@@ -30,8 +44,7 @@
 
             <div class="form-group">
                 <label for="password">Create Password</label>
-                <input type="password" name="password" id="password" required placeholder="••••••••"
-                    pattern="^(?=.*[!@#$%^&*()_+\-=\[\]{};':\" \\|,.<>\/?]).{8}$"
+                <input type="password" name="password" id="password" required placeholder="••••••••" pattern="^(?=.*[!@#$%^&*()_+\-=\[\]{};':\ \\|,.<>\/?]).{8}$ "
                 title="Must be exactly 8 characters and include at least one special character">
 
             </div>

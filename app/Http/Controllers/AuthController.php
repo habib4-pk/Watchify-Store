@@ -45,26 +45,29 @@ class AuthController extends Controller
         return redirect()->back()->with('error', 'Invalid email or password.');
     }
 
-    public function register(Request $request)
-    {
-        $user = new User;
-
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->password = $request->password;
-
-        $user->save();
-        $mailData = [
-            'title' => 'Welcome to WatchifyStore',
-            'name'  => $request->name,
-        ];
-
-        Mail::to($request->email)->send(new RegistrationMail($mailData));
-
-
-        return redirect()->route('loginForm')
-            ->with('success', 'Registration successful! Please login.');
+  public function register(Request $request)
+{
+    $alreadyExist = User::where('email', $request->email)->first();
+    if ($alreadyExist) {
+        return redirect()->back()->with('error', 'Email already registered. Please use another email.');
     }
+
+    $user = new User;
+    $user->name = $request->name;
+    $user->email = $request->email;
+    $user->password = $request->password;
+    $user->save();
+
+    $mailData = [
+        'title' => 'Welcome to WatchifyStore',
+        'name'  => $request->name,
+    ];
+
+    Mail::to($request->email)->send(new RegistrationMail($mailData));
+
+    return redirect()->route('loginForm')->with('success', 'Registration successful! Please login.');
+}
+
 
     public function logout(Request $request)
     {

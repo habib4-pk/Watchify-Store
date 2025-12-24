@@ -59,4 +59,5 @@
         </div>
     </form>
 </div>
+<script src="{{ asset('js/fields.js') }}"></script>
 @endsection
