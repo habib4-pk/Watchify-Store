@@ -74,17 +74,6 @@ class AuthController extends Controller
         $user->role = 'user';
         $user->save();
 
-        // Try to send email (optional)
-        try {
-            $mailData = [
-                'title' => 'Welcome to WatchifyStore',
-                'name' => $request->name,
-            ];
-            Mail::to($request->email)->send(new RegistrationMail($mailData));
-        } catch (Exception $mailEx) {
-            // Email failed, but continue
-        }
-
         return redirect()->route('loginForm')->with('success', 'Registration successful! Please login.');
     }
 
