@@ -50,7 +50,7 @@ class AuthController extends Controller
                     return redirect()->route('adminDashboard')->with('success', 'Welcome Admin! You have logged in successfully.');
                 }
 
-                return redirect()->route('home')->with('success', 'Login successful. Welcome back!');
+                return redirect()->route('shop.index')->with('success', 'Login successful. Welcome back!');
             }
 
             return redirect()->back()->with('error', 'Invalid email or password.')->withInput($request->only('email'));
@@ -74,7 +74,7 @@ class AuthController extends Controller
         $user->role = 'user';
         $user->save();
 
-        return redirect()->route('loginForm')->with('success', 'Registration successful! Please login.');
+        return redirect()->route('account.login')->with('success', 'Registration successful! Please login.');
     }
 
     public function logout(Request $request)
@@ -89,13 +89,13 @@ class AuthController extends Controller
             $request->session()->regenerateToken();
 
             if ($role === 'admin') {
-                return redirect()->route('loginForm')->with('success', 'Admin logged out successfully.');
+                return redirect()->route('account.login')->with('success', 'Admin logged out successfully.');
             }
 
-            return redirect()->route('home')->with('success', 'Logged out successfully.');
+            return redirect()->route('shop.index')->with('success', 'Logged out successfully.');
         } catch (Exception $e) {
             Auth::logout();
-            return redirect()->route('home');
+            return redirect()->route('shop.index');
         }
     }
 }

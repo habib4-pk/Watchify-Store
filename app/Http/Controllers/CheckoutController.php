@@ -24,7 +24,7 @@ class CheckoutController extends Controller
     {
         try {
             if (!Auth::check()) {
-                return redirect()->route('login')->with('error', 'Please login to checkout.');
+                return redirect()->route('account.login')->with('error', 'Please login to checkout.');
             }
 
             $userId = Auth::id();
@@ -56,7 +56,7 @@ class CheckoutController extends Controller
     {
         try {
             if (!Auth::check()) {
-                return redirect()->route('login')->with('error', 'Please login to place an order.');
+                return redirect()->route('account.login')->with('error', 'Please login to place an order.');
             }
 
             $validator = Validator::make($req->all(), [
@@ -153,7 +153,7 @@ class CheckoutController extends Controller
     {
         try {
             if (!Auth::check()) {
-                return redirect()->route('login')->with('error', 'Please login to view your orders.');
+                return redirect()->route('account.login')->with('error', 'Please login to view your orders.');
             }
 
             $user_id = Auth::id();

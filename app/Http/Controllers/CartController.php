@@ -22,7 +22,7 @@ class CartController extends Controller
     {
         try {
             if (!Auth::check()) {
-                return redirect()->route('login')->with('error', 'Please login to view your cart.');
+                return redirect()->route('account.login')->with('error', 'Please login to view your cart.');
             }
 
             $user_id = Auth::id();
@@ -49,7 +49,7 @@ class CartController extends Controller
     {
         try {
             if (!Auth::check()) {
-                return redirect()->route('login')->with('error', 'Please log in to add items to your cart.');
+                return redirect()->route('account.login')->with('error', 'Please log in to add items to your cart.');
             }
 
             $validator = Validator::make($req->all(), [

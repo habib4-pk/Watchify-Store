@@ -20,7 +20,7 @@ class ReviewController extends Controller
 
         try {
             if (!Auth::check()) {
-                return redirect()->route('login')->with('error', 'Please login to add a review.');
+                return redirect()->route('account.login')->with('error', 'Please login to add a review.');
             }
 
             $user_id = Auth::id();
