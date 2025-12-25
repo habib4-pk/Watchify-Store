@@ -6,27 +6,38 @@ return [
     | Cloudinary Configuration
     |--------------------------------------------------------------------------
     |
-    | An HTTP or HTTPS URL to notify your application (a webhook) when the
-    | process of uploads, deletes, and any other API call is completed.
+    | Here you may configure your Cloudinary settings. The CLOUDINARY_URL
+    | environment variable is the primary way to configure credentials.
     |
     */
-    'notification_url' => env('CLOUDINARY_NOTIFICATION_URL'),
+
+    'cloud_url' => env('CLOUDINARY_URL'),
 
     /*
     |--------------------------------------------------------------------------
-    | Cloudinary Configuration
+    | Cloudinary Cloud Settings
     |--------------------------------------------------------------------------
-    |
-    | Here you may configure your Cloudinary settings.
-    |
     */
-    'cloud_url' => env('CLOUDINARY_URL'),
+    'cloud' => [
+        'cloud_name' => env('CLOUDINARY_CLOUD_NAME', ''),
+        'api_key' => env('CLOUDINARY_API_KEY', ''),
+        'api_secret' => env('CLOUDINARY_API_SECRET', ''),
+    ],
 
-    'cloud_name' => env('CLOUDINARY_CLOUD_NAME'),
+    /*
+    |--------------------------------------------------------------------------
+    | Cloudinary URL Settings
+    |--------------------------------------------------------------------------
+    */
+    'url' => [
+        'secure' => true,
+    ],
 
-    'api_key' => env('CLOUDINARY_API_KEY'),
-
-    'api_secret' => env('CLOUDINARY_API_SECRET'),
-
-    'secure' => env('CLOUDINARY_SECURE', true),
+    /*
+    |--------------------------------------------------------------------------
+    | Upload Settings
+    |--------------------------------------------------------------------------
+    */
+    'upload_preset' => env('CLOUDINARY_UPLOAD_PRESET'),
+    'notification_url' => env('CLOUDINARY_NOTIFICATION_URL'),
 ];
