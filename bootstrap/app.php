@@ -12,6 +12,11 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         
+        // Add no-cache to all web routes to prevent form resubmission popup
+        $middleware->web(append: [
+            \App\Http\Middleware\NoCacheMiddleware::class,
+        ]);
+
         // REGISTER YOUR ALIAS HERE
         $middleware->alias([
             'admin' => \App\Http\Middleware\AdminMiddleware::class,
