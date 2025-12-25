@@ -73,7 +73,7 @@ class AuthController extends Controller
         $user->name = $request->name;
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
-        $user->role = 'buyer';
+        $user->role = 'user';
         $user->save();
 
         // Try to send email (optional)
