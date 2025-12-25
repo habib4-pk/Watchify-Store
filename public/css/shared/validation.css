@@ -1,0 +1,84 @@
+/**
+ * Validation Styles
+ * Shared styles for form validation across buyer views
+ * Used by: checkout.blade.php, watchDetail.blade.php
+ */
+
+/* Field Error States */
+.field-group.has-error input,
+.field-group.has-error select,
+.field-group.has-error textarea {
+    border-color: #dc3545;
+    background-color: #fff5f5;
+}
+
+.field-group.has-error label {
+    color: #dc3545;
+}
+
+/* Error Classes for Direct Application */
+input.error,
+select.error,
+textarea.error {
+    border-color: #dc3545;
+    background-color: #fff5f5;
+}
+
+/* Error Message */
+.error-message {
+    color: #dc3545;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    display: block;
+}
+
+/* Field Hint */
+.field-hint {
+    color: #6c757d;
+    font-size: 0.8rem;
+    margin-top: 0.25rem;
+    display: block;
+}
+
+/* Required Star */
+.required-star {
+    color: #dc3545;
+    margin-left: 2px;
+}
+
+/* Form Group */
+.form-group {
+    margin-bottom: 1rem;
+}
+
+/* Input Validation States (HTML5) */
+input:invalid:not(:placeholder-shown) {
+    border-color: #dc3545;
+}
+
+input:valid:not(:placeholder-shown) {
+    border-color: #28a745;
+}
+
+/* Character Counter */
+.character-count {
+    font-size: 0.8rem;
+    color: #6c757d;
+    text-align: right;
+    margin-top: 0.25rem;
+}
+
+.character-count.warning {
+    color: #ffc107;
+}
+
+.character-count.error {
+    color: #dc3545;
+}
+
+/* Review Form Error States */
+.review-form select.error,
+.review-form textarea.error {
+    border-color: #dc3545;
+    background-color: #fff5f5;
+}

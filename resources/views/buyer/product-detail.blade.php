@@ -4,72 +4,11 @@
 
 @section('styles')
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="{{ asset('css/watch-detail.css') }}">
-<link rel="stylesheet" href="{{ asset('css/alert.css') }}">
-<link rel="stylesheet" href="{{ asset('css/reviews.css') }}">
-<style>
-    /* Validation Styles */
-    .review-form select.error,
-    .review-form textarea.error {
-        border-color: #dc3545;
-        background-color: #fff5f5;
-    }
-    
-    .error-message {
-        color: #dc3545;
-        font-size: 0.875rem;
-        margin-top: 0.25rem;
-        display: block;
-    }
-    
-    .form-group {
-        margin-bottom: 1rem;
-    }
-    
-    .required-star {
-        color: #dc3545;
-    }
-    
-    .btn-loading {
-        position: relative;
-        pointer-events: none;
-        opacity: 0.7;
-    }
-    
-    .btn-loading::after {
-        content: '';
-        position: absolute;
-        width: 16px;
-        height: 16px;
-        top: 50%;
-        left: 50%;
-        margin-left: -8px;
-        margin-top: -8px;
-        border: 2px solid #ffffff;
-        border-radius: 50%;
-        border-top-color: transparent;
-        animation: spinner 0.6s linear infinite;
-    }
-    
-    @keyframes spinner {
-        to { transform: rotate(360deg); }
-    }
-    
-    .character-count {
-        font-size: 0.8rem;
-        color: #6c757d;
-        text-align: right;
-        margin-top: 0.25rem;
-    }
-    
-    .character-count.warning {
-        color: #ffc107;
-    }
-    
-    .character-count.error {
-        color: #dc3545;
-    }
-</style>
+<link rel="stylesheet" href="{{ asset('css/buyer/product-detail.css') }}">
+<link rel="stylesheet" href="{{ asset('css/shared/inline-alerts.css') }}">
+<link rel="stylesheet" href="{{ asset('css/buyer/reviews.css') }}">
+<link rel="stylesheet" href="{{ asset('css/shared/validation.css') }}">
+<link rel="stylesheet" href="{{ asset('css/buyer/product-cards.css') }}">
 @endsection
 
 @section('content')

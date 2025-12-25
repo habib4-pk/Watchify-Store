@@ -4,46 +4,9 @@
 
 @section('styles')
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="{{ asset('css/cart-checkout.css') }}">
-<link rel="stylesheet" href="{{ asset('css/alert.css') }}">
-<style>
-    /* Validation Styles */
-    .field-group.has-error input {
-        border-color: #dc3545;
-        background-color: #fff5f5;
-    }
-    
-    .field-group.has-error label {
-        color: #dc3545;
-    }
-    
-    .error-message {
-        color: #dc3545;
-        font-size: 0.875rem;
-        margin-top: 0.25rem;
-        display: block;
-    }
-    
-    .field-hint {
-        color: #6c757d;
-        font-size: 0.8rem;
-        margin-top: 0.25rem;
-        display: block;
-    }
-    
-    .required-star {
-        color: #dc3545;
-        margin-left: 2px;
-    }
-    
-    input:invalid:not(:placeholder-shown) {
-        border-color: #dc3545;
-    }
-    
-    input:valid:not(:placeholder-shown) {
-        border-color: #28a745;
-    }
-</style>
+<link rel="stylesheet" href="{{ asset('css/buyer/cart.css') }}">
+<link rel="stylesheet" href="{{ asset('css/shared/inline-alerts.css') }}">
+<link rel="stylesheet" href="{{ asset('css/shared/validation.css') }}">
 @endsection
 
 @section('content')

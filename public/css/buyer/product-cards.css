@@ -1,0 +1,192 @@
+/**
+ * Product Card Styles
+ * Consolidated from home.blade.php, featured.blade.php, searchedResult.blade.php
+ * Includes stock badges, loading states, and button styles
+ */
+
+/* Button States */
+.btn-disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background: #6c757d !important;
+}
+
+.btn-disabled:hover {
+    background: #6c757d !important;
+    transform: none;
+}
+
+.btn-loading {
+    position: relative;
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+.btn-loading::after {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    top: 50%;
+    left: 50%;
+    margin-left: -8px;
+    margin-top: -8px;
+    border: 2px solid #ffffff;
+    border-radius: 50%;
+    border-top-color: transparent;
+    animation: spinner 0.6s linear infinite;
+}
+
+@keyframes spinner {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Stock Badges */
+.stock-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 4px 8px;
+    font-size: 11px;
+    font-weight: 600;
+    border-radius: 4px;
+    z-index: 1;
+}
+
+.stock-badge.in-stock {
+    background: #d4edda;
+    color: #155724;
+}
+
+.stock-badge.low-stock {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.stock-badge.out-of-stock {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+/* Stock badge inline variant (for featured page) */
+.stock-badge-inline {
+    display: inline-block;
+    padding: 4px 8px;
+    font-size: 11px;
+    font-weight: 600;
+    border-radius: 4px;
+    margin-top: 5px;
+}
+
+.stock-badge-inline.in-stock {
+    background: #d4edda;
+    color: #155724;
+}
+
+.stock-badge-inline.low-stock {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.stock-badge-inline.out-of-stock {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+/* Image Container */
+.image-container {
+    position: relative;
+}
+
+/* Form Inline */
+.form-inline {
+    display: inline-block;
+    margin: 0;
+}
+
+.form-inline button {
+    width: 100%;
+}
+
+/* No Results / Empty State */
+.no-results,
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #6c757d;
+}
+
+.no-results p,
+.empty-state p {
+    font-size: 18px;
+    margin: 20px 0;
+}
+
+.no-results-icon,
+.empty-state-icon {
+    font-size: 64px;
+    margin-bottom: 20px;
+    opacity: 0.5;
+}
+
+.empty-state h3 {
+    font-size: 24px;
+    margin-bottom: 10px;
+    color: #495057;
+}
+
+/* Search Summary (for searchedResult page) */
+.search-summary {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.search-summary h3 {
+    margin: 0 0 10px 0;
+    color: #495057;
+    font-size: 18px;
+}
+
+.search-query {
+    color: #007bff;
+    font-weight: 600;
+}
+
+.results-count {
+    color: #6c757d;
+    font-size: 14px;
+}
+
+/* Search Suggestions */
+.search-suggestions {
+    background: #fff;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 20px;
+    margin-top: 20px;
+    text-align: left;
+}
+
+.search-suggestions h4 {
+    margin-bottom: 15px;
+    color: #495057;
+}
+
+.search-suggestions ul {
+    list-style: none;
+    padding: 0;
+}
+
+.search-suggestions li {
+    padding: 8px 0;
+    border-bottom: 1px solid #f1f3f5;
+}
+
+.search-suggestions li:last-child {
+    border-bottom: none;
+}
