@@ -3,7 +3,7 @@
 @section('title', 'Collections')
 
 @section('styles')
-<link rel="stylesheet" href="{{ secure_secure_asset('css/products.css') }}">
+<link rel="stylesheet" href="{{ secure_asset('css/products.css') }}">
 <style>
     .btn-disabled {
         opacity: 0.6;
