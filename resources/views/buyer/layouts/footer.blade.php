@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="{{ secure_asset('css/footer.css') }}">
+<link rel="stylesheet" href="{{ asset('css/footer.css') }}">
 
 <footer class="watch-footer">
     <div class="footer-wrapper">

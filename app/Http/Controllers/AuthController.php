@@ -38,7 +38,7 @@ class AuthController extends Controller
             'password' => 'required|string',
         ]);
 
-        try {
+   
             $credentials = $request->only('email', 'password');
 
             if (Auth::attempt($credentials)) {
@@ -54,9 +54,7 @@ class AuthController extends Controller
             }
 
             return redirect()->back()->with('error', 'Invalid email or password.')->withInput($request->only('email'));
-        } catch (Exception $e) {
-            return redirect()->back()->with('error', 'An error occurred during login.');
-        }
+       
     }
 
     public function register(Request $request)
