@@ -332,20 +332,6 @@ class BuyerController extends Controller
                 $orderItem->save();
             }
 
-            try {
-                $user = Auth::user();
-                if ($user && $user->email) {
-                    $mailData = [
-                        'customer_name' => $order->customer_name,
-                        'order_id' => $order->id,
-                        'total_amount' => $total_price,
-                        'status' => $order->status,
-                    ];
-                    Mail::to($user->email)->send(new OrderPlacedMail($mailData));
-                }
-            } catch (Exception $mailEx) {
-                // Log mail error but don't stop the order process
-            }
 
             Cart::where('user_id', $user_id)->delete();
 

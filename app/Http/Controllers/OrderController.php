@@ -81,18 +81,6 @@ class OrderController extends Controller
             $order->status = $req->status; // Keep original casing from request
             $order->save();
 
-            try {
-                $mailData = [
-                    'title' => 'Order Status Updated',
-                    'name' => $order->user->name,
-                    'order_id' => $order->id,
-                    'status' => $order->status,
-                ];
-
-                Mail::to($order->user->email)->send(new OrderStatusMail($mailData));
-            } catch (Exception $mailEx) {
-                // Silently fail mail
-            }
 
             return redirect()->route('allOrders')->with('success', 'Order status updated successfully!');
         } catch (Exception $e) {
