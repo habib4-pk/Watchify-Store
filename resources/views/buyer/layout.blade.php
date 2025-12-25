@@ -6,14 +6,14 @@
     <title>@yield('title') | Watchify</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('css/buyer/layout.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/shared/alerts.css') }}">
+    <link rel="stylesheet" href="{{ secure_asset('css/buyer/layout.css') }}">
+    <link rel="stylesheet" href="{{ secure_asset('css/shared/alerts.css') }}">
     
     @yield('styles')
 </head>
 <body data-authenticated="{{ Auth::check() ? 'true' : 'false' }}" 
       data-login-url="{{ route('login') }}"
-      data-placeholder-image="{{ asset('images/placeholder-watch.jpg') }}">
+      data-placeholder-image="{{ secure_asset('images/placeholder-watch.jpg') }}">
 
     @include('buyer.layouts.navbar')
 
@@ -88,7 +88,7 @@
     @include('buyer.layouts.footer')
 
     {{-- Global Alert JavaScript (externalized) --}}
-    <script src="{{ asset('js/buyer/global-alerts.js') }}"></script>
+    <script src="{{ secure_asset('js/buyer/global-alerts.js') }}"></script>
 
     @yield('scripts')
 

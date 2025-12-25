@@ -4,11 +4,11 @@
 
 @section('styles')
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="{{ asset('css/buyer/product-detail.css') }}">
-<link rel="stylesheet" href="{{ asset('css/shared/inline-alerts.css') }}">
-<link rel="stylesheet" href="{{ asset('css/buyer/reviews.css') }}">
-<link rel="stylesheet" href="{{ asset('css/shared/validation.css') }}">
-<link rel="stylesheet" href="{{ asset('css/buyer/product-cards.css') }}">
+<link rel="stylesheet" href="{{ secure_asset('css/buyer/product-detail.css') }}">
+<link rel="stylesheet" href="{{ secure_asset('css/shared/inline-alerts.css') }}">
+<link rel="stylesheet" href="{{ secure_asset('css/buyer/reviews.css') }}">
+<link rel="stylesheet" href="{{ secure_asset('css/shared/validation.css') }}">
+<link rel="stylesheet" href="{{ secure_asset('css/buyer/product-cards.css') }}">
 @endsection
 
 @section('content')
@@ -18,7 +18,7 @@
     <div class="image-gallery">
         <img src="{{ $watch->image }}" 
              alt="{{ $watch->name }}"
-             onerror="this.src='{{ asset('images/placeholder-watch.jpg') }}'">
+             onerror="this.src='{{ secure_asset('images/placeholder-watch.jpg') }}'">
     </div>
 
     <div class="product-details">
@@ -317,7 +317,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const productImage = document.querySelector('.image-gallery img');
     if (productImage) {
         productImage.addEventListener('error', function() {
-            this.src = '{{ asset("images/placeholder-watch.jpg") }}';
+            this.src = '{{ secure_asset("images/placeholder-watch.jpg") }}';
             this.alt = 'Image not available';
         });
     }

@@ -10,7 +10,7 @@
         <img src="{{ $watch->image }}" 
              class="product-image" 
              alt="{{ $watch->name }}"
-             onerror="this.src='{{ asset('images/placeholder-watch.jpg') }}'">
+             onerror="this.src='{{ secure_asset('images/placeholder-watch.jpg') }}'">
         
         {{-- Stock Badge --}}
         @include('buyer.partials.stock-badge', ['stock' => $watch->stock])

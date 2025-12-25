@@ -4,9 +4,9 @@
 
 @section('styles')
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="{{ asset('css/buyer/cart.css') }}">
-<link rel="stylesheet" href="{{ asset('css/shared/inline-alerts.css') }}">
-<link rel="stylesheet" href="{{ asset('css/shared/validation.css') }}">
+<link rel="stylesheet" href="{{ secure_asset('css/buyer/cart.css') }}">
+<link rel="stylesheet" href="{{ secure_asset('css/shared/inline-alerts.css') }}">
+<link rel="stylesheet" href="{{ secure_asset('css/shared/validation.css') }}">
 @endsection
 
 @section('content')

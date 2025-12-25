@@ -3,8 +3,8 @@
 @section('title', 'Featured Products')
 
 @section('styles')
-<link rel="stylesheet" href="{{ asset('css/buyer/products.css') }}">
-<link rel="stylesheet" href="{{ asset('css/buyer/product-cards.css') }}">
+<link rel="stylesheet" href="{{ secure_asset('css/buyer/products.css') }}">
+<link rel="stylesheet" href="{{ secure_asset('css/buyer/product-cards.css') }}">
 @endsection
 
 @section('content')
@@ -43,5 +43,5 @@
 @endsection
 
 @section('scripts')
-<script src="{{ asset('js/buyer/product-validation.js') }}"></script>
+<script src="{{ secure_asset('js/buyer/product-validation.js') }}"></script>
 @endsection
