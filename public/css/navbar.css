@@ -125,6 +125,11 @@
     display: none;
 }
 
+/* Desktop-only elements */
+.desktop-only {
+    display: flex;
+}
+
 .search-container {
     display: flex;
     align-items: center;
@@ -403,11 +408,6 @@
     display: none;
 }
 
-/* Hide mobile logout icon on desktop */
-.mobile-logout-form-icon {
-    display: none;
-}
-
 @media (max-width: 992px) {
     .watchify-nav {
         padding: 0 4%;
@@ -446,7 +446,7 @@
         order: 3;
     }
 
-    /* Show nav-actions but only cart and logout */
+    /* Show nav-actions but only cart on mobile */
     .nav-actions {
         display: flex;
         gap: 8px;
@@ -455,13 +455,13 @@
         margin-right: 12px;
     }
 
-    /* Hide search on mobile navbar */
-    .nav-actions .search-container {
-        display: none;
+    /* Hide desktop-only elements on mobile */
+    .desktop-only {
+        display: none !important;
     }
 
-    /* Hide user dropdown on mobile navbar */
-    .nav-actions .user-dropdown {
+    /* Hide search on mobile navbar */
+    .nav-actions .search-container {
         display: none;
     }
 
@@ -476,28 +476,6 @@
         display: flex;
         font-size: 20px;
         padding: 6px;
-    }
-
-    /* Add mobile logout button in nav-actions */
-    .mobile-logout-form-icon {
-        display: flex;
-        align-items: center;
-    }
-
-    .mobile-logout-icon {
-        display: flex;
-        background: none;
-        border: none;
-        color: #ff4444;
-        font-size: 20px;
-        padding: 6px;
-        cursor: pointer;
-        transition: all 0.2s ease;
-    }
-
-    .mobile-logout-icon:hover {
-        color: #cc0000;
-        transform: scale(1.1);
     }
 
     .nav-menu {

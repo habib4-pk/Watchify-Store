@@ -95,23 +95,15 @@
                 <i class="fas fa-shopping-cart"></i>
             </a>
 
-            <!-- Mobile Logout Icon -->
-            <form action="{{ route('logout') }}" method="POST" class="mobile-logout-form-icon">
-                @csrf
-                <button type="submit" class="mobile-logout-icon" title="Logout">
-                    <i class="fas fa-sign-out-alt"></i>
-                </button>
-            </form>
-
-            <!-- User Avatar and Logout Button -->
-            <div class="user-info">
+            <!-- User Avatar and Logout Button (Desktop Only) -->
+            <div class="user-info desktop-only">
                 <div class="user-avatar">
                     {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
                 </div>
                 <span class="user-name">{{ Auth::user()->name }}</span>
             </div>
             
-            <form action="{{ route('logout') }}" method="POST" style="margin: 0;">
+            <form action="{{ route('logout') }}" method="POST" class="desktop-only" style="margin: 0;">
                 @csrf
                 <button type="submit" class="logout-btn" title="Logout">
                     <i class="fas fa-sign-out-alt"></i> Logout
