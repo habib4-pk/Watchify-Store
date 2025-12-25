@@ -140,7 +140,7 @@ class CheckoutController extends Controller
             // Clear cart
             Cart::where('user_id', $user_id)->delete();
 
-            return redirect()->route('home')->with('success', 'Order placed successfully!');
+            return redirect()->route('myOrders')->with('success', 'Order placed successfully! Thank you for your purchase.');
         } catch (Exception $e) {
             return redirect()->back()->with('error', 'Failed to place order. Please try again.');
         }
