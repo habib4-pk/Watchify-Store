@@ -61,38 +61,33 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
-        // 1. Strict Validation
+        // Simple validation
         $request->validate([
-            'name'     => 'required|string|max:255',
-            'email'    => 'required|email|max:255|unique:users,email',
-            'password' => 'required|string|min:8',
+            'name'     => 'required',
+            'email'    => 'required|email|unique:users,email',
+            'password' => 'required',
         ]);
 
+        // Create user
+        $user = new User;
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->password = Hash::make($request->password);
+        $user->role = 'buyer';
+        $user->save();
+
+        // Try to send email (optional)
         try {
-            // 2. Data Creation with Password Hashing
-            $user = new User;
-            $user->name = $request->name;
-            $user->email = $request->email;
-            $user->password = $request->password; // Hashing is non-negotiable for security
-            $user->role = 'buyer'; // Explicitly setting default role
-            $user->save();
-
-            // 3. Email Logic
-            try {
-                $mailData = [
-                    'title' => 'Welcome to WatchifyStore',
-                    'name' => $request->name,
-                ];
-                Mail::to($request->email)->send(new RegistrationMail($mailData));
-            } catch (Exception $mailEx) {
-                // Return success even if mail fails, but with a note
-                return redirect()->route('loginForm')->with('success', 'Registration successful! (Confirmation email failed to send)');
-            }
-
-            return redirect()->route('loginForm')->with('success', 'Registration successful! Please login.');
-        } catch (Exception $e) {
-            return redirect()->back()->with('error', 'Registration failed. Please try again.')->withInput();
+            $mailData = [
+                'title' => 'Welcome to WatchifyStore',
+                'name' => $request->name,
+            ];
+            Mail::to($request->email)->send(new RegistrationMail($mailData));
+        } catch (Exception $mailEx) {
+            // Email failed, but continue
         }
+
+        return redirect()->route('loginForm')->with('success', 'Registration successful! Please login.');
     }
 
     public function logout(Request $request)
