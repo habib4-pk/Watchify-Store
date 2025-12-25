@@ -73,7 +73,7 @@ class AuthController extends Controller
             $user = new User;
             $user->name = $request->name;
             $user->email = $request->email;
-            $user->password = Hash::make($request->password); // Hashing is non-negotiable for security
+            $user->password = $request->password; // Hashing is non-negotiable for security
             $user->role = 'buyer'; // Explicitly setting default role
             $user->save();
 
