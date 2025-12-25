@@ -103,31 +103,20 @@
                 </button>
             </form>
 
-            <div class="user-dropdown">
-                <button class="user-toggle" type="button" onclick="toggleUserDropdown(event)">
-                    <div class="user-avatar">
-                        {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
-                    </div>
-                    <span class="user-name">{{ Auth::user()->name }}</span>
-                    <i class="fas fa-chevron-down"></i>
-                </button>
-                <div class="user-dropdown-menu">
-                    <div class="dropdown-header">
-                        <span class="user-email">{{ Auth::user()->email }}</span>
-                    </div>
-                    <div class="dropdown-divider"></div>
-                    <a href="{{ route('myOrders') }}" class="dropdown-item">
-                        <i class="fas fa-box"></i> My Orders
-                    </a>
-                    <div class="dropdown-divider"></div>
-                    <form action="{{ route('logout') }}" method="POST" style="margin: 0;">
-                        @csrf
-                        <button type="submit" class="dropdown-item logout-item">
-                            <i class="fas fa-sign-out-alt"></i> Logout
-                        </button>
-                    </form>
+            <!-- User Avatar and Logout Button -->
+            <div class="user-info">
+                <div class="user-avatar">
+                    {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
                 </div>
+                <span class="user-name">{{ Auth::user()->name }}</span>
             </div>
+            
+            <form action="{{ route('logout') }}" method="POST" style="margin: 0;">
+                @csrf
+                <button type="submit" class="logout-btn" title="Logout">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </form>
         @else
             <a href="{{ url('/login') }}" class="login-btn">Login</a>
             <a href="{{ url('/register') }}" class="signup-btn">Join Now</a>
