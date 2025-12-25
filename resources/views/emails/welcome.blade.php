@@ -5,7 +5,7 @@
     <title>Welcome to WatchifyStore</title>
 
   
-    <link rel="stylesheet" href="{{ asset('css/email.css') }}">
+    <link rel="stylesheet" href="{{ secure_asset('css/email.css') }}">
 </head>
 <body class="email-body">
 

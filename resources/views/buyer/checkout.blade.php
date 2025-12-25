@@ -4,8 +4,8 @@
 
 @section('styles')
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="{{ asset('css/cart-checkout.css') }}">
-<link rel="stylesheet" href="{{ asset('css/alert.css') }}">
+<link rel="stylesheet" href="{{ secure_asset('css/cart-checkout.css') }}">
+<link rel="stylesheet" href="{{ secure_asset('css/alert.css') }}">
 <style>
     /* Validation Styles */
     .field-group.has-error input {
@@ -89,7 +89,7 @@
         <ul class="order-items-list">
             @foreach ($cart as $item)
             <li class="summary-item">
-                <img src="{{ asset('storage/' . $item->watch->image) }}" alt="{{ $item->watch->name }}">
+                <img src="{{ secure_asset('storage/' . $item->watch->image) }}" alt="{{ $item->watch->name }}">
                 <div class="summary-item-info">
                     <p>{{ $item->watch->name }}</p>
                     <span class="item-qty">Qty: {{ $item->quantity }}</span>

@@ -3,7 +3,7 @@
 @section('title', 'Featured Products')
 
 @section('styles')
-<link rel="stylesheet" href="{{ asset('css/products.css') }}">
+<link rel="stylesheet" href="{{ secure_asset('css/products.css') }}">
 <style>
     /* Additional validation styles */
     .btn-add:disabled,
@@ -136,10 +136,10 @@
             @foreach($allWatches as $watch)
             <article class="product-card" data-watch-id="{{ $watch->id }}">
                 <div class="image-container">
-                    <img src="{{ asset('storage/' . $watch->image) }}" 
+                    <img src="{{ secure_asset('storage/' . $watch->image) }}" 
                          class="product-image" 
                          alt="{{ $watch->name }}"
-                         onerror="this.src='{{ asset('images/placeholder-watch.jpg') }}'">
+                         onerror="this.src='{{ secure_asset('images/placeholder-watch.jpg') }}'">
                     
                     {{-- Stock Badge --}}
                     @if($watch->stock > 0 && $watch->stock <= 5)
@@ -260,7 +260,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const productImages = document.querySelectorAll('.product-image');
     productImages.forEach(img => {
         img.addEventListener('error', function() {
-            this.src = '{{ asset("images/placeholder-watch.jpg") }}';
+            this.src = '{{ secure_asset("images/placeholder-watch.jpg") }}';
             this.alt = 'Image not available';
         });
     });
