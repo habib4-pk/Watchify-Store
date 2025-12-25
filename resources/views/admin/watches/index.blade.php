@@ -42,7 +42,7 @@
                         <td class="ps-4 text-white">{{ $loop->iteration }}</td>
                         <td>
                             @if($watch->image)
-                                <img src="{{ asset('storage/' . $watch->image) }}" class="rounded-3" alt="{{ $watch->name }}" style="width: 50px; height: 50px; object-fit: cover;">
+                                <img src="{{ asset('photos/' . $watch->image) }}" class="rounded-3" alt="{{ $watch->name }}" style="width: 50px; height: 50px; object-fit: cover;">
                             @else
                                 <div class="rounded-3 d-flex align-items-center justify-content-center" style="width: 50px; height: 50px; background-color: #21262d;">
                                     <i class="bi bi-image text-secondary"></i>
