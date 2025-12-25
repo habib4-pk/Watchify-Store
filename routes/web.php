@@ -61,17 +61,17 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
 // Legacy admin route aliases for backward compatibility
 Route::middleware(['auth', 'admin'])->group(function () {
-    Route::get('/admin/watches', fn() => redirect()->route('admin.products.index'))->name('adminDashboard');
-    Route::get('/admin/watches/add', fn() => redirect()->route('admin.products.create'))->name('addWatch');
-    Route::post('/admin/watches/store', fn() => redirect()->route('admin.products.store'))->name('storeWatch');
-    Route::post('/admin/watches/edit', fn() => redirect()->route('admin.products.edit'))->name('editWatch');
-    Route::post('/admin/watches/update', fn() => redirect()->route('admin.products.update'))->name('updateWatch');
-    Route::post('/admin/watches/delete', fn() => redirect()->route('admin.products.destroy'))->name('deleteWatch');
-    Route::get('/admin/orders', fn() => redirect()->route('admin.orders.index'))->name('allOrders');
-    Route::post('/admin/orders/details', fn() => redirect()->route('admin.orders.show'))->name('orderDetails');
-    Route::post('/admin/orders/update-status', fn() => redirect()->route('admin.orders.update'))->name('updateOrderStatus');
-    Route::get('/admin/users', fn() => redirect()->route('admin.users.index'))->name('allUsers');
-    Route::post('/admin/users/delete', fn() => redirect()->route('admin.users.destroy'))->name('deleteUser');
+    Route::get('/admin/watches', [WatchController::class, 'index'])->name('adminDashboard');
+    Route::get('/admin/watches/add', [WatchController::class, 'add'])->name('addWatch');
+    Route::post('/admin/watches/store', [WatchController::class, 'store'])->name('storeWatch');
+    Route::post('/admin/watches/edit', [WatchController::class, 'edit'])->name('editWatch');
+    Route::post('/admin/watches/update', [WatchController::class, 'update'])->name('updateWatch');
+    Route::post('/admin/watches/delete', [WatchController::class, 'destroy'])->name('deleteWatch');
+    Route::get('/admin/orders', [OrderController::class, 'index'])->name('allOrders');
+    Route::post('/admin/orders/details', [OrderController::class, 'show'])->name('orderDetails');
+    Route::post('/admin/orders/update-status', [OrderController::class, 'update'])->name('updateOrderStatus');
+    Route::get('/admin/users', [AdminController::class, 'showAllUsers'])->name('allUsers');
+    Route::post('/admin/users/delete', [AdminController::class, 'destroy'])->name('deleteUser');
 });
 
 // ============================================================================
