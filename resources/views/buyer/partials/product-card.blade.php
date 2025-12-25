@@ -22,11 +22,10 @@
 
         <div class="button-group">
             {{-- View Details --}}
-            <form action="{{ route('watchDetails') }}" 
+            <form action="{{ route('shop.product') }}" 
                   method="GET" 
                   class="form-inline"
                   onsubmit="return validateDetailsForm(this)">
-                @csrf
                 <input type="hidden" name="id" value="{{ $watch->id }}" required>
                 <button type="submit" class="btn-view">Details</button>
             </form>

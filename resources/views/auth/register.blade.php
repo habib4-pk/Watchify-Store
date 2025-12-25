@@ -4,8 +4,8 @@
 
 @section('styles')
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="{{ secure_asset('css/auth.css') }}">
-<link rel="stylesheet" href="{{ secure_asset('css/alert.css') }}">
+<link rel="stylesheet" href="{{ secure_asset('css/shared/auth.css') }}">
+<link rel="stylesheet" href="{{ secure_asset('css/shared/alerts.css') }}">
 @endsection
 
 @section('content')
@@ -20,7 +20,7 @@
 </div>
 @endif
 
-<link rel="stylesheet" href="{{ secure_asset('css/about-us.css') }}">
+
 
 <div class="auth-wrapper">
     <div class="auth-card">

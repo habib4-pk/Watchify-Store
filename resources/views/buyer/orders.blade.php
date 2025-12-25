@@ -4,7 +4,7 @@
 
 @section('styles')
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="{{ secure_asset('css/cart-checkout.css') }}">
+<link rel="stylesheet" href="{{ secure_asset('css/buyer/cart.css') }}">
 <style>
     .status-badge {
         padding: 6px 12px;
