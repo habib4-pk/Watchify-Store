@@ -17,6 +17,24 @@
     <div class="card-body p-4">
         <form action="{{ route('storeWatch') }}" method="POST" enctype="multipart/form-data">
             @csrf
+            
+            @if ($errors->any())
+                <div class="alert alert-danger mb-4">
+                    <strong>Please fix the following errors:</strong>
+                    <ul class="mb-0 mt-2">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+            
+            @if (session('error'))
+                <div class="alert alert-danger mb-4">
+                    {{ session('error') }}
+                </div>
+            @endif
+            
             <div class="mb-3">
                 <label class="form-label text-secondary">Watch Name</label>
                 <input type="text" name="name" value="{{ old('name') }}" class="form-control border-0 rounded-3" style="background-color: #21262d; color: #fff;" required>

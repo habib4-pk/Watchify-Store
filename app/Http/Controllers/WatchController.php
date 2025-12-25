@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Watch;
 use Illuminate\Http\Request;
 use Exception;
-use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
+use Illuminate\Support\Facades\Log;
 
 class WatchController extends Controller
 {
@@ -44,15 +44,16 @@ class WatchController extends Controller
             $imageUrl = null;
 
             if ($req->hasFile('image')) {
-                // Upload to Cloudinary
-                $uploadedFile = Cloudinary::upload($req->file('image')->getRealPath(), [
+                $file = $req->file('image');
+                Log::info('Uploading image to Cloudinary', ['filename' => $file->getClientOriginalName()]);
+                
+                // Upload to Cloudinary using the file path
+                $result = cloudinary()->upload($file->getRealPath(), [
                     'folder' => 'watches',
-                    'transformation' => [
-                        'quality' => 'auto',
-                        'fetch_format' => 'auto'
-                    ]
                 ]);
-                $imageUrl = $uploadedFile->getSecurePath();
+                
+                $imageUrl = $result->getSecurePath();
+                Log::info('Cloudinary upload success', ['url' => $imageUrl]);
             }
 
             $watch = new Watch;
@@ -66,7 +67,8 @@ class WatchController extends Controller
 
             return redirect()->route('adminDashboard')->with('success', 'Watch added successfully!');
         } catch (Exception $e) {
-            return redirect()->back()->with('error', 'Failed to add watch: ' . $e->getMessage());
+            Log::error('Watch upload failed', ['error' => $e->getMessage()]);
+            return redirect()->back()->with('error', 'Failed to add watch: ' . $e->getMessage())->withInput();
         }
     }
 
@@ -92,15 +94,16 @@ class WatchController extends Controller
             }
 
             if ($req->hasFile('image')) {
+                $file = $req->file('image');
+                Log::info('Uploading updated image to Cloudinary', ['filename' => $file->getClientOriginalName()]);
+                
                 // Upload new image to Cloudinary
-                $uploadedFile = Cloudinary::upload($req->file('image')->getRealPath(), [
+                $result = cloudinary()->upload($file->getRealPath(), [
                     'folder' => 'watches',
-                    'transformation' => [
-                        'quality' => 'auto',
-                        'fetch_format' => 'auto'
-                    ]
                 ]);
-                $imageUrl = $uploadedFile->getSecurePath();
+                
+                $imageUrl = $result->getSecurePath();
+                Log::info('Cloudinary upload success', ['url' => $imageUrl]);
             } else {
                 $imageUrl = $watch->image;
             }
@@ -115,7 +118,8 @@ class WatchController extends Controller
 
             return redirect()->route('adminDashboard')->with('success', 'Watch updated successfully!');
         } catch (Exception $e) {
-            return redirect()->back()->with('error', 'Failed to update watch: ' . $e->getMessage());
+            Log::error('Watch update failed', ['error' => $e->getMessage()]);
+            return redirect()->back()->with('error', 'Failed to update watch: ' . $e->getMessage())->withInput();
         }
     }
 
