@@ -38,7 +38,7 @@
     @foreach($cart as $item)
     <div class="cart-item">
         <div class="item-image">
-            <img src="{{ asset( $item->watch->image) }}" alt="{{ $item->watch->name }}">
+            <img src="{{ asset('storage/' . $item->watch->image) }}" alt="{{ $item->watch->name }}">
         </div>
 
         <div class="item-details">

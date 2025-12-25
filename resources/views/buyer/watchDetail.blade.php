@@ -77,7 +77,7 @@
 <div class="detail-wrapper">
 
     <div class="image-gallery">
-        <img src="{{ asset( $watch->image) }}" 
+        <img src="{{ asset('storage/' . $watch->image) }}" 
              alt="{{ $watch->name }}"
              onerror="this.src='{{ asset('images/placeholder-watch.jpg') }}'">
     </div>
