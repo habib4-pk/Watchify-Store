@@ -4,7 +4,7 @@
 
 @section('styles')
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="{{ secure_asset('css/cart-checkout.css') }}">
+<link rel="stylesheet" href="{{ asset('css/cart-checkout.css') }}">
 <style>
     .status-badge {
         padding: 6px 12px;
@@ -186,10 +186,10 @@
                 @foreach($order->orderItems as $item)
                 <div class="item-row">
                     @if(isset($item->watch) && $item->watch)
-                        <img src="{{ secure_asset('storage/' . $item->watch->image) }}" 
+                        <img src="{{ asset('storage/' . $item->watch->image) }}" 
                              class="watch-img" 
                              alt="{{ $item->watch->name }}"
-                             onerror="this.classList.add('watch-img-error'); this.src='{{ secure_asset('images/placeholder-watch.jpg') }}'">
+                             onerror="this.classList.add('watch-img-error'); this.src='{{ asset('images/placeholder-watch.jpg') }}'">
                         
                         <div class="item-details">
                             <p class="item-name">{{ $item->watch->name }}</p>
@@ -324,7 +324,7 @@ document.addEventListener('DOMContentLoaded', function() {
         img.addEventListener('error', function() {
             if (!this.classList.contains('watch-img-error')) {
                 this.classList.add('watch-img-error');
-                this.src = '{{ secure_asset("images/placeholder-watch.jpg") }}';
+                this.src = '{{ asset("images/placeholder-watch.jpg") }}';
                 this.alt = 'Image not available';
             }
         });

@@ -4,9 +4,9 @@
 
 @section('styles')
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="{{ secure_asset('css/watch-detail.css') }}">
-<link rel="stylesheet" href="{{ secure_asset('css/alert.css') }}">
-<link rel="stylesheet" href="{{ secure_asset('css/reviews.css') }}">
+<link rel="stylesheet" href="{{ asset('css/watch-detail.css') }}">
+<link rel="stylesheet" href="{{ asset('css/alert.css') }}">
+<link rel="stylesheet" href="{{ asset('css/reviews.css') }}">
 <style>
     /* Validation Styles */
     .review-form select.error,
@@ -77,9 +77,9 @@
 <div class="detail-wrapper">
 
     <div class="image-gallery">
-        <img src="{{ secure_asset('storage/' . $watch->image) }}" 
+        <img src="{{ asset('storage/' . $watch->image) }}" 
              alt="{{ $watch->name }}"
-             onerror="this.src='{{ secure_asset('images/placeholder-watch.jpg') }}'">
+             onerror="this.src='{{ asset('images/placeholder-watch.jpg') }}'">
     </div>
 
     <div class="product-details">
@@ -378,7 +378,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const productImage = document.querySelector('.image-gallery img');
     if (productImage) {
         productImage.addEventListener('error', function() {
-            this.src = '{{ secure_asset("images/placeholder-watch.jpg") }}';
+            this.src = '{{ asset("images/placeholder-watch.jpg") }}';
             this.alt = 'Image not available';
         });
     }

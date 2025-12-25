@@ -4,7 +4,7 @@
 
 @section('styles')
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="{{ secure_asset('css/cart-checkout.css') }}">
+<link rel="stylesheet" href="{{ asset('css/cart-checkout.css') }}">
 
 @endsection
 
@@ -38,7 +38,7 @@
     @foreach($cart as $item)
     <div class="cart-item">
         <div class="item-image">
-            <img src="{{ secure_asset('storage/' . $item->watch->image) }}" alt="{{ $item->watch->name }}">
+            <img src="{{ asset('storage/' . $item->watch->image) }}" alt="{{ $item->watch->name }}">
         </div>
 
         <div class="item-details">
