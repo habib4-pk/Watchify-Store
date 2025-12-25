@@ -6,9 +6,28 @@ use App\Models\Watch;
 use Illuminate\Http\Request;
 use Exception;
 use Illuminate\Support\Facades\Log;
+use Cloudinary\Configuration\Configuration;
+use Cloudinary\Api\Upload\UploadApi;
 
 class WatchController extends Controller
 {
+    private function getCloudinary()
+    {
+        // Initialize Cloudinary with direct config
+        Configuration::instance([
+            'cloud' => [
+                'cloud_name' => config('cloudinary.cloud.cloud_name') ?: env('CLOUDINARY_CLOUD_NAME'),
+                'api_key' => config('cloudinary.cloud.api_key') ?: env('CLOUDINARY_API_KEY'),
+                'api_secret' => config('cloudinary.cloud.api_secret') ?: env('CLOUDINARY_API_SECRET'),
+            ],
+            'url' => [
+                'secure' => true
+            ]
+        ]);
+        
+        return new UploadApi();
+    }
+
     public function index()
     {
         try {
@@ -35,7 +54,7 @@ class WatchController extends Controller
             'name' => 'required|string|max:255',
             'price' => 'required|numeric|min:0',
             'description' => 'required|string',
-            'image' => 'required|image|mimes:jpeg,png,jpg,webp|max:2048', // Max 2MB
+            'image' => 'required|image|mimes:jpeg,png,jpg,webp|max:2048',
             'featured' => 'required|in:yes,no',
             'stock' => 'required|integer|min:0',
         ]);
@@ -45,14 +64,18 @@ class WatchController extends Controller
 
             if ($req->hasFile('image')) {
                 $file = $req->file('image');
-                Log::info('Uploading image to Cloudinary', ['filename' => $file->getClientOriginalName()]);
+                Log::info('Uploading image to Cloudinary', [
+                    'filename' => $file->getClientOriginalName(),
+                    'cloud_name' => env('CLOUDINARY_CLOUD_NAME')
+                ]);
                 
-                // Upload to Cloudinary using the file path
-                $result = cloudinary()->upload($file->getRealPath(), [
+                // Upload to Cloudinary using direct SDK
+                $cloudinary = $this->getCloudinary();
+                $result = $cloudinary->upload($file->getRealPath(), [
                     'folder' => 'watches',
                 ]);
                 
-                $imageUrl = $result->getSecurePath();
+                $imageUrl = $result['secure_url'];
                 Log::info('Cloudinary upload success', ['url' => $imageUrl]);
             }
 
@@ -67,7 +90,7 @@ class WatchController extends Controller
 
             return redirect()->route('adminDashboard')->with('success', 'Watch added successfully!');
         } catch (Exception $e) {
-            Log::error('Watch upload failed', ['error' => $e->getMessage()]);
+            Log::error('Watch upload failed', ['error' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
             return redirect()->back()->with('error', 'Failed to add watch: ' . $e->getMessage())->withInput();
         }
     }
@@ -98,11 +121,12 @@ class WatchController extends Controller
                 Log::info('Uploading updated image to Cloudinary', ['filename' => $file->getClientOriginalName()]);
                 
                 // Upload new image to Cloudinary
-                $result = cloudinary()->upload($file->getRealPath(), [
+                $cloudinary = $this->getCloudinary();
+                $result = $cloudinary->upload($file->getRealPath(), [
                     'folder' => 'watches',
                 ]);
                 
-                $imageUrl = $result->getSecurePath();
+                $imageUrl = $result['secure_url'];
                 Log::info('Cloudinary upload success', ['url' => $imageUrl]);
             } else {
                 $imageUrl = $watch->image;
