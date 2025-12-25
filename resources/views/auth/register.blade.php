@@ -11,17 +11,6 @@
 @section('content')
 
 
-@if(session('error'))
-<div class="alert-container">
-    <div id="error-alert" class="alert-error">
-        <span>{{ session('error') }}</span>
-        <button type="button" class="alert-close" onclick="document.getElementById('error-alert').remove()">&times;</button>
-    </div>
-</div>
-@endif
-
-
-
 <div class="auth-wrapper">
     <div class="auth-card">
         <h1>Join the Gallery</h1>
