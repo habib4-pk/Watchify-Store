@@ -16,6 +16,12 @@
     </label>
 
     <ul class="nav-menu">
+        <!-- Mobile Menu Close Button -->
+        <li class="mobile-menu-header">
+            <label for="nav-toggle" class="nav-close-btn">
+                <i class="fas fa-times"></i>
+            </label>
+        </li>
         <li><a href="{{ route('home') }}"><i class="fas fa-home"></i> Home</a></li>
         <li><a href="{{ route('featured') }}"><i class="fas fa-star"></i> Featured</a></li>
 
@@ -87,8 +93,15 @@
         @if(Auth::check())
             <a href="{{ route('cartItems') }}" class="cart-link" title="View Cart">
                 <i class="fas fa-shopping-cart"></i>
-                
             </a>
+
+            <!-- Mobile Logout Icon -->
+            <form action="{{ route('logout') }}" method="POST" class="mobile-logout-form-icon">
+                @csrf
+                <button type="submit" class="mobile-logout-icon" title="Logout">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </form>
 
             <div class="user-dropdown">
                 <button class="user-toggle" type="button" onclick="toggleUserDropdown(event)">

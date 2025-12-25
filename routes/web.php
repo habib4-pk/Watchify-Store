@@ -6,59 +6,54 @@ use App\Http\Controllers\BuyerController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\WatchController;
 use Illuminate\Support\Facades\Route;
-use Symfony\Component\Routing\Router;
 
+// --- Admin Routes (Existing) ---
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'dashboard']);
-
     Route::get('admin/watches', [WatchController::class, 'index'])->name('adminDashboard');
-
     Route::get('admin/watches/add', [WatchController::class, 'add'])->name('addWatch');
-
     Route::post('admin/watches/store', [WatchController::class, 'store'])->name('storeWatch');
-
     Route::post('admin/watches/delete', [WatchController::class, 'destroy'])->name('deleteWatch');
-
     Route::post('admin/watches/update', [WatchController::class, 'update'])->name('updateWatch');
-
     Route::post('admin/watches/edit', [WatchController::class, 'edit'])->name('editWatch');
-
     Route::get('admin/orders', [OrderController::class, 'index'])->name('allOrders');
     Route::post('admin/orders/details', [OrderController::class, 'show'])->name('orderDetails');
-
     Route::post('admin/orders/update-status', [OrderController::class, 'update'])->name('updateOrderStatus');
-
     Route::get('/admin/users', [AdminController::class, 'showAllUsers'])->name('allUsers');
     Route::post('/admin/users/delete', [AdminController::class, 'destroy'])->name('deleteUser');
 });
 
-
-
+// --- Publicly Accessible Routes ---
 Route::get("/home", [BuyerController::class, 'home'])->name('home');
 Route::get("/home/featured", [BuyerController::class, 'featured'])->name('featured');
 Route::get("/home/watches", [BuyerController::class, 'details'])->name('watchDetails');
 Route::get("/home/search", [BuyerController::class, 'search'])->name('search');
-Route::get("/home/cart", [BuyerController::class, 'addToCart'])->name('cartDetails');
-
-Route::post("/home/cart", [BuyerController::class, 'addToCart'])->name('addToCart');
-Route::get('/home/cart-details', [BuyerController::class, 'cart'])->name('cartItems');
-Route::post('/home/cart-details/inc', [BuyerController::class, 'increase'])->name('increase');
-Route::post('/home/cart-details/dec', [BuyerController::class, 'decrease'])->name('decrease');
-Route::post('/home/cart-details/rem', [BuyerController::class, 'remove'])->name('remove');
-Route::get('/home/checkout', [BuyerController::class, 'checkout'])->name('checkout');
-Route::post('/home/checkout/placeOrder', [BuyerController::class, 'placeOrder'])->name('placeOrder');
-
 Route::get("/home/about-us", [BuyerController::class, 'aboutUs'])->name('aboutUs');
-Route::get("/home/my-orders", [BuyerController::class, 'myOrders'])->name('myOrders');
 
-Route::post('/review/store', [App\Http\Controllers\ReviewController::class, 'store'])->name('reviewStore');
-
-Route::post('/review/delete', [App\Http\Controllers\ReviewController::class, 'delete'])->name('reviewDelete');
-
+// Auth Guest Routes
 Route::get('/login', [AuthController::class, 'loginForm'])->name('loginForm');
 Route::get('/register', [AuthController::class, 'registerForm'])->name('registerForm');
-
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/register', [AuthController::class, 'register'])->name('register');
 
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+// --- Protected User Routes (Require Login) ---
+Route::middleware(['auth'])->group(function () {
+    // Checkout & Orders
+    Route::get('/home/checkout', [BuyerController::class, 'checkout'])->name('checkout');
+    Route::post('/home/checkout/placeOrder', [BuyerController::class, 'placeOrder'])->name('placeOrder');
+    Route::get("/home/my-orders", [BuyerController::class, 'myOrders'])->name('myOrders');
+
+    // Cart Management
+    Route::get("/home/cart", [BuyerController::class, 'addToCart'])->name('cartDetails');
+    Route::post("/home/cart", [BuyerController::class, 'addToCart'])->name('addToCart');
+    Route::get('/home/cart-details', [BuyerController::class, 'cart'])->name('cartItems');
+    Route::post('/home/cart-details/inc', [BuyerController::class, 'increase'])->name('increase');
+    Route::post('/home/cart-details/dec', [BuyerController::class, 'decrease'])->name('decrease');
+    Route::post('/home/cart-details/rem', [BuyerController::class, 'remove'])->name('remove');
+
+    // Reviews
+    Route::post('/review/store', [App\Http\Controllers\ReviewController::class, 'store'])->name('reviewStore');
+    Route::post('/review/delete', [App\Http\Controllers\ReviewController::class, 'delete'])->name('reviewDelete');
+
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+});

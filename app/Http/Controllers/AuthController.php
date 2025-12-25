@@ -7,76 +7,113 @@ use Illuminate\Http\Request;
 use App\Mail\RegistrationMail;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Exception;
 
 class AuthController extends Controller
 {
     public function loginForm()
     {
-        return view('auth.login');
+        try {
+            return view('auth.login');
+        } catch (Exception $e) {
+            return redirect()->back()->with('error', 'Login page not found.');
+        }
     }
 
     public function registerForm()
     {
-        return view('auth.register');
+        try {
+            return view('auth.register');
+        } catch (Exception $e) {
+            return redirect()->back()->with('error', 'Registration page not found.');
+        }
     }
 
     public function login(Request $request)
     {
-        $email = $request->email;
-        $password = $request->password;
+        // 1. Strict Validation
+        $request->validate([
+            'email'    => 'required|email|max:255',
+            'password' => 'required|string',
+        ]);
 
-        if (Auth::attempt(['email' => $email, 'password' => $password])) {
-            $request->session()->regenerate();
+        try {
+            $credentials = $request->only('email', 'password');
 
-            $user = Auth::user();
+            if (Auth::attempt($credentials)) {
+                $request->session()->regenerate();
 
-            if ($user->role === 'admin') {
-                return redirect()->route('adminDashboard')->with('success', 'Welcome Admin! You have logged in successfully.');
+                $user = Auth::user();
+
+                if ($user->role === 'admin') {
+                    return redirect()->route('adminDashboard')->with('success', 'Welcome Admin! You have logged in successfully.');
+                }
+
+                return redirect()->route('home')->with('success', 'Login successful. Welcome back!');
             }
 
-            return redirect()->route('home')->with('success', 'Login successful. Welcome back!');
+            return redirect()->back()->with('error', 'Invalid email or password.')->withInput($request->only('email'));
+        } catch (Exception $e) {
+            return redirect()->back()->with('error', 'An error occurred during login.');
         }
-
-        return redirect()->back()->with('error', 'Invalid email or password.');
     }
 
     public function register(Request $request)
     {
-        $alreadyExist = User::where('email', $request->email)->first();
-        if ($alreadyExist) {
-            return redirect()->back()->with('error', 'Email already registered. Please use another email.');
+        // 1. Strict Validation
+        $request->validate([
+            'name'     => 'required|string|max:255',
+            'email'    => 'required|email|max:255|unique:users,email',
+            'password' => 'required|string|min:8|confirmed',
+        ]);
+
+        try {
+            // 2. Data Creation with Password Hashing
+            $user = new User;
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->password = Hash::make($request->password); // Hashing is non-negotiable for security
+            $user->role = 'buyer'; // Explicitly setting default role
+            $user->save();
+
+            // 3. Email Logic
+            try {
+                $mailData = [
+                    'title' => 'Welcome to WatchifyStore',
+                    'name' => $request->name,
+                ];
+                Mail::to($request->email)->send(new RegistrationMail($mailData));
+            } catch (Exception $mailEx) {
+                // Return success even if mail fails, but with a note
+                return redirect()->route('loginForm')->with('success', 'Registration successful! (Confirmation email failed to send)');
+            }
+
+            return redirect()->route('loginForm')->with('success', 'Registration successful! Please login.');
+        } catch (Exception $e) {
+            return redirect()->back()->with('error', 'Registration failed. Please try again.')->withInput();
         }
-
-        $user = new User;
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->password = $request->password;
-        $user->save();
-
-        $mailData = [
-            'title' => 'Welcome to WatchifyStore',
-            'name' => $request->name,
-        ];
-
-        Mail::to($request->email)->send(new RegistrationMail($mailData));
-
-        return redirect()->route('loginForm')->with('success', 'Registration successful! Please login.');
     }
 
     public function logout(Request $request)
     {
-        $role = Auth::user()->role;
+        try {
+            $user = Auth::user();
+            $role = $user ? $user->role : 'buyer';
 
-        Auth::logout();
+            Auth::logout();
 
-        $request->session()->invalidate();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
 
-        $request->session()->regenerateToken();
+            if ($role === 'admin') {
+                return redirect()->route('loginForm')->with('success', 'Admin logged out successfully.');
+            }
 
-        if ($role === 'admin') {
-            return redirect()->route('login')->with('success', 'Admin logged out successfully.');
+            return redirect()->route('home')->with('success', 'Logged out successfully.');
+        } catch (Exception $e) {
+            Auth::logout();
+            return redirect()->route('home');
         }
-
-        return redirect()->route('home')->with('success', 'Logged out successfully.');
     }
 }

@@ -8,71 +8,95 @@ use App\Models\OrderItem;
 use Illuminate\Http\Request;
 use App\Mail\OrderStatusMail;
 use Illuminate\Support\Facades\Mail;
+use Exception;
 
 class OrderController extends Controller
 {
     public function index()
     {
-        $allOrders = Order::all();
-
-        return view('admin.orders.index', compact('allOrders'));
+        try {
+            $allOrders = Order::all();
+            return view('admin.orders.index', compact('allOrders'));
+        } catch (Exception $e) {
+            return redirect()->back()->with('error', 'Unable to load orders.');
+        }
     }
 
     public function show(Request $req)
     {
-        $orderId = $req->id;
+        try {
+            $orderId = $req->id;
+            $orderItems = OrderItem::where('order_id', $orderId)->get();
 
-        $orderItems = OrderItem::where('order_id', $orderId)->get();
+            $totalPrice = 0;
+            foreach ($orderItems as $item) {
+                $totalPrice += $item->price * $item->quantity;
+            }
 
-        $totalPrice = 0;
-
-        foreach ($orderItems as $item) {
-            $totalPrice += $item->price * $item->quantity;
+            return view('admin.orders.show', compact('orderItems', 'totalPrice'));
+        } catch (Exception $e) {
+            return redirect()->back()->with('error', 'Unable to load order details.');
         }
-
-        return view('admin.orders.show', compact('orderItems', 'totalPrice'));
     }
 
     public function update(Request $req)
     {
-        $id = $req->order_id;
+        try {
+            $id = $req->order_id;
+            $order = Order::where('id', $id)->first();
 
-        $order = Order::where('id', $id)->first();
-
-        $newStatus = $req->status;
-        $oldStatus = $order->status;
-
-        if ($oldStatus === $newStatus) {
-            return redirect()->route('allOrders')
-                ->with('success', 'Same Status. No Change!');
-        }
-
-
-        if ($newStatus === 'cancelled') {
-
-            $orderItems = OrderItem::where('order_id', $order->id)->get();
-
-            foreach ($orderItems as $item) {
-                $watch = Watch::where('id', $item->watch_id)->first();
-                $watch->stock = $watch->stock + $item->quantity;
-                $watch->save();
+            if (!$order) {
+                return redirect()->route('allOrders')->with('error', 'Order not found.');
             }
+
+            $newStatus = strtolower($req->status);
+            $oldStatus = strtolower($order->status);
+
+            if ($oldStatus === $newStatus) {
+                return redirect()->route('allOrders')->with('success', 'Same Status. No Change!');
+            }
+
+            // --- Logic: Once completed, cannot be changed ---
+            if ($oldStatus === 'completed') {
+                return redirect()->route('allOrders')->with('error', 'Completed orders cannot be modified.');
+            }
+
+            // --- Logic: Once cancelled, cannot be moved back to shipped or completed ---
+            if ($oldStatus === 'cancelled') {
+                return redirect()->route('allOrders')->with('error', 'Cancelled orders cannot be reopened or shipped.');
+            }
+
+            // Handle Stock Reversion if the order is being cancelled now
+            if ($newStatus === 'cancelled') {
+                $orderItems = OrderItem::where('order_id', $order->id)->get();
+                foreach ($orderItems as $item) {
+                    $watch = Watch::where('id', $item->watch_id)->first();
+                    if ($watch) {
+                        $watch->stock = $watch->stock + $item->quantity;
+                        $watch->save();
+                    }
+                }
+            }
+
+            $order->status = $req->status; // Keep original casing from request
+            $order->save();
+
+            try {
+                $mailData = [
+                    'title' => 'Order Status Updated',
+                    'name' => $order->user->name,
+                    'order_id' => $order->id,
+                    'status' => $order->status,
+                ];
+
+                Mail::to($order->user->email)->send(new OrderStatusMail($mailData));
+            } catch (Exception $mailEx) {
+                // Silently fail mail
+            }
+
+            return redirect()->route('allOrders')->with('success', 'Order status updated successfully!');
+        } catch (Exception $e) {
+            return redirect()->route('allOrders')->with('error', 'Failed to update order status.');
         }
-
-        $order->status = $newStatus;
-        $order->save();
-
-        $mailData = [
-            'title' => 'Order Status Updated',
-            'name' => $order->user->name,
-            'order_id' => $order->id,
-            'status' => $order->status,
-        ];
-
-        Mail::to($order->user->email)
-            ->send(new OrderStatusMail($mailData));
-
-        return redirect()->route('allOrders')
-            ->with('success', 'Order status updated successfully!');
     }
 }

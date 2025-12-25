@@ -7,36 +7,43 @@ use App\Models\User;
 use App\Models\Watch;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Exception;
 
 class AdminController extends Controller
 {
     public function dashboard()
-
     {
-        
+        try {
             $totalSales = Order::where('status', 'completed')->sum('total_amount');
             $totalUsers = User::where('role', '!=', 'admin')->count();
             $totalOrders = Order::count();
             $totalWatches = Watch::count();
 
             return view("admin.dashboard", compact('totalSales', 'totalOrders', 'totalUsers', 'totalWatches'));
-   
-          
-     
+        } catch (Exception $e) {
+            return redirect()->back()->with('error', 'Unable to load dashboard data.');
+        }
     }
 
     public function showAllUsers()
     {
-        $allUsers = User::all();
-        return view('admin.users.index', compact('allUsers'));
+        try {
+            $allUsers = User::all();
+            return view('admin.users.index', compact('allUsers'));
+        } catch (Exception $e) {
+            return redirect()->back()->with('error', 'Unable to fetch users.');
+        }
     }
 
     public function destroy(Request $req)
     {
-        $id = $req->id;
+        try {
+            $id = $req->id;
+            User::destroy($id);
 
-        User::destroy($id);
-
-        return redirect()->route('allUsers')->with('success', 'User deleted successfully!');
+            return redirect()->route('allUsers')->with('success', 'User deleted successfully!');
+        } catch (Exception $e) {
+            return redirect()->route('allUsers')->with('error', 'Failed to delete user. They may have active records.');
+        }
     }
 }

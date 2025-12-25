@@ -54,16 +54,16 @@
     border-radius: 2px;
 }
 
-#nav-toggle:checked ~ .watchify-nav .nav-hamburger span:nth-child(1) {
-    transform: rotate(45deg) translate(8px, 8px);
+#nav-toggle:checked~.watchify-nav .nav-hamburger span:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 6px);
 }
 
-#nav-toggle:checked ~ .watchify-nav .nav-hamburger span:nth-child(2) {
+#nav-toggle:checked~.watchify-nav .nav-hamburger span:nth-child(2) {
     opacity: 0;
 }
 
-#nav-toggle:checked ~ .watchify-nav .nav-hamburger span:nth-child(3) {
-    transform: rotate(-45deg) translate(8px, -8px);
+#nav-toggle:checked~.watchify-nav .nav-hamburger span:nth-child(3) {
+    transform: rotate(-45deg) translate(5px, -6px);
 }
 
 .nav-menu {
@@ -118,6 +118,10 @@
 }
 
 .mobile-only {
+    display: none;
+}
+
+.mobile-menu-header {
     display: none;
 }
 
@@ -216,9 +220,11 @@
     0% {
         transform: scale(0);
     }
+
     50% {
         transform: scale(1.2);
     }
+
     100% {
         transform: scale(1);
     }
@@ -397,6 +403,11 @@
     display: none;
 }
 
+/* Hide mobile logout icon on desktop */
+.mobile-logout-form-icon {
+    display: none;
+}
+
 @media (max-width: 992px) {
     .watchify-nav {
         padding: 0 4%;
@@ -418,14 +429,75 @@
 @media (max-width: 768px) {
     .watchify-nav {
         height: 70px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+    }
+
+    /* Add body padding to prevent content from hiding under fixed navbar */
+    body {
+        padding-top: 70px;
     }
 
     .nav-hamburger {
         display: flex;
+        order: 3;
     }
 
+    /* Show nav-actions but only cart and logout */
     .nav-actions {
+        display: flex;
+        gap: 8px;
+        order: 2;
+        margin-left: auto;
+        margin-right: 12px;
+    }
+
+    /* Hide search on mobile navbar */
+    .nav-actions .search-container {
         display: none;
+    }
+
+    /* Hide user dropdown on mobile navbar */
+    .nav-actions .user-dropdown {
+        display: none;
+    }
+
+    /* Hide login/signup buttons on mobile navbar */
+    .nav-actions .login-btn,
+    .nav-actions .signup-btn {
+        display: none;
+    }
+
+    /* Show cart link on mobile */
+    .nav-actions .cart-link {
+        display: flex;
+        font-size: 20px;
+        padding: 6px;
+    }
+
+    /* Add mobile logout button in nav-actions */
+    .mobile-logout-form-icon {
+        display: flex;
+        align-items: center;
+    }
+
+    .mobile-logout-icon {
+        display: flex;
+        background: none;
+        border: none;
+        color: #ff4444;
+        font-size: 20px;
+        padding: 6px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .mobile-logout-icon:hover {
+        color: #cc0000;
+        transform: scale(1.1);
     }
 
     .nav-menu {
@@ -438,18 +510,52 @@
         background: #ffffff;
         flex-direction: column;
         align-items: flex-start;
-        padding: 90px 24px 24px;
+        padding: 24px;
+        padding-top: 20px;
         gap: 0;
         transition: right 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
         box-shadow: -5px 0 20px rgba(0, 0, 0, 0.15);
         overflow-y: auto;
+        z-index: 1001;
     }
 
-    #nav-toggle:checked ~ .watchify-nav .nav-menu {
+    /* Mobile Menu Header with Close Button */
+    .mobile-menu-header {
+        display: flex;
+        justify-content: flex-end;
+        width: 100%;
+        padding-bottom: 16px;
+        margin-bottom: 12px;
+        border-bottom: 1px solid #f2f2f2;
+    }
+
+    .nav-close-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: #f5f5f5;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .nav-close-btn:hover {
+        background: #e0e0e0;
+        transform: scale(1.1);
+    }
+
+    .nav-close-btn i {
+        font-size: 18px;
+        color: #333;
+    }
+
+    #nav-toggle:checked~.watchify-nav .nav-menu {
         right: 0;
     }
 
-    #nav-toggle:checked ~ .nav-overlay {
+    #nav-toggle:checked~.nav-overlay {
         display: block;
         position: fixed;
         top: 0;
@@ -465,6 +571,7 @@
         from {
             opacity: 0;
         }
+
         to {
             opacity: 1;
         }
@@ -627,4 +734,59 @@
         width: 100%;
         max-width: 100%;
     }
+}
+
+/* Standardizing the icons in nav-actions */
+.action-icon-btn {
+    background: none;
+    border: none;
+    color: #333;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    text-decoration: none;
+}
+
+.action-icon-btn:hover {
+    color: #000;
+    transform: translateY(-2px);
+}
+
+.logout-btn {
+    color: #ff4444;
+    /* Keep the logout icon subtle red */
+}
+
+.logout-btn:hover {
+    color: #cc0000;
+}
+
+/* Ensure actions don't get squished */
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* Cleaner Dropdown */
+.user-dropdown-menu {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 50px;
+    background: #fff;
+    min-width: 180px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    border: 1px solid #eee;
+    z-index: 1000;
+    padding: 10px 0;
+}
+
+.user-dropdown-menu.show {
+    display: block;
 }
