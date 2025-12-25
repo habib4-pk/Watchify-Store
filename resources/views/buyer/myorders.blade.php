@@ -186,7 +186,7 @@
                 @foreach($order->orderItems as $item)
                 <div class="item-row">
                     @if(isset($item->watch) && $item->watch)
-                        <img src="{{ asset('storage/' . $item->watch->image) }}" 
+                        <img src="{{ $item->watch->image }}" 
                              class="watch-img" 
                              alt="{{ $item->watch->name }}"
                              onerror="this.classList.add('watch-img-error'); this.src='{{ asset('images/placeholder-watch.jpg') }}'">

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Watch;
 use Illuminate\Http\Request;
 use Exception;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 class WatchController extends Controller
 {
@@ -40,24 +41,32 @@ class WatchController extends Controller
         ]);
 
         try {
-            $imagePath = null;
+            $imageUrl = null;
 
             if ($req->hasFile('image')) {
-                $imagePath = $req->file('image')->store('photos', 'public');
+                // Upload to Cloudinary
+                $uploadedFile = Cloudinary::upload($req->file('image')->getRealPath(), [
+                    'folder' => 'watches',
+                    'transformation' => [
+                        'quality' => 'auto',
+                        'fetch_format' => 'auto'
+                    ]
+                ]);
+                $imageUrl = $uploadedFile->getSecurePath();
             }
 
             $watch = new Watch;
             $watch->name = $req->name;
             $watch->price = $req->price;
             $watch->description = $req->description;
-            $watch->image = $imagePath;
+            $watch->image = $imageUrl;
             $watch->featured = $req->featured;
             $watch->stock = $req->stock;
             $watch->save();
 
             return redirect()->route('adminDashboard')->with('success', 'Watch added successfully!');
         } catch (Exception $e) {
-            return redirect()->back()->with('error', 'Failed to add watch.');
+            return redirect()->back()->with('error', 'Failed to add watch: ' . $e->getMessage());
         }
     }
 
@@ -83,22 +92,30 @@ class WatchController extends Controller
             }
 
             if ($req->hasFile('image')) {
-                $imagePath = $req->file('image')->store('photos', 'public');
+                // Upload new image to Cloudinary
+                $uploadedFile = Cloudinary::upload($req->file('image')->getRealPath(), [
+                    'folder' => 'watches',
+                    'transformation' => [
+                        'quality' => 'auto',
+                        'fetch_format' => 'auto'
+                    ]
+                ]);
+                $imageUrl = $uploadedFile->getSecurePath();
             } else {
-                $imagePath = $watch->image;
+                $imageUrl = $watch->image;
             }
 
             $watch->name = $req->name;
             $watch->price = $req->price;
             $watch->description = $req->description;
-            $watch->image = $imagePath;
+            $watch->image = $imageUrl;
             $watch->featured = $req->featured;
             $watch->stock = $req->stock;
             $watch->save();
 
             return redirect()->route('adminDashboard')->with('success', 'Watch updated successfully!');
         } catch (Exception $e) {
-            return redirect()->back()->with('error', 'Failed to update watch.');
+            return redirect()->back()->with('error', 'Failed to update watch: ' . $e->getMessage());
         }
     }
 

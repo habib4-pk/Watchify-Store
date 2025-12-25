@@ -89,7 +89,7 @@
         <ul class="order-items-list">
             @foreach ($cart as $item)
             <li class="summary-item">
-                <img src="{{ asset('storage/' . $item->watch->image) }}" alt="{{ $item->watch->name }}">
+                <img src="{{ $item->watch->image }}" alt="{{ $item->watch->name }}">
                 <div class="summary-item-info">
                     <p>{{ $item->watch->name }}</p>
                     <span class="item-qty">Qty: {{ $item->quantity }}</span>

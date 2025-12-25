@@ -46,7 +46,7 @@
             <div class="mb-3">
                 <label class="form-label text-secondary">Current Image</label>
                 <div class="rounded-3 p-3" style="background-color: #21262d;">
-                    <img src="{{ asset('storage/' . $watch->image) }}" class="rounded-3" alt="Current" style="max-width: 120px;">
+                    <img src="{{ $watch->image }}" class="rounded-3" alt="Current" style="max-width: 120px;">
                 </div>
             </div>
             <div class="mb-4">

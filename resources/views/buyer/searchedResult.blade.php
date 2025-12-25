@@ -199,7 +199,7 @@
             @foreach($allWatches as $watch)
             <article class="product-card" data-watch-id="{{ $watch->id }}">
                 <div class="image-container">
-                    <img src="{{ asset('storage/' . $watch->image) }}" 
+                    <img src="{{ $watch->image }}" 
                          class="product-image" 
                          alt="{{ $watch->name }}"
                          onerror="this.src='{{ asset('images/placeholder-watch.jpg') }}'">
