@@ -10,24 +10,6 @@
 
 @section('content')
 
-@if(session('success'))
-<div class="alert-container">
-    <div id="success-alert" class="alert-success">
-        <span>{{ session('success') }}</span>
-        <button type="button" class="alert-close" onclick="document.getElementById('success-alert').remove()">&times;</button>
-    </div>
-</div>
-@endif
-
-@if(session('error'))
-<div class="alert-container">
-    <div id="error-alert" class="alert-error">
-        <span>{{ session('error') }}</span>
-        <button type="button" class="alert-close" onclick="document.getElementById('error-alert').remove()">&times;</button>
-    </div>
-</div>
-@endif
-
 <div class="cart-wrapper">
     @if(count($cart) > 0)
     <div class="cart-header">
