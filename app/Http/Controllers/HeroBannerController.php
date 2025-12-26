@@ -47,7 +47,7 @@ class HeroBannerController extends Controller
     public function store(Request $req)
     {
         $validator = Validator::make($req->all(), [
-            'image' => 'required|image|mimes:jpeg,png,jpg,webp|max:5120',
+            'image' => 'required|image|mimes:jpeg,png,jpg,webp|max:10240',
             'title' => 'nullable|string|max:100',
             'subtitle' => 'nullable|string|max:200',
             'button_text' => 'nullable|string|max:50',

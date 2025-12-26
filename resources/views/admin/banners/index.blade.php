@@ -84,7 +84,7 @@
                     <div class="mb-3">
                         <label class="form-label text-secondary">Banner Image <span class="text-danger">*</span></label>
                         <input type="file" name="image" class="form-control border-0 rounded-3" style="background-color: #21262d; color: #fff;" accept="image/*" required>
-                        <small class="text-secondary">Recommended: 1920x600px. Max 5MB.</small>
+                        <small class="text-secondary">Recommended: 1920x600px. Max 10MB.</small>
                     </div>
                     <div class="mb-3">
                         <label class="form-label text-secondary">Title (Optional)</label>
