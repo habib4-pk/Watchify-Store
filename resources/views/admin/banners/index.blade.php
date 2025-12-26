@@ -192,6 +192,8 @@ document.addEventListener('DOMContentLoaded', function() {
         btn.addEventListener('click', async function() {
             if (!confirm('Delete this banner?')) return;
             const id = this.dataset.id;
+            const card = this.closest('[data-id]');
+            
             try {
                 const response = await fetch('/admin/banners/delete', {
                     method: 'POST',
@@ -199,13 +201,17 @@ document.addEventListener('DOMContentLoaded', function() {
                         'Content-Type': 'application/json',
                         'X-CSRF-TOKEN': csrfToken
                     },
-                    body: JSON.stringify({ id })
+                    body: JSON.stringify({ id: parseInt(id) })
                 });
                 const data = await response.json();
+                
                 if (data.success) {
-                    this.closest('.col-md-6').remove();
+                    card.remove();
+                } else {
+                    alert(data.message || 'Failed to delete banner');
                 }
             } catch (error) {
+                console.error('Delete error:', error);
                 alert('Error deleting banner');
             }
         });
