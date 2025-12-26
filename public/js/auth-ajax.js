@@ -234,25 +234,27 @@
         const form = e.target;
         const button = form.querySelector('button[type="submit"]');
 
-        WatchifyAjax.setLoading(button, true);
+        // Save original text and show loading with text (not just spinner)
+        const originalText = button.innerHTML;
+        button.disabled = true;
+        button.innerHTML = '<span class="ajax-spinner" style="width:14px;height:14px;margin-right:6px;"></span> Logging out...';
 
         try {
             const response = await WatchifyAjax.fetch(ROUTES.logout, {});
 
             if (response.success) {
-                WatchifyAjax.showToast(response.message || 'Logged out successfully', 'success');
-
-                // Redirect after short delay
-                setTimeout(() => {
-                    window.location.href = response.redirect || '/home';
-                }, 800);
+                // Queue toast for after redirect
+                WatchifyAjax.queueToast(response.message || 'Logged out successfully', 'success');
+                window.location.href = response.redirect || '/shop';
             } else {
                 // Fallback - just redirect
-                window.location.href = '/home';
+                WatchifyAjax.queueToast('Logged out', 'success');
+                window.location.href = '/shop';
             }
         } catch (error) {
             // Fallback - just redirect
-            window.location.href = '/home';
+            WatchifyAjax.queueToast('Logged out', 'success');
+            window.location.href = '/shop';
         }
     }
 
