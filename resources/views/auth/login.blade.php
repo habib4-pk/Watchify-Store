@@ -39,6 +39,13 @@
               
             </div>
 
+            <div class="form-group remember-group">
+                <label class="remember-label">
+                    <input type="checkbox" name="remember" id="remember">
+                    <span>Remember me</span>
+                </label>
+            </div>
+
             <button type="submit" class="btn-auth">Sign In</button>
         </form>
 

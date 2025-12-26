@@ -24,7 +24,7 @@
     margin-bottom: 10px;
 }
 
-.auth-card > p {
+.auth-card>p {
     font-family: 'Inter', sans-serif;
     font-size: 14px;
     color: #666;
@@ -121,6 +121,34 @@
     opacity: 0.7;
 }
 
+/* Remember Me Checkbox */
+.remember-group {
+    margin-bottom: 20px !important;
+}
+
+.remember-label {
+    display: flex !important;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    font-size: 14px !important;
+    font-weight: 400 !important;
+    text-transform: none !important;
+    letter-spacing: normal !important;
+    color: #666 !important;
+}
+
+.remember-label input[type="checkbox"] {
+    width: 18px !important;
+    height: 18px;
+    accent-color: #1a1a1a;
+    cursor: pointer;
+}
+
+.remember-label span {
+    user-select: none;
+}
+
 .password-requirements {
     display: none;
     margin-top: 10px;
@@ -181,7 +209,7 @@
         font-size: 24px;
     }
 
-    .auth-card > p {
+    .auth-card>p {
         font-size: 13px;
         margin-bottom: 25px;
     }

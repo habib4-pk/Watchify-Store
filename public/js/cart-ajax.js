@@ -89,10 +89,10 @@
 
         // Check if user is logged in
         if (document.body.dataset.authenticated !== 'true') {
-            WatchifyAjax.showToast('Please login to add items to cart', 'warning');
+            WatchifyAjax.showToast('Please login first', 'info');
             setTimeout(() => {
-                window.location.href = document.body.dataset.loginUrl || '/login';
-            }, 1500);
+                window.location.href = document.body.dataset.loginUrl || '/account/login';
+            }, 1000);
             return;
         }
 
