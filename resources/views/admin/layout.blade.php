@@ -2,7 +2,7 @@
 <html lang="en" data-bs-theme="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=0.8, maximum-scale=2.0, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Admin - @yield('title')</title>
     
@@ -14,30 +14,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- AJAX States CSS -->
     <link rel="stylesheet" href="{{ secure_asset('css/shared/ajax-states.css') }}">
-    
-    <style>
-        /* Optimize UI for laptop screens - Maximum zoom out */
-        @media (min-width: 992px) and (max-width: 1600px) {
-            html {
-                font-size: 13px; /* Smaller base font for maximum content */
-            }
-            body {
-                zoom: 0.85; /* Maximum zoom out for best content density */
-            }
-        }
-        
-        @media (min-width: 1601px) {
-            html {
-                font-size: 14px; /* Reduced for large screens */
-            }
-        }
-        
-        /* Ensure smooth font rendering at different scales */
-        body {
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
-    </style>
     
     @yield('styles')
 
