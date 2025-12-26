@@ -117,15 +117,24 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const csrfToken = '{{ csrf_token() }}';
+    let isUploading = false;
     
     // Add Banner Form
-    document.getElementById('addBannerForm').addEventListener('submit', async function(e) {
+    const form = document.getElementById('addBannerForm');
+    form.addEventListener('submit', async function(e) {
         e.preventDefault();
+        
+        // Prevent double submission
+        if (isUploading) return;
+        isUploading = true;
+        
         const btn = document.getElementById('uploadBtn');
         const spinner = btn.querySelector('.spinner-border');
+        const btnText = btn.textContent;
         
         btn.disabled = true;
         spinner.classList.remove('d-none');
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status"></span> Uploading...';
         
         try {
             const formData = new FormData(this);
@@ -137,15 +146,21 @@ document.addEventListener('DOMContentLoaded', function() {
             const data = await response.json();
             
             if (data.success) {
+                // Close modal and reload
+                const modal = bootstrap.Modal.getInstance(document.getElementById('addBannerModal'));
+                if (modal) modal.hide();
                 location.reload();
             } else {
                 alert(data.message || 'Failed to upload banner');
+                isUploading = false;
+                btn.disabled = false;
+                btn.innerHTML = '<span class="spinner-border spinner-border-sm d-none" role="status"></span> Upload Banner';
             }
         } catch (error) {
             alert('Error uploading banner');
-        } finally {
+            isUploading = false;
             btn.disabled = false;
-            spinner.classList.add('d-none');
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm d-none" role="status"></span> Upload Banner';
         }
     });
     

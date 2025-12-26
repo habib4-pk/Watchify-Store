@@ -71,11 +71,13 @@
             background-size: cover;
             background-position: center;
             opacity: 0;
-            transition: opacity 0.8s ease-in-out;
+            visibility: hidden;
+            transition: opacity 0.5s ease-in-out, visibility 0.5s;
         }
         
         .hero-slide.active {
             opacity: 1;
+            visibility: visible;
             z-index: 1;
         }
         
@@ -224,7 +226,7 @@
     </style>
     
     <script>
-    (function() {
+    document.addEventListener('DOMContentLoaded', function() {
         const slider = document.getElementById('heroSlider');
         if (!slider) return;
         
@@ -236,15 +238,9 @@
         let currentIndex = 0;
         let intervalId = null;
         let isPaused = false;
-        const INTERVAL = 5000;
+        const INTERVAL = 3000; // 3 seconds
         
-        function init() {
-            startAutoAdvance();
-            slider.addEventListener('mouseenter', () => isPaused = true);
-            slider.addEventListener('mouseleave', () => isPaused = false);
-        }
-        
-        window.heroGoToSlide = function(index) {
+        function goToSlide(index) {
             if (index < 0) index = slides.length - 1;
             if (index >= slides.length) index = 0;
             
@@ -255,23 +251,33 @@
             if (dots[index]) dots[index].classList.add('active');
             
             currentIndex = index;
-        };
+        }
         
-        window.heroChangeSlide = function(delta) {
-            heroGoToSlide(currentIndex + delta);
-        };
+        function changeSlide(delta) {
+            goToSlide(currentIndex + delta);
+        }
         
         function startAutoAdvance() {
             if (intervalId) clearInterval(intervalId);
-            intervalId = setInterval(() => {
+            intervalId = setInterval(function() {
                 if (!isPaused) {
-                    heroGoToSlide(currentIndex + 1);
+                    goToSlide(currentIndex + 1);
                 }
             }, INTERVAL);
         }
         
-        init();
-    })();
+        // Expose to global for onclick handlers
+        window.heroGoToSlide = goToSlide;
+        window.heroChangeSlide = changeSlide;
+        
+        // Mouse events
+        slider.addEventListener('mouseenter', function() { isPaused = true; });
+        slider.addEventListener('mouseleave', function() { isPaused = false; });
+        
+        // Start
+        startAutoAdvance();
+        console.log('Hero slider initialized with', slides.length, 'slides');
+    });
     </script>
 @else
     {{-- Fallback static hero if no banners --}}
