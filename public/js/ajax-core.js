@@ -27,8 +27,15 @@
         return meta ? meta.getAttribute('content') : '';
     }
 
+    function updateCsrfToken(newToken) {
+        const meta = document.querySelector('meta[name="csrf-token"]');
+        if (meta && newToken) {
+            meta.setAttribute('content', newToken);
+        }
+    }
+
     // ========================================================================
-    // FETCH WITH CSRF - Core AJAX function
+    // FETCH WITH CSRF - Core AJAX function (handles 419 gracefully)
     // ========================================================================
     async function fetchWithCsrf(url, options = {}) {
         const defaultOptions = {
@@ -61,6 +68,33 @@
 
         try {
             const response = await fetch(url, mergedOptions);
+
+            // Handle 419 CSRF Token Mismatch specially
+            if (response.status === 419) {
+                const data = await response.json().catch(() => ({}));
+
+                // If server sent us a new token, update it and retry
+                if (data.csrf_token) {
+                    updateCsrfToken(data.csrf_token);
+
+                    // Retry the request with new token
+                    mergedOptions.headers['X-CSRF-TOKEN'] = data.csrf_token;
+                    if (options.body && typeof options.body === 'object' && !(options.body instanceof FormData)) {
+                        mergedOptions.body = JSON.stringify(options.body);
+                    }
+
+                    const retryResponse = await fetch(url, mergedOptions);
+                    if (retryResponse.ok) {
+                        return await retryResponse.json();
+                    }
+                }
+
+                // If reload is requested or retry failed, show toast and reload
+                showToast('Session expired. Refreshing page...', 'warning');
+                setTimeout(() => window.location.reload(), 1500);
+                throw new Error('Session expired');
+            }
+
             const data = await response.json();
 
             if (!response.ok) {
