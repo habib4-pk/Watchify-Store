@@ -59,6 +59,7 @@ class WatchController extends Controller
         $validator = Validator::make($req->all(), [
             'name' => 'required|string|max:255',
             'price' => 'required|numeric|min:0',
+            'discount_percentage' => 'nullable|integer|min:0|max:100',
             'description' => 'required|string',
             'image' => 'required|image|mimes:jpeg,png,jpg,webp|max:2048',
             'additional_images' => 'nullable|array|max:10',
@@ -83,9 +84,8 @@ class WatchController extends Controller
 
             if ($req->hasFile('image')) {
                 $file = $req->file('image');
-                Log::info('Uploading image to Cloudinary', [
+                Log::info('Uploading primary image to Cloudinary', [
                     'filename' => $file->getClientOriginalName(),
-                    'cloud_name' => env('CLOUDINARY_CLOUD_NAME')
                 ]);
                 
                 // Upload to Cloudinary using direct SDK
@@ -95,17 +95,20 @@ class WatchController extends Controller
                 ]);
                 
                 $imageUrl = $result['secure_url'];
-                Log::info('Cloudinary upload success', ['url' => $imageUrl]);
+                Log::info('Primary image upload success', ['url' => $imageUrl]);
             }
 
             $watch = new Watch;
             $watch->name = $req->name;
             $watch->price = $req->price;
+            $watch->discount_percentage = $req->discount_percentage ?? 0;
             $watch->description = $req->description;
             $watch->image = $imageUrl;
             $watch->featured = $req->featured;
             $watch->stock = $req->stock;
             $watch->save();
+            
+            Log::info('Watch created', ['id' => $watch->id, 'name' => $watch->name]);
 
             // Save primary image to watch_images table
             if ($imageUrl) {
@@ -168,6 +171,7 @@ class WatchController extends Controller
             'id' => 'required|exists:watches,id',
             'name' => 'required|string|max:255',
             'price' => 'required|numeric|min:0',
+            'discount_percentage' => 'nullable|integer|min:0|max:100',
             'description' => 'required|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
             'additional_images' => 'nullable|array|max:10',
@@ -216,6 +220,7 @@ class WatchController extends Controller
 
             $watch->name = $req->name;
             $watch->price = $req->price;
+            $watch->discount_percentage = $req->discount_percentage ?? 0;
             $watch->description = $req->description;
             $watch->image = $imageUrl;
             $watch->featured = $req->featured;
