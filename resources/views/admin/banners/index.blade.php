@@ -67,6 +67,9 @@
     @endforelse
 </div>
 
+<!-- Toast Container for Notifications -->
+<div id="toastContainer" class="position-fixed top-0 end-0 p-3" style="z-index: 9999;"></div>
+
 <!-- Add Banner Modal -->
 <div class="modal fade" id="addBannerModal" tabindex="-1">
     <div class="modal-dialog">
@@ -119,18 +122,67 @@ document.addEventListener('DOMContentLoaded', function() {
     const csrfToken = '{{ csrf_token() }}';
     let isUploading = false;
     
+    // Toast Notification Function
+    function showToast(message, type = 'success') {
+        const toastContainer = document.getElementById('toastContainer');
+        const toastId = 'toast-' + Date.now();
+        
+        const bgColors = {
+            success: '#238636',
+            error: '#da3633',
+            warning: '#9e6a03',
+            info: '#0969da'
+        };
+        
+        const icons = {
+            success: 'bi-check-circle',
+            error: 'bi-x-circle',
+            warning: 'bi-exclamation-triangle',
+            info: 'bi-info-circle'
+        };
+        
+        const toastHTML = `
+            <div id="${toastId}" class="toast align-items-center border-0 mb-2" role="alert" style="background-color: ${bgColors[type]}; color: white;">
+                <div class="d-flex">
+                    <div class="toast-body d-flex align-items-center gap-2">
+                        <i class="bi ${icons[type]}"></i>
+                        <span>${message}</span>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                </div>
+            </div>
+        `;
+        
+        toastContainer.insertAdjacentHTML('beforeend', toastHTML);
+        const toastElement = document.getElementById(toastId);
+        const toast = new bootstrap.Toast(toastElement, { autohide: true, delay: 3000 });
+        toast.show();
+        
+        // Remove from DOM after hidden
+        toastElement.addEventListener('hidden.bs.toast', () => toastElement.remove());
+    }
+    
     // Add Banner Form
     const form = document.getElementById('addBannerForm');
     const bannersGrid = document.getElementById('bannersGrid');
+    const fileInput = form.querySelector('input[name="image"]');
     
     form.addEventListener('submit', async function(e) {
         e.preventDefault();
+        e.stopImmediatePropagation();
         
         // Prevent double submission
         if (isUploading) {
             console.log('Upload already in progress, ignoring...');
-            return;
+            return false;
         }
+        
+        // Validate file is selected
+        if (!fileInput.files || fileInput.files.length === 0) {
+            showToast('Please select an image file', 'error');
+            return false;
+        }
+        
         isUploading = true;
         
         const btn = document.getElementById('uploadBtn');
@@ -138,7 +190,9 @@ document.addEventListener('DOMContentLoaded', function() {
         btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status"></span> Uploading...';
         
         try {
+            // Create FormData BEFORE disabling file input (disabled inputs are excluded from FormData)
             const formData = new FormData(this);
+            fileInput.disabled = true; // Disable after FormData creation to prevent changes
             const response = await fetch('/admin/banners/store', {
                 method: 'POST',
                 headers: { 'X-CSRF-TOKEN': csrfToken },
@@ -190,44 +244,65 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Insert at beginning
                 bannersGrid.insertBefore(newCard, bannersGrid.firstChild);
                 
-                // Attach event handlers to new buttons
-                attachToggleHandler(newCard.querySelector('.toggle-btn'));
-                attachDeleteHandler(newCard.querySelector('.delete-btn'));
-                
-                // Reset form
+                // Reset form before showing success
                 form.reset();
                 
-                // Show success
-                alert('Banner added successfully!');
+                // Show success toast
+                showToast('Banner added successfully!', 'success');
             } else {
-                alert(data.message || 'Failed to upload banner');
+                showToast(data.message || 'Failed to upload banner', 'error');
             }
         } catch (error) {
             console.error('Upload error:', error);
-            alert('Error uploading banner');
+            showToast('Error uploading banner. Please try again.', 'error');
         } finally {
             isUploading = false;
             btn.disabled = false;
+            fileInput.disabled = false;
             btn.innerHTML = '<span class="spinner-border spinner-border-sm d-none" role="status"></span> Upload Banner';
         }
+        
+        return false;
     });
-    // Toggle Active Handler
-    function attachToggleHandler(btn) {
-        btn.addEventListener('click', async function() {
-            const id = this.dataset.id;
-            const card = this.closest('[data-id]');
+
+    // Use Event Delegation for Toggle and Delete buttons
+    // This ensures dynamically added buttons work correctly
+    bannersGrid.addEventListener('click', async function(e) {
+        const toggleBtn = e.target.closest('.toggle-btn');
+        const deleteBtn = e.target.closest('.delete-btn');
+        
+        if (toggleBtn) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            const id = toggleBtn.dataset.id;
+            const card = toggleBtn.closest('[data-id]');
             const badge = card.querySelector('.badge.bg-success, .badge.bg-secondary');
-            const icon = this.querySelector('i');
+            const currentIcon = toggleBtn.querySelector('i');
+            const isCurrentlyActive = badge.classList.contains('bg-success');
+            
+            // Show loading state
+            toggleBtn.disabled = true;
+            const originalHTML = toggleBtn.innerHTML;
+            toggleBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status"></span>';
             
             try {
+                // Use FormData instead of JSON for Laravel web routes
+                const formData = new FormData();
+                formData.append('id', id);
+                
                 const response = await fetch('/admin/banners/toggle', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json',
                         'X-CSRF-TOKEN': csrfToken
                     },
-                    body: JSON.stringify({ id: parseInt(id) })
+                    body: formData
                 });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
                 const data = await response.json();
                 
                 if (data.success) {
@@ -235,57 +310,99 @@ document.addEventListener('DOMContentLoaded', function() {
                     if (data.is_active) {
                         badge.className = 'badge bg-success';
                         badge.textContent = 'Active';
-                        icon.className = 'bi bi-eye-slash';
-                        this.innerHTML = '<i class="bi bi-eye-slash"></i> Hide';
+                        toggleBtn.innerHTML = '<i class="bi bi-eye-slash"></i> Hide';
+                        showToast('Banner is now visible on homepage', 'success');
                     } else {
                         badge.className = 'badge bg-secondary';
                         badge.textContent = 'Inactive';
-                        icon.className = 'bi bi-eye';
-                        this.innerHTML = '<i class="bi bi-eye"></i> Show';
+                        toggleBtn.innerHTML = '<i class="bi bi-eye"></i> Show';
+                        showToast('Banner is now hidden from homepage', 'success');
                     }
                 } else {
-                    alert(data.message || 'Failed to toggle banner');
+                    showToast(data.message || 'Failed to toggle banner', 'error');
+                    toggleBtn.innerHTML = originalHTML;
                 }
             } catch (error) {
                 console.error('Toggle error:', error);
-                alert('Error toggling banner');
+                showToast('Error toggling banner. Please try again.', 'error');
+                toggleBtn.innerHTML = originalHTML;
+            } finally {
+                toggleBtn.disabled = false;
             }
-        });
-    }
-    
-    // Delete Banner Handler
-    function attachDeleteHandler(btn) {
-        btn.addEventListener('click', async function() {
-            if (!confirm('Delete this banner?')) return;
-            const id = this.dataset.id;
-            const card = this.closest('[data-id]');
+        }
+        
+        if (deleteBtn) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            if (!confirm('Are you sure you want to delete this banner? This action cannot be undone.')) return;
+            
+            const id = deleteBtn.dataset.id;
+            const card = deleteBtn.closest('[data-id]');
+            
+            // Show loading state
+            deleteBtn.disabled = true;
+            const originalHTML = deleteBtn.innerHTML;
+            deleteBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status"></span>';
             
             try {
+                // Use FormData instead of JSON for Laravel web routes
+                const formData = new FormData();
+                formData.append('id', id);
+                
                 const response = await fetch('/admin/banners/delete', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json',
                         'X-CSRF-TOKEN': csrfToken
                     },
-                    body: JSON.stringify({ id: parseInt(id) })
+                    body: formData
                 });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
                 const data = await response.json();
                 
                 if (data.success) {
-                    card.remove();
+                    // Animate removal
+                    card.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+                    card.style.opacity = '0';
+                    card.style.transform = 'scale(0.9)';
+                    
+                    setTimeout(() => {
+                        card.remove();
+                        
+                        // Check if this was the last banner
+                        const remainingBanners = bannersGrid.querySelectorAll('[data-id]');
+                        if (remainingBanners.length === 0) {
+                            // Show empty state
+                            const emptyStateHTML = `
+                                <div class="col-12">
+                                    <div class="text-center py-5 text-secondary">
+                                        <i class="bi bi-image fs-1 mb-3 d-block opacity-50"></i>
+                                        <p>No banners yet. Add your first hero banner!</p>
+                                    </div>
+                                </div>
+                            `;
+                            bannersGrid.innerHTML = emptyStateHTML;
+                        }
+                    }, 300);
+                    
+                    showToast('Banner deleted successfully!', 'success');
                 } else {
-                    alert(data.message || 'Failed to delete banner');
+                    showToast(data.message || 'Failed to delete banner', 'error');
+                    deleteBtn.innerHTML = originalHTML;
+                    deleteBtn.disabled = false;
                 }
             } catch (error) {
                 console.error('Delete error:', error);
-                alert('Error deleting banner');
+                showToast('Error deleting banner. Please try again.', 'error');
+                deleteBtn.innerHTML = originalHTML;
+                deleteBtn.disabled = false;
             }
-        });
-    }
-    
-    // Attach handlers to existing buttons
-    document.querySelectorAll('.toggle-btn').forEach(attachToggleHandler);
-    document.querySelectorAll('.delete-btn').forEach(attachDeleteHandler);
+        }
+    });
     
     // Reset form when modal closes
     const modalEl = document.getElementById('addBannerModal');
@@ -293,8 +410,18 @@ document.addEventListener('DOMContentLoaded', function() {
         isUploading = false;
         form.reset();
         const btn = document.getElementById('uploadBtn');
+        const fileInputEl = form.querySelector('input[name="image"]');
         btn.disabled = false;
+        fileInputEl.disabled = false;
         btn.innerHTML = '<span class="spinner-border spinner-border-sm d-none" role="status"></span> Upload Banner';
+    });
+    
+    // Prevent form submission on Enter key in text fields (extra safety)
+    form.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') {
+            e.preventDefault();
+            return false;
+        }
     });
 });
 </script>

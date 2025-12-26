@@ -2,7 +2,7 @@
 <html lang="en" data-bs-theme="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=2.0, user-scalable=yes">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Admin - @yield('title')</title>
     
@@ -15,7 +15,32 @@
     <!-- AJAX States CSS -->
     <link rel="stylesheet" href="{{ secure_asset('css/shared/ajax-states.css') }}">
     
+    <style>
+        /* Optimize UI for laptop screens */
+        @media (min-width: 992px) and (max-width: 1600px) {
+            html {
+                font-size: 15px; /* Slightly smaller base font */
+            }
+            body {
+                zoom: 0.95; /* Subtle zoom out for better content density */
+            }
+        }
+        
+        @media (min-width: 1601px) {
+            html {
+                font-size: 16px;
+            }
+        }
+        
+        /* Ensure smooth font rendering at different scales */
+        body {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+    </style>
+    
     @yield('styles')
+
 </head>
 <body style="font-family: 'Inter', sans-serif; background-color: #0d1117;" 
       data-authenticated="true"
