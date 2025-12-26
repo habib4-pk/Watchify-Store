@@ -6,8 +6,9 @@
 (function () {
     'use strict';
 
-    const API = {
-        placeOrder: '/api/checkout/place-order'
+    // Use WEB route for proper session support
+    const ROUTES = {
+        placeOrder: '/checkout/place-order'
     };
 
     // ========================================================================
@@ -120,7 +121,7 @@
                 phone_number: form.querySelector('input[name="phone_number"]')?.value
             };
 
-            const response = await WatchifyAjax.fetch(API.placeOrder, {
+            const response = await WatchifyAjax.fetch(ROUTES.placeOrder, {
                 body: formData
             });
 

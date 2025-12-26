@@ -6,11 +6,12 @@
 (function () {
     'use strict';
 
-    const API = {
-        add: '/api/cart/add',
-        increase: '/api/cart/increase',
-        decrease: '/api/cart/decrease',
-        remove: '/api/cart/remove',
+    // Use WEB routes for proper session/auth support
+    const ROUTES = {
+        add: '/cart/add',
+        increase: '/cart/increase',
+        decrease: '/cart/decrease',
+        remove: '/cart/remove',
         count: '/api/cart/count'
     };
 
@@ -98,7 +99,7 @@
         WatchifyAjax.setLoading(button, true);
 
         try {
-            const response = await WatchifyAjax.fetch(API.add, {
+            const response = await WatchifyAjax.fetch(ROUTES.add, {
                 body: { id: watchId }
             });
 
@@ -138,7 +139,7 @@
         WatchifyAjax.setLoading(button, true);
 
         try {
-            const response = await WatchifyAjax.fetch(API.increase, {
+            const response = await WatchifyAjax.fetch(ROUTES.increase, {
                 body: { increase: cartItemId }
             });
 
@@ -191,7 +192,7 @@
         WatchifyAjax.setLoading(button, true);
 
         try {
-            const response = await WatchifyAjax.fetch(API.decrease, {
+            const response = await WatchifyAjax.fetch(ROUTES.decrease, {
                 body: { decrease: cartItemId }
             });
 
@@ -252,7 +253,7 @@
         WatchifyAjax.setLoading(button, true);
 
         try {
-            const response = await WatchifyAjax.fetch(API.remove, {
+            const response = await WatchifyAjax.fetch(ROUTES.remove, {
                 body: { remove: cartItemId }
             });
 
@@ -289,7 +290,7 @@
     // ========================================================================
     async function fetchCartCount() {
         try {
-            const response = await WatchifyAjax.fetch(API.count, { method: 'GET' });
+            const response = await WatchifyAjax.fetch(ROUTES.count, { method: 'GET' });
             if (response.success) {
                 WatchifyAjax.updateCartBadge(response.count);
             }

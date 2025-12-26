@@ -38,12 +38,12 @@ Route::middleware(['auth', 'web'])->prefix('reviews')->name('api.reviews.')->gro
 });
 
 // ============================================================================
-// AUTH API
+// AUTH API - Needs web middleware for session-based CSRF
 // ============================================================================
-Route::prefix('auth')->name('api.auth.')->group(function () {
+Route::middleware(['web'])->prefix('auth')->name('api.auth.')->group(function () {
     Route::post('/login', [AuthController::class, 'login'])->name('login');
     Route::post('/register', [AuthController::class, 'register'])->name('register');
-    Route::post('/logout', [AuthController::class, 'logout'])->middleware(['auth', 'web'])->name('logout');
+    Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
 });
 
 // ============================================================================

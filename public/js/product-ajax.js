@@ -6,9 +6,10 @@
 (function () {
     'use strict';
 
-    const API = {
-        reviewStore: '/api/reviews/store',
-        reviewDelete: '/api/reviews/delete'
+    // Use WEB routes for proper session support
+    const ROUTES = {
+        reviewStore: '/reviews/store',
+        reviewDelete: '/reviews/delete'
     };
 
     // ========================================================================
@@ -107,7 +108,7 @@
         WatchifyAjax.setLoading(button, true);
 
         try {
-            const response = await WatchifyAjax.fetch(API.reviewStore, {
+            const response = await WatchifyAjax.fetch(ROUTES.reviewStore, {
                 body: {
                     watch_id: watchId,
                     rating: rating,
@@ -178,7 +179,7 @@
         WatchifyAjax.setLoading(button, true);
 
         try {
-            const response = await WatchifyAjax.fetch(API.reviewDelete, {
+            const response = await WatchifyAjax.fetch(ROUTES.reviewDelete, {
                 body: { review_id: reviewId }
             });
 
@@ -297,7 +298,7 @@
                     <div class="review-rating" style="color: #fbbf24;">${stars}</div>
                 </div>
                 ${review.comment ? `<p class="review-comment">${review.comment}</p>` : ''}
-                <form action="/api/reviews/delete" method="POST" class="delete-review-form">
+                <form action="/reviews/delete" method="POST" class="delete-review-form">
                     <input type="hidden" name="review_id" value="${review.id}">
                     <button type="submit" class="delete-review-btn">Delete</button>
                 </form>

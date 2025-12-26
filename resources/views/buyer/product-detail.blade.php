@@ -181,6 +181,8 @@
 @endsection
 
 @section('scripts')
+{{-- Product AJAX for reviews without page reload --}}
+<script src="{{ secure_asset('js/product-ajax.js') }}"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     

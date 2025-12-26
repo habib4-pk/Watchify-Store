@@ -188,6 +188,8 @@
 </div>
 
 @section('scripts')
+{{-- Checkout AJAX for SPA-like order placement --}}
+<script src="{{ secure_asset('js/checkout-ajax.js') }}"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('checkoutForm');

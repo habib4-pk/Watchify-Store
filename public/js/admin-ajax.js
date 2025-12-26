@@ -6,10 +6,11 @@
 (function () {
     'use strict';
 
-    const API = {
-        deleteProduct: '/api/admin/products/delete',
-        updateOrder: '/api/admin/orders/update-status',
-        deleteUser: '/api/admin/users/delete'
+    // Use WEB routes for proper session support
+    const ROUTES = {
+        deleteProduct: '/admin/products/delete',
+        updateOrder: '/admin/orders/update-status',
+        deleteUser: '/admin/users/delete'
     };
 
     // ========================================================================
@@ -49,7 +50,7 @@
         WatchifyAjax.setLoading(button, true);
 
         try {
-            const response = await WatchifyAjax.fetch(API.deleteProduct, {
+            const response = await WatchifyAjax.fetch(ROUTES.deleteProduct, {
                 body: { id: productId }
             });
 
@@ -104,7 +105,7 @@
         WatchifyAjax.setLoading(button, true);
 
         try {
-            const response = await WatchifyAjax.fetch(API.updateOrder, {
+            const response = await WatchifyAjax.fetch(ROUTES.updateOrder, {
                 body: { order_id: orderId, status: status }
             });
 
@@ -213,7 +214,7 @@
         WatchifyAjax.setLoading(button, true);
 
         try {
-            const response = await WatchifyAjax.fetch(API.deleteUser, {
+            const response = await WatchifyAjax.fetch(ROUTES.deleteUser, {
                 body: { id: userId }
             });
 

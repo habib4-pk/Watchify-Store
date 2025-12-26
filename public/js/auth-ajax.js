@@ -6,10 +6,11 @@
 (function () {
     'use strict';
 
-    const API = {
-        login: '/api/auth/login',
-        register: '/api/auth/register',
-        logout: '/api/auth/logout'
+    // Use WEB routes (not API) because auth needs full session support
+    const ROUTES = {
+        login: '/account/login',
+        register: '/account/register',
+        logout: '/logout'
     };
 
     // ========================================================================
@@ -68,7 +69,7 @@
         WatchifyAjax.setLoading(button, true);
 
         try {
-            const response = await WatchifyAjax.fetch(API.login, {
+            const response = await WatchifyAjax.fetch(ROUTES.login, {
                 body: {
                     email: emailInput.value,
                     password: passwordInput.value,
@@ -181,7 +182,7 @@
         WatchifyAjax.setLoading(button, true);
 
         try {
-            const response = await WatchifyAjax.fetch(API.register, {
+            const response = await WatchifyAjax.fetch(ROUTES.register, {
                 body: {
                     name: nameInput.value,
                     email: emailInput.value,
@@ -238,7 +239,7 @@
         WatchifyAjax.setLoading(button, true);
 
         try {
-            const response = await WatchifyAjax.fetch(API.logout, {});
+            const response = await WatchifyAjax.fetch(ROUTES.logout, {});
 
             if (response.success) {
                 WatchifyAjax.showToast(response.message || 'Logged out successfully', 'success');
