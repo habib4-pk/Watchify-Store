@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=0.85, maximum-scale=2.0, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=0.8, maximum-scale=2.0, user-scalable=yes">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title') | Watchify</title>
     
@@ -12,19 +12,19 @@
     <link rel="stylesheet" href="{{ secure_asset('css/shared/ajax-states.css') }}">
     
     <style>
-        /* Optimize UI for laptop screens - More zoomed out */
+        /* Optimize UI for laptop screens - Maximum zoom out */
         @media (min-width: 992px) and (max-width: 1600px) {
             html {
-                font-size: 14px; /* Smaller base font for more content */
+                font-size: 13px; /* Smaller base font for maximum content */
             }
             body {
-                zoom: 0.9; /* More zoom out for better content density */
+                zoom: 0.85; /* Maximum zoom out for best content density */
             }
         }
         
         @media (min-width: 1601px) {
             html {
-                font-size: 15px; /* Slightly reduced for large screens too */
+                font-size: 14px; /* Reduced for large screens */
             }
         }
         
