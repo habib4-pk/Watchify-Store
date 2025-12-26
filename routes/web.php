@@ -4,10 +4,12 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\HeroBannerController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\WatchController;
+use App\Http\Controllers\WatchImageController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -45,6 +47,14 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
         Route::post('/delete', [WatchController::class, 'destroy'])->name('destroy');
     });
     
+    // Product Image Management
+    Route::prefix('product-images')->name('images.')->group(function () {
+        Route::post('/store', [WatchImageController::class, 'store'])->name('store');
+        Route::post('/delete', [WatchImageController::class, 'destroy'])->name('destroy');
+        Route::post('/reorder', [WatchImageController::class, 'updateOrder'])->name('reorder');
+        Route::post('/set-primary', [WatchImageController::class, 'setPrimary'])->name('setPrimary');
+    });
+    
     // Order Management
     Route::prefix('orders')->name('orders.')->group(function () {
         Route::get('/', [OrderController::class, 'index'])->name('index');
@@ -56,6 +66,16 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::prefix('users')->name('users.')->group(function () {
         Route::get('/', [AdminController::class, 'showAllUsers'])->name('index');
         Route::post('/delete', [AdminController::class, 'destroy'])->name('destroy');
+    });
+    
+    // Hero Banner Management
+    Route::prefix('banners')->name('banners.')->group(function () {
+        Route::get('/', [HeroBannerController::class, 'index'])->name('index');
+        Route::post('/store', [HeroBannerController::class, 'store'])->name('store');
+        Route::post('/update', [HeroBannerController::class, 'update'])->name('update');
+        Route::post('/delete', [HeroBannerController::class, 'destroy'])->name('destroy');
+        Route::post('/toggle', [HeroBannerController::class, 'toggleActive'])->name('toggle');
+        Route::post('/reorder', [HeroBannerController::class, 'updateOrder'])->name('reorder');
     });
 });
 

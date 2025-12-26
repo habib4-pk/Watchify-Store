@@ -16,15 +16,64 @@
 <div class="detail-wrapper">
 
     <div class="image-gallery">
-        <img src="{{ $watch->image }}" 
-             alt="{{ $watch->name }}"
-             onerror="this.src='{{ secure_asset('images/placeholder-watch.jpg') }}'">
+        @php
+            $allImages = $watch->all_images;
+            $hasMultipleImages = count($allImages) > 1;
+        @endphp
+        
+        <!-- Main Slideshow Container -->
+        <div class="slideshow-container" id="slideshow">
+            @foreach($allImages as $index => $imageUrl)
+                <div class="slide {{ $index === 0 ? 'active' : '' }}" data-index="{{ $index }}">
+                    <img src="{{ $imageUrl }}" 
+                         alt="{{ $watch->name }} - Image {{ $index + 1 }}"
+                         onerror="this.src='{{ secure_asset('images/placeholder-watch.jpg') }}'">
+                </div>
+            @endforeach
+            
+            @if($hasMultipleImages)
+                <!-- Navigation Arrows -->
+                <button class="slide-arrow prev" onclick="changeSlide(-1)" aria-label="Previous image">
+                    <i class="bi bi-chevron-left"></i>
+                </button>
+                <button class="slide-arrow next" onclick="changeSlide(1)" aria-label="Next image">
+                    <i class="bi bi-chevron-right"></i>
+                </button>
+                
+                <!-- Progress Bar -->
+                <div class="slide-progress">
+                    <div class="progress-bar" id="progressBar"></div>
+                </div>
+            @endif
+        </div>
+        
+        @if($hasMultipleImages)
+            <!-- Thumbnail Navigation -->
+            <div class="thumbnail-strip">
+                @foreach($allImages as $index => $imageUrl)
+                    <div class="thumbnail {{ $index === 0 ? 'active' : '' }}" 
+                         data-index="{{ $index }}"
+                         onclick="goToSlide({{ $index }})">
+                        <img src="{{ $imageUrl }}" alt="Thumbnail {{ $index + 1 }}">
+                    </div>
+                @endforeach
+            </div>
+        @endif
     </div>
 
     <div class="product-details">
         <span class="brand-label">Luxury Collection 2025</span>
         <h1 class="product-title">{{ $watch->name }}</h1>
-        <span class="price-tag">Rs. {{ number_format($watch->price) }}</span>
+        
+        @if($watch->has_discount)
+            <div class="price-section">
+                <span class="original-price-tag">Rs. {{ number_format($watch->price) }}</span>
+                <span class="discount-badge-lg">-{{ $watch->discount_percentage }}% OFF</span>
+            </div>
+            <span class="price-tag discounted">Rs. {{ number_format($watch->discounted_price) }}</span>
+        @else
+            <span class="price-tag">Rs. {{ number_format($watch->price) }}</span>
+        @endif
 
         <div class="description-box">
             <h4>Description</h4>
@@ -184,6 +233,123 @@
 {{-- Product AJAX for reviews without page reload --}}
 <script src="{{ secure_asset('js/product-ajax.js') }}"></script>
 <script>
+// ============================================
+// SLIDESHOW FUNCTIONALITY
+// ============================================
+(function() {
+    const slideshow = document.getElementById('slideshow');
+    if (!slideshow) return;
+    
+    const slides = slideshow.querySelectorAll('.slide');
+    const thumbnails = document.querySelectorAll('.thumbnail');
+    const progressBar = document.getElementById('progressBar');
+    
+    if (slides.length <= 1) return; // No slideshow needed for single image
+    
+    let currentIndex = 0;
+    let intervalId = null;
+    let isPaused = false;
+    const INTERVAL_DURATION = 4000; // 4 seconds
+    
+    // Initialize slideshow
+    function init() {
+        startAutoAdvance();
+        setupHoverPause();
+        setupTouchSupport();
+    }
+    
+    // Go to specific slide
+    window.goToSlide = function(index) {
+        if (index < 0) index = slides.length - 1;
+        if (index >= slides.length) index = 0;
+        
+        // Remove active from all
+        slides.forEach(s => s.classList.remove('active'));
+        thumbnails.forEach(t => t.classList.remove('active'));
+        
+        // Add active to current
+        slides[index].classList.add('active');
+        if (thumbnails[index]) thumbnails[index].classList.add('active');
+        
+        currentIndex = index;
+        resetProgress();
+    };
+    
+    // Change slide by delta
+    window.changeSlide = function(delta) {
+        goToSlide(currentIndex + delta);
+    };
+    
+    // Auto advance
+    function startAutoAdvance() {
+        if (intervalId) clearInterval(intervalId);
+        intervalId = setInterval(() => {
+            if (!isPaused) {
+                goToSlide(currentIndex + 1);
+            }
+        }, INTERVAL_DURATION);
+        resetProgress();
+    }
+    
+    // Progress bar animation
+    function resetProgress() {
+        if (!progressBar) return;
+        progressBar.style.transition = 'none';
+        progressBar.style.width = '0%';
+        
+        // Force reflow
+        progressBar.offsetHeight;
+        
+        progressBar.style.transition = `width ${INTERVAL_DURATION}ms linear`;
+        progressBar.style.width = '100%';
+    }
+    
+    // Pause on hover
+    function setupHoverPause() {
+        slideshow.addEventListener('mouseenter', () => {
+            isPaused = true;
+            if (progressBar) progressBar.style.animationPlayState = 'paused';
+        });
+        
+        slideshow.addEventListener('mouseleave', () => {
+            isPaused = false;
+            if (progressBar) progressBar.style.animationPlayState = 'running';
+        });
+    }
+    
+    // Touch/swipe support
+    function setupTouchSupport() {
+        let touchStartX = 0;
+        let touchEndX = 0;
+        
+        slideshow.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+        
+        slideshow.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        }, { passive: true });
+        
+        function handleSwipe() {
+            const diff = touchStartX - touchEndX;
+            if (Math.abs(diff) > 50) { // Minimum swipe distance
+                if (diff > 0) {
+                    changeSlide(1); // Swipe left = next
+                } else {
+                    changeSlide(-1); // Swipe right = prev
+                }
+            }
+        }
+    }
+    
+    // Initialize on load
+    init();
+})();
+
+// ============================================
+// EXISTING FUNCTIONALITY
+// ============================================
 document.addEventListener('DOMContentLoaded', function() {
     
     // Add to Cart Validation
@@ -314,15 +480,6 @@ document.addEventListener('DOMContentLoaded', function() {
     window.confirmDelete = function(event) {
         return confirm('Are you sure you want to delete this review? This action cannot be undone.');
     };
-    
-    // Image error handling
-    const productImage = document.querySelector('.image-gallery img');
-    if (productImage) {
-        productImage.addEventListener('error', function() {
-            this.src = '{{ secure_asset("images/placeholder-watch.jpg") }}';
-            this.alt = 'Image not available';
-        });
-    }
 });
 </script>
 @endsection

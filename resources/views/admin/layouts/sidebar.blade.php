@@ -48,6 +48,15 @@
                 <span class="fw-medium">Users</span>
             </a>
         </li>
+        
+        <li class="nav-item">
+            <a href="{{ url('/admin/banners') }}" 
+               class="nav-link d-flex align-items-center gap-3 rounded-3 px-3 py-2 {{ request()->is('admin/banners*') ? 'active bg-primary text-white' : 'text-secondary' }}"
+               style="{{ request()->is('admin/banners*') ? '' : 'transition: all 0.2s;' }}">
+                <i class="bi bi-images fs-5"></i>
+                <span class="fw-medium">Hero Banners</span>
+            </a>
+        </li>
     </ul>
     
     <hr class="my-4" style="border-color: #30363d;">

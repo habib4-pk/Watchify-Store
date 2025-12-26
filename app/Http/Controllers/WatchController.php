@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Watch;
+use App\Models\WatchImage;
 use Illuminate\Http\Request;
 use Exception;
 use Illuminate\Support\Facades\Log;
@@ -60,6 +61,8 @@ class WatchController extends Controller
             'price' => 'required|numeric|min:0',
             'description' => 'required|string',
             'image' => 'required|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'additional_images' => 'nullable|array|max:10',
+            'additional_images.*' => 'image|mimes:jpeg,png,jpg,webp|max:2048',
             'featured' => 'required|in:yes,no',
             'stock' => 'required|integer|min:0',
         ]);
@@ -104,6 +107,33 @@ class WatchController extends Controller
             $watch->stock = $req->stock;
             $watch->save();
 
+            // Save primary image to watch_images table
+            if ($imageUrl) {
+                WatchImage::create([
+                    'watch_id' => $watch->id,
+                    'image_url' => $imageUrl,
+                    'sort_order' => 0,
+                    'is_primary' => true,
+                ]);
+            }
+
+            // Handle additional images
+            if ($req->hasFile('additional_images')) {
+                $cloudinary = $this->getCloudinary();
+                $sortOrder = 1;
+                foreach ($req->file('additional_images') as $additionalFile) {
+                    $result = $cloudinary->upload($additionalFile->getRealPath(), [
+                        'folder' => 'watches',
+                    ]);
+                    WatchImage::create([
+                        'watch_id' => $watch->id,
+                        'image_url' => $result['secure_url'],
+                        'sort_order' => $sortOrder++,
+                        'is_primary' => false,
+                    ]);
+                }
+            }
+
             if ($req->expectsJson()) {
                 return response()->json([
                     'success' => true,
@@ -140,6 +170,8 @@ class WatchController extends Controller
             'price' => 'required|numeric|min:0',
             'description' => 'required|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'additional_images' => 'nullable|array|max:10',
+            'additional_images.*' => 'image|mimes:jpeg,png,jpg,webp|max:2048',
             'featured' => 'required|in:yes,no',
             'stock' => 'required|integer|min:0',
         ]);
@@ -190,6 +222,41 @@ class WatchController extends Controller
             $watch->stock = $req->stock;
             $watch->save();
 
+            // Handle new primary image in watch_images table
+            if ($req->hasFile('image')) {
+                // Update existing primary or create new
+                $existingPrimary = WatchImage::where('watch_id', $watch->id)
+                    ->where('is_primary', true)
+                    ->first();
+                if ($existingPrimary) {
+                    $existingPrimary->update(['image_url' => $imageUrl]);
+                } else {
+                    WatchImage::create([
+                        'watch_id' => $watch->id,
+                        'image_url' => $imageUrl,
+                        'sort_order' => 0,
+                        'is_primary' => true,
+                    ]);
+                }
+            }
+
+            // Handle additional images
+            if ($req->hasFile('additional_images')) {
+                $cloudinary = $this->getCloudinary();
+                $maxOrder = WatchImage::where('watch_id', $watch->id)->max('sort_order') ?? 0;
+                foreach ($req->file('additional_images') as $additionalFile) {
+                    $result = $cloudinary->upload($additionalFile->getRealPath(), [
+                        'folder' => 'watches',
+                    ]);
+                    WatchImage::create([
+                        'watch_id' => $watch->id,
+                        'image_url' => $result['secure_url'],
+                        'sort_order' => ++$maxOrder,
+                        'is_primary' => false,
+                    ]);
+                }
+            }
+
             if ($req->expectsJson()) {
                 return response()->json([
                     'success' => true,
@@ -222,7 +289,7 @@ class WatchController extends Controller
     {
         try {
             $id = $req->id;
-            $watch = Watch::where('id', $id)->first();
+            $watch = Watch::with('images')->where('id', $id)->first();
 
             if (!$watch) {
                 return redirect()->route('adminDashboard')->with('error', 'Watch not found.');

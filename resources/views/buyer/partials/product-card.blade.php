@@ -18,7 +18,16 @@
 
     <div class="product-info">
         <h3 class="product-name">{{ $watch->name }}</h3>
-        <p class="product-price">Rs. {{ number_format($watch->price) }}</p>
+        
+        @if($watch->has_discount)
+            <div class="price-wrapper">
+                <span class="original-price">Rs. {{ number_format($watch->price) }}</span>
+                <span class="discount-badge">-{{ $watch->discount_percentage }}%</span>
+            </div>
+            <p class="product-price discounted">Rs. {{ number_format($watch->discounted_price) }}</p>
+        @else
+            <p class="product-price">Rs. {{ number_format($watch->price) }}</p>
+        @endif
 
         <div class="button-group">
             {{-- View Details --}}

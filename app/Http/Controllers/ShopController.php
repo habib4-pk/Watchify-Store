@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Watch;
 use App\Models\User;
 use App\Models\Review;
+use App\Models\HeroBanner;
 use Illuminate\Support\Facades\Validator;
 use Exception;
 
@@ -40,7 +41,8 @@ class ShopController extends Controller
             else $query->orderBy('created_at', 'desc');
 
             $allWatches = $query->get();
-            return view('buyer.home', compact('allWatches', 'sort'));
+            $heroBanners = HeroBanner::active()->get();
+            return view('buyer.home', compact('allWatches', 'sort', 'heroBanners'));
         } catch (Exception $e) {
             return redirect()->back()->with('error', 'Unable to load watches.');
         }
@@ -123,7 +125,7 @@ class ShopController extends Controller
             }
 
             $id = $req->id;
-            $watch = Watch::where('id', $id)->first();
+            $watch = Watch::with('images')->where('id', $id)->first();
 
             if (!$watch) {
                 return redirect()->back()->with('error', 'Watch not found.');
