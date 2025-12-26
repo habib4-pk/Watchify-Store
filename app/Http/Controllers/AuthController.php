@@ -8,8 +8,14 @@ use App\Mail\RegistrationMail;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 use Exception;
 
+/**
+ * AuthController
+ * Handles authentication: login, register, logout
+ * Supports both AJAX (JSON) and traditional (redirect) responses
+ */
 class AuthController extends Controller
 {
     public function loginForm()
@@ -32,49 +38,113 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        // 1. Strict Validation
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'email'    => 'required|email|max:255',
             'password' => 'required|string',
         ]);
 
-   
-            $credentials = $request->only('email', 'password');
+        if ($validator->fails()) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Validation failed.',
+                    'errors' => $validator->errors()
+                ], 422);
+            }
+            return redirect()->back()->withErrors($validator)->withInput($request->only('email'));
+        }
 
-            if (Auth::attempt($credentials)) {
-                $request->session()->regenerate();
+        $credentials = $request->only('email', 'password');
 
-                $user = Auth::user();
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
 
-                if ($user->role === 'admin') {
-                    return redirect()->route('adminDashboard')->with('success', 'Welcome Admin! You have logged in successfully.');
-                }
+            $user = Auth::user();
+            $redirect = $user->role === 'admin' ? route('adminDashboard') : route('shop.index');
+            $message = $user->role === 'admin' 
+                ? 'Welcome Admin! You have logged in successfully.' 
+                : 'Login successful. Welcome back!';
 
-                return redirect()->route('shop.index')->with('success', 'Login successful. Welcome back!');
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => $message,
+                    'redirect' => $redirect,
+                    'user' => [
+                        'name' => $user->name,
+                        'email' => $user->email,
+                        'role' => $user->role
+                    ]
+                ]);
             }
 
-            return redirect()->back()->with('error', 'Invalid email or password.')->withInput($request->only('email'));
-       
+            return redirect($redirect)->with('success', $message);
+        }
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid email or password.'
+            ], 401);
+        }
+
+        return redirect()->back()->with('error', 'Invalid email or password.')->withInput($request->only('email'));
     }
 
     public function register(Request $request)
     {
-        // Simple validation
-        $request->validate([
-            'name'     => 'required',
+        $validator = Validator::make($request->all(), [
+            'name'     => 'required|string|max:255',
             'email'    => 'required|email|unique:users,email',
-            'password' => 'required',
+            'password' => 'required|string|min:8|confirmed',
         ]);
 
-        // Create user
-        $user = new User;
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->password = $request->password;
-        $user->role = 'user';
-        $user->save();
+        if ($validator->fails()) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Validation failed.',
+                    'errors' => $validator->errors()
+                ], 422);
+            }
+            return redirect()->back()->withErrors($validator)->withInput($request->except('password'));
+        }
 
-        return redirect()->route('account.login')->with('success', 'Registration successful! Please login.');
+        try {
+            // Create user
+            $user = new User;
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->password = $request->password; // Model should hash this
+            $user->role = 'user';
+            $user->save();
+
+            // Auto-login after registration
+            Auth::login($user);
+            $request->session()->regenerate();
+
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Registration successful! Welcome aboard!',
+                    'redirect' => route('shop.index'),
+                    'user' => [
+                        'name' => $user->name,
+                        'email' => $user->email
+                    ]
+                ]);
+            }
+
+            return redirect()->route('shop.index')->with('success', 'Registration successful! Welcome aboard!');
+        } catch (Exception $e) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Registration failed. Please try again.'
+                ], 500);
+            }
+            return redirect()->back()->with('error', 'Registration failed. Please try again.');
+        }
     }
 
     public function logout(Request $request)
@@ -88,13 +158,28 @@ class AuthController extends Controller
             $request->session()->invalidate();
             $request->session()->regenerateToken();
 
-            if ($role === 'admin') {
-                return redirect()->route('account.login')->with('success', 'Admin logged out successfully.');
+            $redirect = route('shop.index');
+            $message = $role === 'admin' ? 'Admin logged out successfully.' : 'Logged out successfully.';
+
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => $message,
+                    'redirect' => $redirect
+                ]);
             }
 
-            return redirect()->route('shop.index')->with('success', 'Logged out successfully.');
+            return redirect($redirect)->with('success', $message);
         } catch (Exception $e) {
             Auth::logout();
+            
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Logged out.',
+                    'redirect' => route('shop.index')
+                ]);
+            }
             return redirect()->route('shop.index');
         }
     }

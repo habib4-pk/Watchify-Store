@@ -3,11 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title') | Watchify</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ secure_asset('css/buyer/layout.css') }}">
     <link rel="stylesheet" href="{{ secure_asset('css/shared/alerts.css') }}">
+    <link rel="stylesheet" href="{{ secure_asset('css/shared/ajax-states.css') }}">
     
     @yield('styles')
 </head>
@@ -87,8 +89,20 @@
 
     @include('buyer.layouts.footer')
 
-    {{-- Global Alert JavaScript (externalized) --}}
+    {{-- Core AJAX Module (must load first) --}}
+    <script src="{{ secure_asset('js/ajax-core.js') }}"></script>
+    
+    {{-- Global Alert JavaScript --}}
     <script src="{{ secure_asset('js/buyer/global-alerts.js') }}"></script>
+    
+    {{-- Cart AJAX (loads on all pages for add-to-cart buttons) --}}
+    <script src="{{ secure_asset('js/cart-ajax.js') }}"></script>
+    
+    {{-- Auth AJAX (handles logout forms on all pages) --}}
+    <script src="{{ secure_asset('js/auth-ajax.js') }}"></script>
+    
+    {{-- Search AJAX (live search dropdown) --}}
+    <script src="{{ secure_asset('js/search-ajax.js') }}"></script>
 
     @yield('scripts')
 

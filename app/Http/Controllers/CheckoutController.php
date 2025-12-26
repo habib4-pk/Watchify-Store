@@ -14,6 +14,7 @@ use Exception;
 /**
  * CheckoutController
  * Handles checkout process and order placement
+ * Supports both AJAX (JSON) and traditional (redirect) responses
  */
 class CheckoutController extends Controller
 {
@@ -56,6 +57,9 @@ class CheckoutController extends Controller
     {
         try {
             if (!Auth::check()) {
+                if ($req->expectsJson()) {
+                    return response()->json(['success' => false, 'message' => 'Please login to place an order.'], 401);
+                }
                 return redirect()->route('account.login')->with('error', 'Please login to place an order.');
             }
 
@@ -81,6 +85,13 @@ class CheckoutController extends Controller
             ]);
 
             if ($validator->fails()) {
+                if ($req->expectsJson()) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Please fix the validation errors.',
+                        'errors' => $validator->errors()
+                    ], 422);
+                }
                 return redirect()->back()
                     ->withErrors($validator)
                     ->withInput()
@@ -91,6 +102,9 @@ class CheckoutController extends Controller
             $cartItems = Cart::where('user_id', $user_id)->get();
 
             if ($cartItems->count() == 0) {
+                if ($req->expectsJson()) {
+                    return response()->json(['success' => false, 'message' => 'Your cart is empty.'], 400);
+                }
                 return redirect()->back()->with('error', 'Your cart is empty.');
             }
 
@@ -98,10 +112,17 @@ class CheckoutController extends Controller
             foreach ($cartItems as $item) {
                 $watch = Watch::find($item->watch_id);
                 if (!$watch) {
+                    if ($req->expectsJson()) {
+                        return response()->json(['success' => false, 'message' => 'Some items in your cart are no longer available.'], 400);
+                    }
                     return redirect()->back()->with('error', 'Some items in your cart are no longer available.');
                 }
                 if ($watch->stock < $item->quantity) {
-                    return redirect()->back()->with('error', "Not enough stock for {$watch->name}. Only {$watch->stock} available.");
+                    $errorMsg = "Not enough stock for {$watch->name}. Only {$watch->stock} available.";
+                    if ($req->expectsJson()) {
+                        return response()->json(['success' => false, 'message' => $errorMsg], 400);
+                    }
+                    return redirect()->back()->with('error', $errorMsg);
                 }
             }
 
@@ -140,8 +161,19 @@ class CheckoutController extends Controller
             // Clear cart
             Cart::where('user_id', $user_id)->delete();
 
+            if ($req->expectsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Order placed successfully! Thank you for your purchase.',
+                    'orderId' => $order->id,
+                    'redirect' => route('myOrders')
+                ]);
+            }
             return redirect()->route('myOrders')->with('success', 'Order placed successfully! Thank you for your purchase.');
         } catch (Exception $e) {
+            if ($req->expectsJson()) {
+                return response()->json(['success' => false, 'message' => 'Failed to place order. Please try again.'], 500);
+            }
             return redirect()->back()->with('error', 'Failed to place order. Please try again.');
         }
     }

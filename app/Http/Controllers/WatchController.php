@@ -6,9 +6,15 @@ use App\Models\Watch;
 use Illuminate\Http\Request;
 use Exception;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 use Cloudinary\Configuration\Configuration;
 use Cloudinary\Api\Upload\UploadApi;
 
+/**
+ * WatchController
+ * Handles product management: list, create, update, delete
+ * Supports both AJAX (JSON) and traditional (redirect) responses
+ */
 class WatchController extends Controller
 {
     private function getCloudinary()
@@ -49,8 +55,7 @@ class WatchController extends Controller
 
     public function store(Request $req)
     {
-        // 1. Validation Logic
-        $req->validate([
+        $validator = Validator::make($req->all(), [
             'name' => 'required|string|max:255',
             'price' => 'required|numeric|min:0',
             'description' => 'required|string',
@@ -58,6 +63,17 @@ class WatchController extends Controller
             'featured' => 'required|in:yes,no',
             'stock' => 'required|integer|min:0',
         ]);
+
+        if ($validator->fails()) {
+            if ($req->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Validation failed.',
+                    'errors' => $validator->errors()
+                ], 422);
+            }
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
 
         try {
             $imageUrl = null;
@@ -88,17 +104,37 @@ class WatchController extends Controller
             $watch->stock = $req->stock;
             $watch->save();
 
+            if ($req->expectsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Watch added successfully!',
+                    'watch' => [
+                        'id' => $watch->id,
+                        'name' => $watch->name,
+                        'price' => $watch->price,
+                        'image' => $watch->image,
+                        'featured' => $watch->featured,
+                        'stock' => $watch->stock
+                    ],
+                    'redirect' => route('adminDashboard')
+                ]);
+            }
             return redirect()->route('adminDashboard')->with('success', 'Watch added successfully!');
         } catch (Exception $e) {
             Log::error('Watch upload failed', ['error' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
+            if ($req->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Failed to add watch: ' . $e->getMessage()
+                ], 500);
+            }
             return redirect()->back()->with('error', 'Failed to add watch: ' . $e->getMessage())->withInput();
         }
     }
 
     public function update(Request $req)
     {
-        // 1. Validation Logic
-        $req->validate([
+        $validator = Validator::make($req->all(), [
             'id' => 'required|exists:watches,id',
             'name' => 'required|string|max:255',
             'price' => 'required|numeric|min:0',
@@ -108,11 +144,25 @@ class WatchController extends Controller
             'stock' => 'required|integer|min:0',
         ]);
 
+        if ($validator->fails()) {
+            if ($req->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Validation failed.',
+                    'errors' => $validator->errors()
+                ], 422);
+            }
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
         try {
             $id = $req->id;
             $watch = Watch::where('id', $id)->first();
 
             if (!$watch) {
+                if ($req->expectsJson()) {
+                    return response()->json(['success' => false, 'message' => 'Watch not found.'], 404);
+                }
                 return redirect()->route('adminDashboard')->with('error', 'Watch not found.');
             }
 
@@ -140,9 +190,30 @@ class WatchController extends Controller
             $watch->stock = $req->stock;
             $watch->save();
 
+            if ($req->expectsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Watch updated successfully!',
+                    'watch' => [
+                        'id' => $watch->id,
+                        'name' => $watch->name,
+                        'price' => $watch->price,
+                        'image' => $watch->image,
+                        'featured' => $watch->featured,
+                        'stock' => $watch->stock
+                    ],
+                    'redirect' => route('adminDashboard')
+                ]);
+            }
             return redirect()->route('adminDashboard')->with('success', 'Watch updated successfully!');
         } catch (Exception $e) {
             Log::error('Watch update failed', ['error' => $e->getMessage()]);
+            if ($req->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Failed to update watch: ' . $e->getMessage()
+                ], 500);
+            }
             return redirect()->back()->with('error', 'Failed to update watch: ' . $e->getMessage())->withInput();
         }
     }
@@ -167,9 +238,29 @@ class WatchController extends Controller
     {
         try {
             $id = $req->id;
+            $watch = Watch::find($id);
+            
+            if (!$watch) {
+                if ($req->expectsJson()) {
+                    return response()->json(['success' => false, 'message' => 'Watch not found.'], 404);
+                }
+                return redirect()->route('adminDashboard')->with('error', 'Watch not found.');
+            }
+            
+            $watchName = $watch->name;
             Watch::destroy($id);
+            
+            if ($req->expectsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => "Watch '{$watchName}' deleted successfully!"
+                ]);
+            }
             return redirect()->route('adminDashboard')->with('success', 'Watch deleted successfully!');
         } catch (Exception $e) {
+            if ($req->expectsJson()) {
+                return response()->json(['success' => false, 'message' => 'Failed to delete watch.'], 500);
+            }
             return redirect()->back()->with('error', 'Failed to delete watch.');
         }
     }
