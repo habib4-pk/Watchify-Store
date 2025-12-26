@@ -210,6 +210,16 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+    
+    // Reset form when modal closes
+    const modal = document.getElementById('addBannerModal');
+    modal.addEventListener('hidden.bs.modal', function() {
+        isUploading = false;
+        form.reset();
+        const btn = document.getElementById('uploadBtn');
+        btn.disabled = false;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm d-none" role="status"></span> Upload Banner';
+    });
 });
 </script>
 

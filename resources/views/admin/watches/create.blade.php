@@ -78,7 +78,10 @@
                 <div id="additionalPreview" class="mt-3 d-flex flex-wrap gap-2"></div>
             </div>
             <div class="d-flex gap-2">
-                <button type="submit" class="btn btn-primary px-4"><i class="bi bi-check-lg me-2"></i>Save Watch</button>
+                <button type="submit" class="btn btn-primary px-4" id="watchSubmitBtn">
+                    <span class="spinner-border spinner-border-sm d-none me-2" role="status"></span>
+                    <i class="bi bi-check-lg me-2 btn-icon"></i>Save Watch
+                </button>
                 <a href="{{ route('adminDashboard') }}" class="btn btn-outline-secondary">Cancel</a>
             </div>
         </form>
@@ -112,6 +115,25 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    let isSubmitting = false;
+    
+    // Prevent double form submission
+    const form = document.querySelector('form');
+    const submitBtn = document.getElementById('watchSubmitBtn');
+    
+    form.addEventListener('submit', function(e) {
+        if (isSubmitting) {
+            e.preventDefault();
+            return false;
+        }
+        isSubmitting = true;
+        
+        // Show loading state
+        submitBtn.disabled = true;
+        submitBtn.querySelector('.spinner-border').classList.remove('d-none');
+        submitBtn.querySelector('.btn-icon').classList.add('d-none');
+    });
+    
     // Primary image preview
     const primaryInput = document.getElementById('primaryImage');
     const primaryPreview = document.getElementById('primaryPreview');

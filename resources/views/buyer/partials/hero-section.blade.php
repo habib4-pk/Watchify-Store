@@ -1,11 +1,12 @@
 {{-- 
     Hero Section Partial
-    Dynamic hero banner slideshow for buyer pages
+    Premium dynamic hero banner slideshow
     Used by: home.blade.php
 --}}
 
 @if(isset($heroBanners) && count($heroBanners) > 0)
     <section class="hero-slider" id="heroSlider">
+        <!-- Slides -->
         <div class="slides-wrapper">
             @foreach($heroBanners as $index => $banner)
                 <div class="hero-slide {{ $index === 0 ? 'active' : '' }}" 
@@ -20,7 +21,10 @@
                             <p class="hero-subtitle">{{ $banner->subtitle }}</p>
                         @endif
                         @if($banner->button_text && $banner->button_link)
-                            <a href="{{ $banner->button_link }}" class="hero-btn">{{ $banner->button_text }}</a>
+                            <a href="{{ $banner->button_link }}" class="hero-btn">
+                                {{ $banner->button_text }}
+                                <i class="bi bi-arrow-right ms-2"></i>
+                            </a>
                         @endif
                     </div>
                 </div>
@@ -44,6 +48,11 @@
                             aria-label="Go to slide {{ $index + 1 }}"></button>
                 @endforeach
             </div>
+            
+            <!-- Progress Bar -->
+            <div class="hero-progress">
+                <div class="hero-progress-bar" id="heroProgressBar"></div>
+            </div>
         @endif
     </section>
     
@@ -51,10 +60,11 @@
         .hero-slider {
             position: relative;
             width: 100%;
-            height: 70vh;
-            min-height: 400px;
-            max-height: 600px;
+            height: 80vh;
+            min-height: 500px;
+            max-height: 700px;
             overflow: hidden;
+            background: #0a0a0a;
         }
         
         .slides-wrapper {
@@ -72,12 +82,14 @@
             background-position: center;
             opacity: 0;
             visibility: hidden;
-            transition: opacity 0.5s ease-in-out, visibility 0.5s;
+            transform: scale(1.05);
+            transition: opacity 0.8s ease, visibility 0.8s, transform 6s ease-out;
         }
         
         .hero-slide.active {
             opacity: 1;
             visibility: visible;
+            transform: scale(1);
             z-index: 1;
         }
         
@@ -87,7 +99,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(to right, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 100%);
+            background: linear-gradient(135deg, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.5) 100%);
         }
         
         .hero-content {
@@ -96,52 +108,65 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
+            align-items: flex-start;
             height: 100%;
-            padding: 0 10%;
+            padding: 0 12%;
             color: #fff;
+            max-width: 800px;
         }
         
         .hero-title {
             font-family: 'Playfair Display', serif;
-            font-size: clamp(2rem, 5vw, 4rem);
-            font-weight: 400;
-            margin-bottom: 15px;
-            animation: fadeInUp 0.6s ease-out;
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 500;
+            margin-bottom: 20px;
+            line-height: 1.1;
+            text-shadow: 0 2px 30px rgba(0,0,0,0.3);
+            opacity: 0;
+            transform: translateY(30px);
+            animation: heroFadeUp 0.8s ease forwards 0.2s;
         }
         
         .hero-subtitle {
-            font-size: clamp(1rem, 2vw, 1.3rem);
-            opacity: 0.9;
-            margin-bottom: 25px;
+            font-size: clamp(1rem, 2vw, 1.4rem);
+            opacity: 0;
+            margin-bottom: 30px;
             max-width: 500px;
-            animation: fadeInUp 0.6s ease-out 0.1s both;
+            line-height: 1.6;
+            font-weight: 300;
+            text-shadow: 0 1px 10px rgba(0,0,0,0.3);
+            transform: translateY(30px);
+            animation: heroFadeUp 0.8s ease forwards 0.4s;
         }
         
         .hero-btn {
-            display: inline-block;
-            padding: 14px 35px;
-            background: linear-gradient(135deg, #c9a050, #dbb668);
+            display: inline-flex;
+            align-items: center;
+            padding: 16px 40px;
+            background: linear-gradient(135deg, #c9a050 0%, #e8c36a 50%, #c9a050 100%);
+            background-size: 200% 100%;
             color: #1a1a1a;
             text-decoration: none;
             font-weight: 600;
             font-size: 14px;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
             text-transform: uppercase;
-            border-radius: 4px;
-            transition: all 0.3s ease;
-            animation: fadeInUp 0.6s ease-out 0.2s both;
+            border-radius: 50px;
+            transition: all 0.4s ease;
+            box-shadow: 0 4px 20px rgba(201, 160, 80, 0.3);
+            opacity: 0;
+            transform: translateY(30px);
+            animation: heroFadeUp 0.8s ease forwards 0.6s;
         }
         
         .hero-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 20px rgba(201, 160, 80, 0.4);
+            background-position: 100% 0;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(201, 160, 80, 0.5);
+            color: #1a1a1a;
         }
         
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
+        @keyframes heroFadeUp {
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -154,66 +179,107 @@
             top: 50%;
             transform: translateY(-50%);
             z-index: 10;
-            background: rgba(255,255,255,0.15);
-            border: 1px solid rgba(255,255,255,0.3);
-            width: 50px;
-            height: 50px;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            width: 56px;
+            height: 56px;
             border-radius: 50%;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
+            font-size: 22px;
             color: #fff;
             transition: all 0.3s ease;
-            backdrop-filter: blur(4px);
         }
         
         .hero-arrow:hover {
-            background: rgba(255,255,255,0.25);
+            background: rgba(255,255,255,0.2);
+            border-color: rgba(255,255,255,0.4);
             transform: translateY(-50%) scale(1.1);
         }
         
-        .hero-arrow.prev { left: 20px; }
-        .hero-arrow.next { right: 20px; }
+        .hero-arrow.prev { left: 30px; }
+        .hero-arrow.next { right: 30px; }
         
         /* Dots */
         .hero-dots {
             position: absolute;
-            bottom: 25px;
+            bottom: 40px;
             left: 50%;
             transform: translateX(-50%);
             z-index: 10;
             display: flex;
-            gap: 10px;
+            gap: 12px;
         }
         
         .dot {
             width: 12px;
             height: 12px;
             border-radius: 50%;
-            border: 2px solid rgba(255,255,255,0.6);
+            border: 2px solid rgba(255,255,255,0.5);
             background: transparent;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.4s ease;
+            position: relative;
         }
         
         .dot:hover {
             border-color: #fff;
+            transform: scale(1.2);
         }
         
         .dot.active {
-            background: #fff;
-            border-color: #fff;
+            background: #c9a050;
+            border-color: #c9a050;
+            box-shadow: 0 0 15px rgba(201, 160, 80, 0.5);
         }
         
-        @media (max-width: 768px) {
+        /* Progress Bar */
+        .hero-progress {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: rgba(255,255,255,0.1);
+            z-index: 10;
+        }
+        
+        .hero-progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #c9a050, #e8c36a);
+            transition: width 0.1s linear;
+        }
+        
+        @media (max-width: 992px) {
             .hero-slider {
-                height: 50vh;
-                min-height: 300px;
+                height: 60vh;
+                min-height: 400px;
             }
             .hero-content {
-                padding: 0 5%;
+                padding: 0 8%;
+            }
+            .hero-arrow {
+                width: 46px;
+                height: 46px;
+                font-size: 18px;
+            }
+            .hero-arrow.prev { left: 15px; }
+            .hero-arrow.next { right: 15px; }
+        }
+        
+        @media (max-width: 576px) {
+            .hero-slider {
+                height: 50vh;
+                min-height: 350px;
+            }
+            .hero-content {
+                padding: 0 6%;
+                align-items: center;
+                text-align: center;
             }
             .hero-arrow {
                 width: 40px;
@@ -222,6 +288,13 @@
             }
             .hero-arrow.prev { left: 10px; }
             .hero-arrow.next { right: 10px; }
+            .hero-dots {
+                bottom: 25px;
+            }
+            .dot {
+                width: 10px;
+                height: 10px;
+            }
         }
     </style>
     
@@ -232,58 +305,105 @@
         
         const slides = slider.querySelectorAll('.hero-slide');
         const dots = slider.querySelectorAll('.dot');
+        const progressBar = document.getElementById('heroProgressBar');
         
-        if (slides.length <= 1) return;
+        if (slides.length <= 1) {
+            if (progressBar) progressBar.parentElement.style.display = 'none';
+            return;
+        }
         
         let currentIndex = 0;
         let intervalId = null;
         let isPaused = false;
-        const INTERVAL = 3000; // 3 seconds
+        let progress = 0;
+        const INTERVAL = 4000; // 4 seconds per slide
+        const TICK = 50; // Update progress every 50ms
         
         function goToSlide(index) {
             if (index < 0) index = slides.length - 1;
             if (index >= slides.length) index = 0;
             
-            slides.forEach(s => s.classList.remove('active'));
+            slides.forEach(s => {
+                s.classList.remove('active');
+                // Reset animations
+                const title = s.querySelector('.hero-title');
+                const subtitle = s.querySelector('.hero-subtitle');
+                const btn = s.querySelector('.hero-btn');
+                if (title) title.style.animation = 'none';
+                if (subtitle) subtitle.style.animation = 'none';
+                if (btn) btn.style.animation = 'none';
+            });
             dots.forEach(d => d.classList.remove('active'));
             
-            slides[index].classList.add('active');
+            const activeSlide = slides[index];
+            activeSlide.classList.add('active');
+            
+            // Trigger animations
+            setTimeout(() => {
+                const title = activeSlide.querySelector('.hero-title');
+                const subtitle = activeSlide.querySelector('.hero-subtitle');
+                const btn = activeSlide.querySelector('.hero-btn');
+                if (title) title.style.animation = 'heroFadeUp 0.8s ease forwards 0.2s';
+                if (subtitle) subtitle.style.animation = 'heroFadeUp 0.8s ease forwards 0.4s';
+                if (btn) btn.style.animation = 'heroFadeUp 0.8s ease forwards 0.6s';
+            }, 50);
+            
             if (dots[index]) dots[index].classList.add('active');
             
             currentIndex = index;
+            progress = 0;
         }
         
         function changeSlide(delta) {
             goToSlide(currentIndex + delta);
         }
         
-        function startAutoAdvance() {
-            if (intervalId) clearInterval(intervalId);
-            intervalId = setInterval(function() {
-                if (!isPaused) {
+        function updateProgress() {
+            if (!isPaused) {
+                progress += (TICK / INTERVAL) * 100;
+                if (progressBar) progressBar.style.width = progress + '%';
+                
+                if (progress >= 100) {
                     goToSlide(currentIndex + 1);
                 }
-            }, INTERVAL);
+            }
         }
         
-        // Expose to global for onclick handlers
+        function startAutoAdvance() {
+            if (intervalId) clearInterval(intervalId);
+            intervalId = setInterval(updateProgress, TICK);
+        }
+        
+        // Expose globally
         window.heroGoToSlide = goToSlide;
         window.heroChangeSlide = changeSlide;
         
-        // Mouse events
+        // Events
         slider.addEventListener('mouseenter', function() { isPaused = true; });
         slider.addEventListener('mouseleave', function() { isPaused = false; });
         
+        // Touch swipe
+        let touchStartX = 0;
+        slider.addEventListener('touchstart', function(e) {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+        
+        slider.addEventListener('touchend', function(e) {
+            const diff = touchStartX - e.changedTouches[0].screenX;
+            if (Math.abs(diff) > 50) {
+                changeSlide(diff > 0 ? 1 : -1);
+            }
+        }, { passive: true });
+        
         // Start
         startAutoAdvance();
-        console.log('Hero slider initialized with', slides.length, 'slides');
     });
     </script>
 @else
     {{-- Fallback static hero if no banners --}}
-    <section class="hero">
-        <span class="hero-label">Established 2025</span>
-        <h1>The Art of Precision</h1>
-        <p>Explore a curated collection of timepieces that blend heritage with modern engineering.</p>
+    <section class="hero" style="background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%); padding: 120px 10%; text-align: center;">
+        <span class="hero-label" style="color: #c9a050; text-transform: uppercase; letter-spacing: 4px; font-size: 12px;">Established 2025</span>
+        <h1 style="color: #fff; font-family: 'Playfair Display', serif; font-size: clamp(2rem, 5vw, 3.5rem); margin: 20px 0;">The Art of Precision</h1>
+        <p style="color: rgba(255,255,255,0.7); max-width: 500px; margin: 0 auto;">Explore a curated collection of timepieces that blend heritage with modern engineering.</p>
     </section>
 @endif
