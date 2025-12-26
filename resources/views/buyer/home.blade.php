@@ -11,7 +11,7 @@
 
 @include('buyer.partials.hero-section')
 
-<section class="featured-products">
+<section class="featured-products" style="margin-top: 40px;">
     <div class="section-header">
         <h2 class="section-title">New Arrivals</h2>
         

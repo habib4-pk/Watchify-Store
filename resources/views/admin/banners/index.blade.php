@@ -121,19 +121,20 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Add Banner Form
     const form = document.getElementById('addBannerForm');
+    const bannersGrid = document.getElementById('bannersGrid');
+    
     form.addEventListener('submit', async function(e) {
         e.preventDefault();
         
         // Prevent double submission
-        if (isUploading) return;
+        if (isUploading) {
+            console.log('Upload already in progress, ignoring...');
+            return;
+        }
         isUploading = true;
         
         const btn = document.getElementById('uploadBtn');
-        const spinner = btn.querySelector('.spinner-border');
-        const btnText = btn.textContent;
-        
         btn.disabled = true;
-        spinner.classList.remove('d-none');
         btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status"></span> Uploading...';
         
         try {
@@ -145,29 +146,79 @@ document.addEventListener('DOMContentLoaded', function() {
             });
             const data = await response.json();
             
-            if (data.success) {
-                // Close modal and reload
-                const modal = bootstrap.Modal.getInstance(document.getElementById('addBannerModal'));
+            if (data.success && data.banner) {
+                // Close modal
+                const modalEl = document.getElementById('addBannerModal');
+                const modal = bootstrap.Modal.getInstance(modalEl);
                 if (modal) modal.hide();
-                location.reload();
+                
+                // Remove empty state if present
+                const emptyState = bannersGrid.querySelector('.col-12');
+                if (emptyState && emptyState.querySelector('.text-secondary')) {
+                    emptyState.remove();
+                }
+                
+                // Create new banner card
+                const banner = data.banner;
+                const newCard = document.createElement('div');
+                newCard.className = 'col-md-6 col-lg-4';
+                newCard.setAttribute('data-id', banner.id);
+                newCard.innerHTML = `
+                    <div class="card border-0 rounded-4 h-100" style="background-color: #161b22;">
+                        <div class="position-relative">
+                            <img src="${banner.image_url}" class="card-img-top rounded-top-4" alt="Banner" style="height: 180px; object-fit: cover;">
+                            <div class="position-absolute top-0 end-0 m-2">
+                                <span class="badge bg-success">Active</span>
+                            </div>
+                        </div>
+                        <div class="card-body p-3">
+                            ${banner.title ? `<h6 class="text-white mb-1">${banner.title}</h6>` : ''}
+                            ${banner.subtitle ? `<p class="text-secondary small mb-2">${banner.subtitle}</p>` : ''}
+                            ${banner.button_text ? `<span class="badge bg-primary">${banner.button_text}</span>` : ''}
+                        </div>
+                        <div class="card-footer border-0 bg-transparent d-flex gap-2 p-3 pt-0">
+                            <button class="btn btn-sm btn-outline-light flex-grow-1 toggle-btn" data-id="${banner.id}">
+                                <i class="bi bi-eye-slash"></i> Hide
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger delete-btn" data-id="${banner.id}">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                // Insert at beginning
+                bannersGrid.insertBefore(newCard, bannersGrid.firstChild);
+                
+                // Attach event handlers to new buttons
+                attachToggleHandler(newCard.querySelector('.toggle-btn'));
+                attachDeleteHandler(newCard.querySelector('.delete-btn'));
+                
+                // Reset form
+                form.reset();
+                
+                // Show success
+                alert('Banner added successfully!');
             } else {
                 alert(data.message || 'Failed to upload banner');
-                isUploading = false;
-                btn.disabled = false;
-                btn.innerHTML = '<span class="spinner-border spinner-border-sm d-none" role="status"></span> Upload Banner';
             }
         } catch (error) {
+            console.error('Upload error:', error);
             alert('Error uploading banner');
+        } finally {
             isUploading = false;
             btn.disabled = false;
             btn.innerHTML = '<span class="spinner-border spinner-border-sm d-none" role="status"></span> Upload Banner';
         }
     });
-    
-    // Toggle Active
-    document.querySelectorAll('.toggle-btn').forEach(btn => {
+    // Toggle Active Handler
+    function attachToggleHandler(btn) {
         btn.addEventListener('click', async function() {
             const id = this.dataset.id;
+            const card = this.closest('[data-id]');
+            const badge = card.querySelector('.badge.bg-success, .badge.bg-secondary');
+            const icon = this.querySelector('i');
+            
             try {
                 const response = await fetch('/admin/banners/toggle', {
                     method: 'POST',
@@ -175,20 +226,35 @@ document.addEventListener('DOMContentLoaded', function() {
                         'Content-Type': 'application/json',
                         'X-CSRF-TOKEN': csrfToken
                     },
-                    body: JSON.stringify({ id })
+                    body: JSON.stringify({ id: parseInt(id) })
                 });
                 const data = await response.json();
+                
                 if (data.success) {
-                    location.reload();
+                    // Update UI without reload
+                    if (data.is_active) {
+                        badge.className = 'badge bg-success';
+                        badge.textContent = 'Active';
+                        icon.className = 'bi bi-eye-slash';
+                        this.innerHTML = '<i class="bi bi-eye-slash"></i> Hide';
+                    } else {
+                        badge.className = 'badge bg-secondary';
+                        badge.textContent = 'Inactive';
+                        icon.className = 'bi bi-eye';
+                        this.innerHTML = '<i class="bi bi-eye"></i> Show';
+                    }
+                } else {
+                    alert(data.message || 'Failed to toggle banner');
                 }
             } catch (error) {
+                console.error('Toggle error:', error);
                 alert('Error toggling banner');
             }
         });
-    });
+    }
     
-    // Delete Banner
-    document.querySelectorAll('.delete-btn').forEach(btn => {
+    // Delete Banner Handler
+    function attachDeleteHandler(btn) {
         btn.addEventListener('click', async function() {
             if (!confirm('Delete this banner?')) return;
             const id = this.dataset.id;
@@ -215,11 +281,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 alert('Error deleting banner');
             }
         });
-    });
+    }
+    
+    // Attach handlers to existing buttons
+    document.querySelectorAll('.toggle-btn').forEach(attachToggleHandler);
+    document.querySelectorAll('.delete-btn').forEach(attachDeleteHandler);
     
     // Reset form when modal closes
-    const modal = document.getElementById('addBannerModal');
-    modal.addEventListener('hidden.bs.modal', function() {
+    const modalEl = document.getElementById('addBannerModal');
+    modalEl.addEventListener('hidden.bs.modal', function() {
         isUploading = false;
         form.reset();
         const btn = document.getElementById('uploadBtn');
