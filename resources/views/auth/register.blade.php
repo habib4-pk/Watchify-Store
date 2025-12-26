@@ -16,7 +16,7 @@
         <h1>Join the Gallery</h1>
         <p>Create an account to start your premium watch collection.</p>
 
-        <form action="{{ route('register') }}" method="POST">
+        <form action="{{ route('account.register.submit') }}" method="POST">
             @csrf
 
             <div class="form-group">
@@ -33,14 +33,18 @@
 
             <div class="form-group">
                 <label for="password">Create Password</label>
-                <input type="password" name="password" id="password" required placeholder="••••••••" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one special character and at least 8">
+                <input type="password" name="password" id="password" required placeholder="••••••••" minlength="8">
 
+            </div>
+
+            <div class="form-group">
+                <label for="password_confirmation">Confirm Password</label>
+                <input type="password" name="password_confirmation" id="password_confirmation" required placeholder="••••••••" minlength="8">
             </div>
 
             <div id="message" class="password-requirements">
 
                 <p id="length" class="invalid">Minimum <b>8 characters</b></p>
-                <p id="char" class="invalid">A <b>special character</b></p>
             </div>
 
             <button type="submit" class="btn-auth">Create Account</button>

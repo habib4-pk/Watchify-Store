@@ -157,6 +157,28 @@
         return toast;
     }
 
+    // Queue a toast to show after page redirect
+    function queueToast(message, type = 'success') {
+        sessionStorage.setItem('pendingToast', JSON.stringify({ message, type }));
+    }
+
+    // Show any pending toasts on page load
+    function showPendingToasts() {
+        const pending = sessionStorage.getItem('pendingToast');
+        if (pending) {
+            sessionStorage.removeItem('pendingToast');
+            const { message, type } = JSON.parse(pending);
+            setTimeout(() => showToast(message, type), 300);
+        }
+    }
+
+    // Show pending toasts when DOM is ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', showPendingToasts);
+    } else {
+        showPendingToasts();
+    }
+
     // ========================================================================
     // CART BADGE UPDATE
     // ========================================================================
@@ -314,6 +336,7 @@
     window.WatchifyAjax = {
         fetch: fetchWithCsrf,
         showToast,
+        queueToast,
         updateCartBadge,
         setLoading,
         setContainerLoading,

@@ -78,12 +78,11 @@
             });
 
             if (response.success) {
-                WatchifyAjax.showToast(response.message || 'Login successful!', 'success');
+                // Queue toast to show after redirect (don't show now - redirect is too fast)
+                WatchifyAjax.queueToast(response.message || 'Login successful!', 'success');
 
-                // Redirect after short delay
-                setTimeout(() => {
-                    window.location.href = response.redirect || '/home';
-                }, 800);
+                // Immediate redirect
+                window.location.href = response.redirect || '/shop';
             } else {
                 WatchifyAjax.showToast(response.message || 'Login failed', 'error');
 
@@ -192,12 +191,11 @@
             });
 
             if (response.success) {
-                WatchifyAjax.showToast(response.message || 'Registration successful!', 'success');
+                // Queue toast to show after redirect
+                WatchifyAjax.queueToast(response.message || 'Registration successful!', 'success');
 
-                // Redirect after short delay
-                setTimeout(() => {
-                    window.location.href = response.redirect || '/home';
-                }, 800);
+                // Immediate redirect
+                window.location.href = response.redirect || '/shop';
             } else {
                 WatchifyAjax.showToast(response.message || 'Registration failed', 'error');
 
