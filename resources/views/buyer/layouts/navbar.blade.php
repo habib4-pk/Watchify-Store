@@ -3,6 +3,17 @@
 <link rel="stylesheet" href="{{ secure_asset('css/buyer/navbar.css') }}">
 
 <input type="checkbox" id="nav-toggle">
+<input type="checkbox" id="mobile-search-toggle">
+
+<!-- Mobile Search Dropdown (appears below navbar on mobile) -->
+<div class="mobile-search-dropdown">
+    <form action="{{ route('search') }}" method="GET" class="mobile-search-dropdown-form">
+        <input type="text" name="query" placeholder="Search watches..." class="mobile-search-dropdown-input">
+        <button type="submit" class="mobile-search-dropdown-submit">
+            <i class="fas fa-search"></i>
+        </button>
+    </form>
+</div>
 
 <nav class="watchify-nav">
     <!-- Logo -->
@@ -36,6 +47,11 @@
                 <i class="fas fa-shopping-cart"></i>
             </a>
         @endif
+
+        <!-- Mobile Search Icon (Mobile Only) -->
+        <label for="mobile-search-toggle" class="mobile-search-icon" title="Search">
+            <i class="fas fa-search"></i>
+        </label>
 
         <!-- User Info (Desktop Only) -->
         @if(Auth::check())

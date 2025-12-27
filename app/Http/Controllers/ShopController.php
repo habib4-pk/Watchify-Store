@@ -85,18 +85,28 @@ class ShopController extends Controller
     {
         try {
             $validator = Validator::make($req->all(), [
-                'query' => 'required|string|min:1|max:100',
+                'query' => 'nullable|string|max:100',
                 'sort' => 'nullable|string|in:price_asc,price_desc,name_az,newest'
             ]);
 
             if ($validator->fails()) {
-                return redirect()->back()->with('error', 'Invalid search query.');
+                return redirect()->back()->with('error', 'Invalid search parameters.');
             }
 
-            $queryStr = strip_tags(trim($req->input('query')));
+            $queryStr = strip_tags(trim($req->input('query', '')));
+            
+            // Handle empty or whitespace-only queries
+            if (empty($queryStr)) {
+                return redirect()->route('shop.index')->with('info', 'Please enter a search term.');
+            }
+            
             $sort = $req->input('sort');
             
-            $query = Watch::where('name', 'LIKE', "%{$queryStr}%");
+            // Search in name and description for better results
+            $query = Watch::where(function($q) use ($queryStr) {
+                $q->where('name', 'LIKE', "%{$queryStr}%")
+                  ->orWhere('description', 'LIKE', "%{$queryStr}%");
+            });
 
             if ($sort == 'price_asc') $query->orderBy('price', 'asc');
             elseif ($sort == 'price_desc') $query->orderBy('price', 'desc');
