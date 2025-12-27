@@ -47,12 +47,8 @@
                     @endif
                 </div>
                 <div class="card-footer border-0 bg-transparent d-flex gap-2 p-3 pt-0">
-                    <button class="btn btn-sm btn-outline-light flex-grow-1 toggle-btn" data-id="{{ $banner->id }}">
-                        <i class="bi {{ $banner->is_active ? 'bi-eye-slash' : 'bi-eye' }}"></i>
-                        {{ $banner->is_active ? 'Hide' : 'Show' }}
-                    </button>
-                    <button class="btn btn-sm btn-outline-danger delete-btn" data-id="{{ $banner->id }}">
-                        <i class="bi bi-trash"></i>
+                    <button class="btn btn-sm btn-outline-danger delete-btn w-100" data-id="{{ $banner->id }}">
+                        <i class="bi bi-trash"></i> Delete
                     </button>
                 </div>
             </div>
@@ -121,6 +117,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     const csrfToken = '{{ csrf_token() }}';
     let isUploading = false;
+    let isDeleting = false; // Prevent double delete confirmation
     
     // Toast Notification Function
     function showToast(message, type = 'success') {
@@ -231,11 +228,8 @@ document.addEventListener('DOMContentLoaded', function() {
                             ${banner.button_text ? `<span class="badge bg-primary">${banner.button_text}</span>` : ''}
                         </div>
                         <div class="card-footer border-0 bg-transparent d-flex gap-2 p-3 pt-0">
-                            <button class="btn btn-sm btn-outline-light flex-grow-1 toggle-btn" data-id="${banner.id}">
-                                <i class="bi bi-eye-slash"></i> Hide
-                            </button>
-                            <button class="btn btn-sm btn-outline-danger delete-btn" data-id="${banner.id}">
-                                <i class="bi bi-trash"></i>
+                            <button class="btn btn-sm btn-outline-danger delete-btn w-100" data-id="${banner.id}">
+                                <i class="bi bi-trash"></i> Delete
                             </button>
                         </div>
                     </div>
@@ -265,78 +259,24 @@ document.addEventListener('DOMContentLoaded', function() {
         return false;
     });
 
-    // Use Event Delegation for Toggle and Delete buttons
+    // Use Event Delegation for Delete button
     // This ensures dynamically added buttons work correctly
     bannersGrid.addEventListener('click', async function(e) {
-        const toggleBtn = e.target.closest('.toggle-btn');
         const deleteBtn = e.target.closest('.delete-btn');
-        
-        if (toggleBtn) {
-            e.preventDefault();
-            e.stopPropagation();
-            
-            const id = toggleBtn.dataset.id;
-            const card = toggleBtn.closest('[data-id]');
-            const badge = card.querySelector('.badge.bg-success, .badge.bg-secondary');
-            const currentIcon = toggleBtn.querySelector('i');
-            const isCurrentlyActive = badge.classList.contains('bg-success');
-            
-            // Show loading state
-            toggleBtn.disabled = true;
-            const originalHTML = toggleBtn.innerHTML;
-            toggleBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status"></span>';
-            
-            try {
-                // Use FormData instead of JSON for Laravel web routes
-                const formData = new FormData();
-                formData.append('id', id);
-                
-                const response = await fetch('/admin/banners/toggle', {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': csrfToken
-                    },
-                    body: formData
-                });
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                
-                const data = await response.json();
-                
-                if (data.success) {
-                    // Update UI without reload
-                    if (data.is_active) {
-                        badge.className = 'badge bg-success';
-                        badge.textContent = 'Active';
-                        toggleBtn.innerHTML = '<i class="bi bi-eye-slash"></i> Hide';
-                        showToast('Banner is now visible on homepage', 'success');
-                    } else {
-                        badge.className = 'badge bg-secondary';
-                        badge.textContent = 'Inactive';
-                        toggleBtn.innerHTML = '<i class="bi bi-eye"></i> Show';
-                        showToast('Banner is now hidden from homepage', 'success');
-                    }
-                } else {
-                    showToast(data.message || 'Failed to toggle banner', 'error');
-                    toggleBtn.innerHTML = originalHTML;
-                }
-            } catch (error) {
-                console.error('Toggle error:', error);
-                showToast('Error toggling banner. Please try again.', 'error');
-                toggleBtn.innerHTML = originalHTML;
-            } finally {
-                toggleBtn.disabled = false;
-            }
-        }
         
         if (deleteBtn) {
             e.preventDefault();
             e.stopPropagation();
             
+            // Prevent double confirmation dialog
+            if (isDeleting) {
+                console.log('Delete already in progress, ignoring...');
+                return;
+            }
+            
             if (!confirm('Are you sure you want to delete this banner? This action cannot be undone.')) return;
             
+            isDeleting = true;
             const id = deleteBtn.dataset.id;
             const card = deleteBtn.closest('[data-id]');
             
@@ -387,6 +327,9 @@ document.addEventListener('DOMContentLoaded', function() {
                             `;
                             bannersGrid.innerHTML = emptyStateHTML;
                         }
+                        
+                        // Reset delete flag
+                        isDeleting = false;
                     }, 300);
                     
                     showToast('Banner deleted successfully!', 'success');
@@ -394,12 +337,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     showToast(data.message || 'Failed to delete banner', 'error');
                     deleteBtn.innerHTML = originalHTML;
                     deleteBtn.disabled = false;
+                    isDeleting = false;
                 }
             } catch (error) {
                 console.error('Delete error:', error);
                 showToast('Error deleting banner. Please try again.', 'error');
                 deleteBtn.innerHTML = originalHTML;
                 deleteBtn.disabled = false;
+                isDeleting = false;
             }
         }
     });

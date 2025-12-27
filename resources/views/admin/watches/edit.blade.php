@@ -206,14 +206,20 @@
 document.addEventListener('DOMContentLoaded', function() {
     const watchId = {{ $watch->id }};
     const csrfToken = '{{ csrf_token() }}';
+    let isProcessingPreview = false;
     
     // Preview additional images before upload
     const additionalInput = document.getElementById('additionalImages');
     const additionalPreview = document.getElementById('additionalPreview');
     
     additionalInput.addEventListener('change', function() {
+        // Prevent duplicate processing
+        if (isProcessingPreview) return;
+        
+        isProcessingPreview = true;
         additionalPreview.innerHTML = '';
-        if (this.files) {
+        
+        if (this.files && this.files.length > 0) {
             Array.from(this.files).forEach((file, index) => {
                 const reader = new FileReader();
                 reader.onload = function(e) {
@@ -225,6 +231,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 reader.readAsDataURL(file);
             });
         }
+        
+        // Reset flag after a short delay to allow next selection
+        setTimeout(() => { isProcessingPreview = false; }, 100);
     });
     
     // Set Primary Image
@@ -232,14 +241,16 @@ document.addEventListener('DOMContentLoaded', function() {
         btn.addEventListener('click', async function() {
             const imageId = this.dataset.id;
             try {
+                // Use FormData instead of JSON for Laravel web routes
+                const formData = new FormData();
+                formData.append('image_id', imageId);
+                
                 const response = await fetch('/admin/product-images/set-primary', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': csrfToken,
-                        'Accept': 'application/json'
+                        'X-CSRF-TOKEN': csrfToken
                     },
-                    body: JSON.stringify({ image_id: imageId })
+                    body: formData
                 });
                 const data = await response.json();
                 if (data.success) {
@@ -248,6 +259,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     alert(data.message || 'Failed to set primary image');
                 }
             } catch (error) {
+                console.error('Error setting primary image:', error);
                 alert('Error setting primary image');
             }
         });
@@ -260,14 +272,16 @@ document.addEventListener('DOMContentLoaded', function() {
             
             const imageId = this.dataset.id;
             try {
+                // Use FormData instead of JSON for Laravel web routes
+                const formData = new FormData();
+                formData.append('image_id', imageId);
+                
                 const response = await fetch('/admin/product-images/delete', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': csrfToken,
-                        'Accept': 'application/json'
+                        'X-CSRF-TOKEN': csrfToken
                     },
-                    body: JSON.stringify({ image_id: imageId })
+                    body: formData
                 });
                 const data = await response.json();
                 if (data.success) {
@@ -276,6 +290,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     alert(data.message || 'Failed to delete image');
                 }
             } catch (error) {
+                console.error('Error deleting image:', error);
                 alert('Error deleting image');
             }
         });
@@ -325,14 +340,19 @@ document.addEventListener('DOMContentLoaded', function() {
         if (order.length === 0) return;
         
         try {
+            // Use FormData instead of JSON for Laravel web routes
+            const formData = new FormData();
+            formData.append('watch_id', watchId);
+            order.forEach((id, index) => {
+                formData.append(`order[${index}]`, id);
+            });
+            
             const response = await fetch('/admin/product-images/reorder', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken,
-                    'Accept': 'application/json'
+                    'X-CSRF-TOKEN': csrfToken
                 },
-                body: JSON.stringify({ watch_id: watchId, order: order })
+                body: formData
             });
             const data = await response.json();
             if (!data.success) {
@@ -344,5 +364,4 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 </script>
-
 @endsection
