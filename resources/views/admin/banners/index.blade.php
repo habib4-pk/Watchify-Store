@@ -267,6 +267,13 @@ document.addEventListener('DOMContentLoaded', function() {
         if (deleteBtn) {
             e.preventDefault();
             e.stopPropagation();
+            e.stopImmediatePropagation(); // Prevent other handlers from firing
+            
+            // Skip if button is already disabled
+            if (deleteBtn.disabled) {
+                console.log('Button already disabled, skipping');
+                return;
+            }
             
             // Prevent double confirmation dialog
             if (isDeleting) {
@@ -276,13 +283,15 @@ document.addEventListener('DOMContentLoaded', function() {
             
             if (!confirm('Are you sure you want to delete this banner? This action cannot be undone.')) return;
             
+            // Immediately set flags and disable buttons
             isDeleting = true;
             const id = deleteBtn.dataset.id;
             const card = deleteBtn.closest('[data-id]');
             
+            // Disable ALL delete buttons to prevent race conditions
+            document.querySelectorAll('.delete-btn').forEach(btn => btn.disabled = true);
+            
             // Show loading state
-            deleteBtn.disabled = true;
-            const originalHTML = deleteBtn.innerHTML;
             deleteBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status"></span>';
             
             try {
@@ -343,8 +352,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.error('Delete error:', error);
                 showToast('Error deleting banner. Please try again.', 'error');
                 deleteBtn.innerHTML = originalHTML;
-                deleteBtn.disabled = false;
-                isDeleting = false;
+            } finally {
+                // Reset flags and re-enable buttons after delay
+                setTimeout(() => {
+                    document.querySelectorAll('.delete-btn').forEach(btn => btn.disabled = false);
+                    isDeleting = false;
+                }, 500);
             }
         }
     });
