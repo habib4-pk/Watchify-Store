@@ -7,7 +7,7 @@
 
 <!-- Mobile Search Dropdown (appears below navbar on mobile) -->
 <div class="mobile-search-dropdown">
-    <form action="{{ route('search') }}" method="GET" class="mobile-search-dropdown-form">
+    <form action="{{ route('shop.search') }}" method="GET" class="mobile-search-dropdown-form">
         <input type="text" name="query" placeholder="Search watches..." class="mobile-search-dropdown-input">
         <button type="submit" class="mobile-search-dropdown-submit">
             <i class="fas fa-search"></i>
@@ -34,7 +34,7 @@
     <!-- Right Side Actions -->
     <div class="nav-actions">
         <!-- Search (Desktop Only) -->
-        <form action="{{ route('search') }}" method="GET" class="search-container desktop-only">
+        <form action="{{ route('shop.search') }}" method="GET" class="search-container desktop-only">
             <input type="text" name="query" placeholder="Search watches..." class="search-input">
             <button type="submit" class="search-submit">
                 <i class="fas fa-search"></i>
@@ -103,7 +103,7 @@
         @endif
     </ul>
 
-    <form action="{{ route('search') }}" method="GET" class="mobile-search">
+    <form action="{{ route('shop.search') }}" method="GET" class="mobile-search">
         <input type="text" name="query" placeholder="Search watches..." class="search-input">
         <button type="submit" class="search-submit">
             <i class="fas fa-search"></i>

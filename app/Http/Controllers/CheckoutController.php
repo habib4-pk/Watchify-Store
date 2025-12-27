@@ -41,7 +41,7 @@ class CheckoutController extends Controller
                 if (!$watch) {
                     return redirect()->route('cartItems')->with('error', 'Some items in your cart are no longer available.');
                 }
-                $total = $total + ($watch->price * $item->quantity);
+                $total = $total + ($watch->discounted_price * $item->quantity);
             }
 
             return view('buyer.checkout', compact('cart', 'total'));
@@ -129,7 +129,7 @@ class CheckoutController extends Controller
             // Calculate total
             $total_price = 0;
             foreach ($cartItems as $item) {
-                $total_price = $total_price + ($item->watch->price * $item->quantity);
+                $total_price = $total_price + ($item->watch->discounted_price * $item->quantity);
             }
 
             // Create order
@@ -154,7 +154,7 @@ class CheckoutController extends Controller
                 $orderItem->order_id = $order->id;
                 $orderItem->watch_id = $item->watch_id;
                 $orderItem->quantity = $item->quantity;
-                $orderItem->price = $watch->price;
+                $orderItem->price = $watch->discounted_price;
                 $orderItem->save();
             }
 

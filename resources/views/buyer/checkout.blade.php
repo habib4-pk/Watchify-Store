@@ -24,9 +24,17 @@
                 <div class="summary-item-info">
                     <p>{{ $item->watch->name }}</p>
                     <span class="item-qty">Qty: {{ $item->quantity }}</span>
+                    @if($item->watch->has_discount)
+                        <span class="badge bg-success">{{ $item->watch->discount_percentage }}% OFF</span>
+                    @endif
                 </div>
                 <div class="item-price">
-                    Rs. {{ number_format($item->watch->price * $item->quantity, 2) }}
+                    @if($item->watch->has_discount)
+                        <span style="text-decoration: line-through; color: #999; font-size: 0.85em;">Rs. {{ number_format($item->watch->price * $item->quantity, 2) }}</span>
+                        <br>Rs. {{ number_format($item->watch->discounted_price * $item->quantity, 2) }}
+                    @else
+                        Rs. {{ number_format($item->watch->price * $item->quantity, 2) }}
+                    @endif
                 </div>
             </li>
             @endforeach

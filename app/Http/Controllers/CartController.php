@@ -32,7 +32,7 @@ class CartController extends Controller
             
             foreach ($cart as $item) {
                 if ($item->watch) {
-                    $item->subtotal = $item->watch->price * $item->quantity;
+                    $item->subtotal = $item->watch->discounted_price * $item->quantity;
                     $total += $item->subtotal;
                 }
             }
@@ -72,7 +72,7 @@ class CartController extends Controller
         
         foreach ($cart as $item) {
             if ($item->watch) {
-                $total += $item->watch->price * $item->quantity;
+                $total += $item->watch->discounted_price * $item->quantity;
                 $itemCount++;
                 $cartCount += $item->quantity;
             }
@@ -216,7 +216,7 @@ class CartController extends Controller
 
             if ($req->expectsJson()) {
                 $summary = $this->getCartSummary();
-                $subtotal = $watch->price * $cart->quantity;
+                $subtotal = $watch->discounted_price * $cart->quantity;
                 return response()->json([
                     'success' => true,
                     'message' => 'Quantity increased.',
@@ -271,7 +271,7 @@ class CartController extends Controller
                 $cart->quantity = $cart->quantity - 1;
                 $cart->save();
                 $quantity = $cart->quantity;
-                $subtotal = $watch ? $watch->price * $quantity : 0;
+                $subtotal = $watch ? $watch->discounted_price * $quantity : 0;
                 $message = 'Quantity decreased.';
             } else {
                 Cart::destroy($id);

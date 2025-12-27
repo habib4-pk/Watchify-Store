@@ -292,6 +292,7 @@ document.addEventListener('DOMContentLoaded', function() {
             document.querySelectorAll('.delete-btn').forEach(btn => btn.disabled = true);
             
             // Show loading state
+            const originalHTML = deleteBtn.innerHTML;
             deleteBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status"></span>';
             
             try {
@@ -352,12 +353,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.error('Delete error:', error);
                 showToast('Error deleting banner. Please try again.', 'error');
                 deleteBtn.innerHTML = originalHTML;
-            } finally {
-                // Reset flags and re-enable buttons after delay
-                setTimeout(() => {
-                    document.querySelectorAll('.delete-btn').forEach(btn => btn.disabled = false);
-                    isDeleting = false;
-                }, 500);
+                document.querySelectorAll('.delete-btn').forEach(btn => btn.disabled = false);
+                isDeleting = false;
             }
         }
     });

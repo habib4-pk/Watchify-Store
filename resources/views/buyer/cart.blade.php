@@ -25,7 +25,15 @@
 
         <div class="item-details">
             <h3>{{ $item->watch->name }}</h3>
-            <p>Unit Price: Rs. {{ number_format($item->watch->price, 2) }}</p>
+            @if($item->watch->has_discount)
+                <p>
+                    <span style="text-decoration: line-through; color: #999;">Rs. {{ number_format($item->watch->price, 2) }}</span>
+                    <span style="color: #238636; font-weight: 600;">Rs. {{ number_format($item->watch->discounted_price, 2) }}</span>
+                    <span class="badge bg-success ms-2">{{ $item->watch->discount_percentage }}% OFF</span>
+                </p>
+            @else
+                <p>Unit Price: Rs. {{ number_format($item->watch->price, 2) }}</p>
+            @endif
             
             <form action="{{ route('remove') }}" method="POST">
                 @csrf

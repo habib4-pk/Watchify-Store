@@ -108,7 +108,9 @@ Route::prefix('shop')->name('shop.')->group(function () {
 Route::get('/home', fn() => redirect()->route('shop.index'))->name('home');
 Route::get('/home/featured', fn() => redirect()->route('shop.featured'))->name('featured');
 Route::get('/home/watches', fn() => redirect()->route('shop.product'))->name('watchDetails');
-Route::get('/home/search', fn() => redirect()->route('shop.search'))->name('search');
+Route::get('/home/search', function(Illuminate\Http\Request $request) {
+    return redirect()->route('shop.search', $request->query());
+})->name('search');
 
 // ============================================================================
 // STATIC PAGES
